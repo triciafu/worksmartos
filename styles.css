@@ -679,6 +679,10 @@ h1 {
   transform: translateY(0);
 }
 
+.hero .reveal {
+  transform: translateY(24px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

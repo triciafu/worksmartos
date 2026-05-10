@@ -16,7 +16,7 @@ if (navToggle && nav) {
 }
 
 const motionTargets = document.querySelectorAll(
-  ".section-heading, .feature-card, .security-copy, .security-list article, .split-section > div, .workflow-list article, .pricing-copy, .price-card"
+  ".hero .eyebrow, .hero h1, .hero-text, .hero-actions, .section-heading, .feature-card, .security-copy, .security-list article, .split-section > div, .workflow-list article, .pricing-copy, .price-card"
 );
 
 motionTargets.forEach((target, index) => {
