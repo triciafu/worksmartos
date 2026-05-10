@@ -161,6 +161,14 @@ a {
   font-weight: 500;
 }
 
+.security-section .eyebrow,
+.split-section .eyebrow,
+.pricing-section .eyebrow {
+  color: #0071e3;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 h1,
 h2,
 h3,
@@ -548,9 +556,15 @@ h1 {
 
 .security-copy h2 {
   margin-bottom: 18px;
-  font-size: clamp(38px, 5vw, 58px);
+  font-size: 32px;
   line-height: 1.03;
-  font-weight: 600;
+  font-weight: 500;
+}
+
+.split-section h2,
+.pricing-copy h2 {
+  font-size: 32px;
+  font-weight: 500;
 }
 
 .security-copy p {
