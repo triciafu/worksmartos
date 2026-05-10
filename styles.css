@@ -108,10 +108,13 @@ a {
   grid-template-columns: 1fr;
   gap: 0;
   align-items: center;
-  max-width: 1180px;
+  max-width: none;
   min-height: calc(100vh - 64px);
   margin: 0 auto;
-  padding: 76px 24px 56px;
+  padding: 76px max(24px, calc((100vw - 1180px) / 2 + 24px)) 56px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 46%, rgba(255, 255, 255, 0.58) 100%),
+    url("hero-background.jpg") center right / cover no-repeat;
 }
 
 .eyebrow {
