@@ -465,8 +465,17 @@ h1 {
 }
 
 .section {
+  max-width: none;
   padding-top: 124px;
   padding-bottom: 124px;
+  background: #f5f5f5;
+}
+
+.section-heading,
+.feature-grid {
+  max-width: 1180px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .section-heading {
@@ -500,7 +509,6 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: white;
-  box-shadow: 0 14px 38px rgba(20, 24, 31, 0.06);
 }
 
 .feature-card {
