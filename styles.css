@@ -79,11 +79,13 @@ a {
   border-radius: 999px;
   color: white;
   background: var(--accent);
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
 }
 
 .nav-cta:hover {
   color: white;
   background: var(--accent-dark);
+  transform: none;
 }
 
 .nav-toggle {
@@ -204,7 +206,7 @@ h1 {
 }
 
 .button:hover {
-  transform: translateY(-1px);
+  transform: none;
 }
 
 .button.primary {
