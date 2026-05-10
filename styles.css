@@ -491,6 +491,8 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
 
 .feature-card,
@@ -502,7 +504,7 @@ h1 {
 }
 
 .feature-card {
-  padding: 28px;
+  padding: 44px 28px;
 }
 
 .feature-icon {
@@ -677,10 +679,6 @@ h1 {
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-.hero .reveal {
-  transform: translateY(24px);
 }
 
 @media (prefers-reduced-motion: reduce) {
