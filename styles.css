@@ -692,7 +692,7 @@ h1 {
   gap: 16px;
   width: min(100%, 520px);
   padding: 28px;
-  border: 0;
+  border: 1px solid var(--line);
   border-radius: 8px;
   background: #ffffff;
 }
@@ -712,7 +712,7 @@ h1 {
 .signup-form select,
 .signup-form textarea {
   width: 100%;
-  border: 0;
+  border: 1px solid var(--line);
   border-radius: 8px;
   background: #ffffff;
   box-shadow: none;
