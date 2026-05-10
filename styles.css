@@ -104,6 +104,7 @@ a {
 }
 
 .hero {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0;
@@ -112,9 +113,35 @@ a {
   min-height: calc(100vh - 64px);
   margin: 0 auto;
   padding: 76px max(24px, calc((100vw - 1180px) / 2 + 24px)) 56px;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 46%, rgba(255, 255, 255, 0.58) 100%),
-    url("hero-background.jpg") center right / cover no-repeat;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.hero::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: url("hero-background.jpg") center right / cover no-repeat;
+  content: "";
+  transform: scaleX(-1);
+}
+
+.hero::after {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.92) 46%,
+    rgba(255, 255, 255, 0.58) 100%
+  );
+  content: "";
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 1;
 }
 
 .eyebrow {
@@ -142,9 +169,9 @@ p {
 h1 {
   max-width: 680px;
   margin-bottom: 24px;
-  font-size: clamp(56px, 8vw, 96px);
-  line-height: 0.96;
-  font-weight: 800;
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 500;
 }
 
 .hero-text {
