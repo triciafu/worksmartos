@@ -65,14 +65,11 @@ if (signupForm && formStatus) {
     formStatus.classList.remove("is-error");
 
     try {
-      const response = await fetch(endpoint, {
+      await fetch(endpoint, {
         method: "POST",
         body: new FormData(signupForm),
+        mode: "no-cors",
       });
-
-      if (!response.ok) {
-        throw new Error("Submission failed");
-      }
 
       signupForm.reset();
       formStatus.textContent = "Thanks. You're on the enterprise launch list.";
