@@ -83,7 +83,7 @@ a {
 }
 
 .nav-cta:hover {
-  color: white;
+  color: #ffffff;
   background: var(--accent-dark);
   transform: none;
 }
@@ -220,7 +220,14 @@ h1 {
 
 .button.secondary {
   border: 1px solid var(--line);
+  color: var(--ink);
   background: white;
+}
+
+.button.secondary:hover {
+  border-color: var(--ink);
+  color: #ffffff;
+  background: var(--ink);
 }
 
 .button.full {
