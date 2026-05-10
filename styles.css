@@ -556,7 +556,7 @@ h1 {
   margin-top: auto;
   color: var(--accent);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .feature-link:hover {
@@ -685,6 +685,64 @@ h1 {
   margin-bottom: 28px;
 }
 
+.signup-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: min(100%, 520px);
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.signup-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.signup-form span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.signup-form input,
+.signup-form select,
+.signup-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+
+.signup-form input,
+.signup-form select {
+  height: 44px;
+  padding: 0 12px;
+}
+
+.signup-form textarea {
+  min-height: 112px;
+  padding: 12px;
+  resize: vertical;
+}
+
+.signup-form input:focus,
+.signup-form select:focus,
+.signup-form textarea:focus {
+  border-color: var(--accent);
+  outline: 3px solid rgba(0, 113, 227, 0.14);
+}
+
+.form-full,
+.signup-form button {
+  grid-column: 1 / -1;
+}
+
 .site-footer {
   justify-content: space-between;
   gap: 18px;
@@ -739,7 +797,8 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .price-card {
+  .price-card,
+  .signup-form {
     width: 100%;
   }
 }
@@ -850,6 +909,11 @@ h1 {
 
   .button {
     width: 100%;
+  }
+
+  .signup-form {
+    grid-template-columns: 1fr;
+    padding: 22px;
   }
 
   .dashboard-top {

@@ -136,12 +136,41 @@
             growing organizations.
           </p>
         </div>
-        <article class="price-card">
-          <span>Coming soon</span>
-          <strong>Enterprise</strong>
-          <p>Sign up to hear when enterprise workflows, secure AI controls, and team rollout support are available.</p>
-          <a class="button primary full" href="mailto:hello@worksmartos.com">Join launch list</a>
-        </article>
+        <form class="signup-form" action="https://formspree.io/f/your-form-id" method="POST">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" autocomplete="name" required />
+          </label>
+          <label>
+            <span>Work email</span>
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+          <label>
+            <span>Company</span>
+            <input type="text" name="company" autocomplete="organization" required />
+          </label>
+          <label>
+            <span>Role</span>
+            <input type="text" name="role" autocomplete="organization-title" />
+          </label>
+          <label>
+            <span>Team size</span>
+            <select name="team_size">
+              <option value="">Select one</option>
+              <option>1-25</option>
+              <option>26-100</option>
+              <option>101-500</option>
+              <option>501-1,000</option>
+              <option>1,000+</option>
+            </select>
+          </label>
+          <label class="form-full">
+            <span>What do you want to automate?</span>
+            <textarea name="automation_goals" rows="4"></textarea>
+          </label>
+          <input type="hidden" name="source" value="WorkSmartOS enterprise launch page" />
+          <button class="button primary full" type="submit">Join launch list</button>
+        </form>
       </section>
     </main>
 
