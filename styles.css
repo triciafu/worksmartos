@@ -500,8 +500,8 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
-  margin-top: 24px;
-  margin-bottom: 24px;
+  margin-top: 48px;
+  margin-bottom: 48px;
 }
 
 .feature-card,
@@ -514,7 +514,7 @@ h1 {
 .feature-card {
   display: flex;
   flex-direction: column;
-  padding: 44px 28px;
+  padding: 88px 28px;
 }
 
 .feature-icon {
