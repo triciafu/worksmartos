@@ -705,7 +705,7 @@ h1 {
 .signup-form span {
   color: var(--muted);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .signup-form input,
@@ -721,8 +721,10 @@ h1 {
   font-size: 15px;
 }
 
-.signup-form select {
-  font-weight: 600;
+.signup-form input,
+.signup-form select,
+.signup-form textarea {
+  font-weight: 400;
 }
 
 .signup-form input,
