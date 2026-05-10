@@ -458,8 +458,8 @@ h1 {
 }
 
 .section {
-  padding-top: 88px;
-  padding-bottom: 88px;
+  padding-top: 124px;
+  padding-bottom: 124px;
 }
 
 .section-heading {
@@ -533,7 +533,7 @@ h1 {
   gap: 64px;
   align-items: center;
   padding-top: 96px;
-  padding-bottom: 96px;
+  padding-bottom: 124px;
   border-top: 1px solid var(--line);
 }
 
@@ -544,7 +544,7 @@ h1 {
   align-items: center;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 96px 24px;
+  padding: 124px 24px;
   border-top: 1px solid var(--line);
   color: var(--ink);
   background: #ffffff;
@@ -624,7 +624,7 @@ h1 {
   justify-content: space-between;
   gap: 44px;
   padding-top: 96px;
-  padding-bottom: 104px;
+  padding-bottom: 132px;
   border-top: 1px solid var(--line);
 }
 
