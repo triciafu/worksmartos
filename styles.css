@@ -319,8 +319,7 @@ h1 {
 
 .dashboard-top,
 .metric-row,
-.flow-card,
-.pricing-section {
+.flow-card {
   display: flex;
 }
 
@@ -530,18 +529,17 @@ h1 {
 }
 
 .security-section {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.75fr);
-  gap: 64px;
-  align-items: center;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 96px 24px;
+  max-width: none;
+  margin: 0;
+  padding: 104px max(24px, calc((100vw - 1180px) / 2 + 24px));
   border-top: 1px solid var(--line);
+  color: #ffffff;
+  background: #101114;
 }
 
 .security-copy {
-  max-width: 680px;
+  max-width: 830px;
+  margin-bottom: 48px;
 }
 
 .security-copy h2 {
@@ -552,67 +550,131 @@ h1 {
 }
 
 .security-copy p {
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.72);
   font-size: 17px;
   line-height: 1.58;
 }
 
+.security-section .eyebrow {
+  color: #7eb8ff;
+}
+
 .security-list {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .security-list article {
-  padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: white;
+  min-height: 220px;
+  padding: 28px;
+  background: #181a1f;
 }
 
 .security-list span {
   margin: 0;
-  color: var(--muted);
+  color: #7eb8ff;
   font-size: 13px;
   font-weight: 700;
 }
 
 .security-list strong {
   display: block;
-  margin-top: 9px;
-  font-size: 19px;
+  margin-top: 46px;
+  color: #ffffff;
+  font-size: 23px;
   line-height: 1.3;
+  font-weight: 500;
+}
+
+.security-list p {
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 .workflow-list {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .workflow-list article {
-  padding: 22px;
-  border: 1px solid var(--line);
+  min-height: 210px;
+  padding: 28px;
+  border: 0;
   border-radius: 8px;
-  background: white;
+  background: #f6f7f9;
 }
 
 .workflow-list strong {
   display: block;
-  margin-top: 9px;
-  font-size: 19px;
+  margin-top: 0;
+  font-size: 28px;
   line-height: 1.3;
+  font-weight: 500;
+}
+
+.workflow-list p {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.55;
 }
 
 .pricing-section {
-  align-items: stretch;
-  justify-content: space-between;
-  gap: 44px;
+  display: block;
   padding-top: 96px;
   padding-bottom: 104px;
   border-top: 1px solid var(--line);
 }
 
+.pilot-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.48fr);
+  gap: 56px;
+  align-items: end;
+  padding: 46px;
+  border-radius: 8px;
+  background: #f6f7f9;
+}
+
 .pricing-copy {
   max-width: 650px;
+}
+
+.pilot-actions {
+  display: grid;
+  gap: 24px;
+  justify-items: stretch;
+}
+
+.pilot-detail span {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pilot-detail strong {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 28px;
+  line-height: 1.08;
+  font-weight: 600;
+}
+
+.pilot-detail p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.55;
 }
 
 .price-card {
@@ -644,7 +706,6 @@ h1 {
 
 @media (max-width: 940px) {
   .hero,
-  .security-section,
   .split-section,
   .pricing-section {
     grid-template-columns: 1fr;
@@ -660,8 +721,10 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .pricing-section {
-    display: grid;
+  .security-list,
+  .workflow-list,
+  .pilot-panel {
+    grid-template-columns: 1fr;
   }
 
   .price-card {
@@ -738,6 +801,7 @@ h1 {
   }
 
   .section,
+  .security-section,
   .split-section,
   .pricing-section {
     padding-top: 68px;
@@ -745,6 +809,7 @@ h1 {
   }
 
   .section h2,
+  .security-copy h2,
   .split-section h2,
   .pricing-copy h2 {
     font-size: 38px;
@@ -760,11 +825,16 @@ h1 {
   .nav-shell,
   .hero,
   .section,
+  .security-section,
   .split-section,
   .pricing-section,
   .site-footer {
     padding-right: 18px;
     padding-left: 18px;
+  }
+
+  .pilot-panel {
+    padding: 28px;
   }
 
   h1 {
