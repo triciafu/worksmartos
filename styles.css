@@ -544,6 +544,18 @@ h1 {
   line-height: 1.58;
 }
 
+.feature-link {
+  display: inline-block;
+  margin-top: 18px;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.feature-link:hover {
+  color: var(--accent-dark);
+}
+
 .split-section {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(360px, 0.72fr);
