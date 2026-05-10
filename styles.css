@@ -58,8 +58,15 @@ a {
 }
 
 .brand {
+  gap: 8px;
   color: #000000;
   font-size: 20px;
+  font-weight: 500;
+}
+
+.brand-beta {
+  color: var(--accent);
+  font-size: 12px;
   font-weight: 500;
 }
 
