@@ -529,6 +529,60 @@ h1 {
   border-top: 1px solid var(--line);
 }
 
+.security-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.75fr);
+  gap: 64px;
+  align-items: center;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 96px 24px;
+  border-top: 1px solid var(--line);
+}
+
+.security-copy {
+  max-width: 680px;
+}
+
+.security-copy h2 {
+  margin-bottom: 18px;
+  font-size: clamp(38px, 5vw, 58px);
+  line-height: 1.03;
+  font-weight: 600;
+}
+
+.security-copy p {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.58;
+}
+
+.security-list {
+  display: grid;
+  gap: 12px;
+}
+
+.security-list article {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+}
+
+.security-list span {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.security-list strong {
+  display: block;
+  margin-top: 9px;
+  font-size: 19px;
+  line-height: 1.3;
+}
+
 .workflow-list {
   display: grid;
   gap: 12px;
@@ -590,6 +644,7 @@ h1 {
 
 @media (max-width: 940px) {
   .hero,
+  .security-section,
   .split-section,
   .pricing-section {
     grid-template-columns: 1fr;
