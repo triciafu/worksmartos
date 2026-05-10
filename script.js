@@ -44,3 +44,41 @@ if ("IntersectionObserver" in window) {
 } else {
   motionTargets.forEach((target) => target.classList.add("is-visible"));
 }
+
+
+const signupForm = document.querySelector("[data-signup-form]");
+const formStatus = document.querySelector("[data-form-status]");
+
+if (signupForm && formStatus) {
+  signupForm.addEventListener("submit", async (event) => {
+    const endpoint = signupForm.getAttribute("action");
+
+    if (!endpoint || endpoint.includes("PASTE_GOOGLE_APPS_SCRIPT")) {
+      event.preventDefault();
+      formStatus.textContent = "Form storage is not connected yet.";
+      formStatus.classList.add("is-error");
+      return;
+    }
+
+    event.preventDefault();
+    formStatus.textContent = "Submitting...";
+    formStatus.classList.remove("is-error");
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: new FormData(signupForm),
+      });
+
+      if (!response.ok) {
+        throw new Error("Submission failed");
+      }
+
+      signupForm.reset();
+      formStatus.textContent = "Thanks. You're on the enterprise launch list.";
+    } catch (error) {
+      formStatus.textContent = "Something went wrong. Please try again.";
+      formStatus.classList.add("is-error");
+    }
+  });
+}

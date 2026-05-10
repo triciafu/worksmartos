@@ -755,6 +755,19 @@ h1 {
   display: none;
 }
 
+.form-status {
+  grid-column: 1 / -1;
+  min-height: 20px;
+  margin: -2px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.form-status.is-error {
+  color: #b42318;
+}
+
 .site-footer {
   justify-content: space-between;
   gap: 18px;
