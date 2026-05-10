@@ -171,13 +171,13 @@ p {
 h1 {
   max-width: 600px;
   margin-bottom: 24px;
-  font-size: 56px;
+  font-size: 50px;
   line-height: 1.15;
   font-weight: 600;
 }
 
 .hero h1 {
-  font-size: 56px;
+  font-size: 50px;
 }
 
 .hero-text {
