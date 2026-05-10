@@ -44,23 +44,3 @@ if ("IntersectionObserver" in window) {
 } else {
   motionTargets.forEach((target) => target.classList.add("is-visible"));
 }
-
-
-const automationInterest = document.querySelector("[data-automation-interest]");
-const otherAutomationField = document.querySelector("[data-other-automation-field]");
-const otherAutomationInput = document.querySelector("[data-other-automation-input]");
-
-if (automationInterest && otherAutomationField && otherAutomationInput) {
-  const syncOtherAutomationField = () => {
-    const shouldShow = automationInterest.value === "Other";
-    otherAutomationField.classList.toggle("is-hidden", !shouldShow);
-    otherAutomationInput.required = shouldShow;
-
-    if (!shouldShow) {
-      otherAutomationInput.value = "";
-    }
-  };
-
-  automationInterest.addEventListener("change", syncOtherAutomationField);
-  syncOtherAutomationField();
-}

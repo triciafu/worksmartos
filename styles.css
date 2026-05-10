@@ -721,6 +721,10 @@ h1 {
   font-size: 15px;
 }
 
+.signup-form select {
+  font-weight: 600;
+}
+
 .signup-form input,
 .signup-form select {
   height: 44px;
