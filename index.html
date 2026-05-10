@@ -164,12 +164,26 @@
               <option>1,000+</option>
             </select>
           </label>
+          <label>
+            <span>Automation interest</span>
+            <select name="automation_interest" data-automation-interest required>
+              <option value="">Select one</option>
+              <option value="Email automation">Email automation</option>
+              <option value="Workflow automation">Workflow automation</option>
+              <option value="Meeting coordination">Meeting coordination</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          <label class="form-full is-hidden" data-other-automation-field>
+            <span>Tell us what you want to automate</span>
+            <input type="text" name="automation_interest_other" data-other-automation-input />
+          </label>
           <label class="form-full">
             <span>What do you want to automate?</span>
             <textarea name="automation_goals" rows="4"></textarea>
           </label>
           <input type="hidden" name="source" value="WorkSmartOS enterprise launch page" />
-          <button class="button primary full" type="submit">Join launch list</button>
+          <button class="button primary full" type="submit">Submit</button>
         </form>
       </section>
     </main>

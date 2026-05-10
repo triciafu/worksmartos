@@ -210,6 +210,7 @@ h1 {
 
 .button {
   display: inline-flex;
+  border: 0;
   align-items: center;
   justify-content: center;
   min-height: 44px;
@@ -691,7 +692,7 @@ h1 {
   gap: 16px;
   width: min(100%, 520px);
   padding: 28px;
-  border: 1px solid var(--line);
+  border: 0;
   border-radius: 8px;
   background: #ffffff;
 }
@@ -704,16 +705,17 @@ h1 {
 .signup-form span {
   color: var(--muted);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .signup-form input,
 .signup-form select,
 .signup-form textarea {
   width: 100%;
-  border: 1px solid var(--line);
+  border: 0;
   border-radius: 8px;
   background: #ffffff;
+  box-shadow: none;
   color: var(--ink);
   font: inherit;
   font-size: 15px;
@@ -741,6 +743,10 @@ h1 {
 .form-full,
 .signup-form button {
   grid-column: 1 / -1;
+}
+
+.is-hidden {
+  display: none;
 }
 
 .site-footer {
