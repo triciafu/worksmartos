@@ -51,10 +51,10 @@
           <div class="studio-panel-heading">
             <span>Step 1</span>
             <h2>Write the approval request once.</h2>
-            <p>Use merge fields to personalize the message for every client, team, or stakeholder.</p>
+            <p class="step-instruction">Write the message once, then use merge fields to personalize it for every recipient.</p>
           </div>
           <label>
-            <span>Subject template</span>
+            <span>Subject</span>
             <input
               type="text"
               name="subject_template"
@@ -63,7 +63,7 @@
             />
           </label>
           <label>
-            <span>Email template</span>
+            <span>Email</span>
             <textarea name="body_template" rows="12" required>Hi {{contact_name}},
 
 Sharing the {{campaign_name}} creative for {{client_name}} for your review.

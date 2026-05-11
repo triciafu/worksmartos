@@ -1484,3 +1484,18 @@ iframe[style*="position: fixed"] {
     margin: 0;
   }
 }
+
+
+.studio-controls {
+  justify-items: stretch;
+}
+
+.studio-controls > label,
+.studio-controls .token-row,
+.studio-controls .studio-actions {
+  width: min(100%, 600px);
+}
+
+.step-instruction {
+  max-width: 600px;
+}
