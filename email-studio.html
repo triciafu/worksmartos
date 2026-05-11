@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Create personalized approval request emails for multiple client or team contacts from one master template."
+    />
+    <title>Approval Email Studio | WorkSmartOS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="WorkSmartOS home">
+          <span>WorkSmartOS</span>
+          <span class="brand-beta">Beta</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-links" data-nav>
+          <a href="index.html#tools">Explore tools</a>
+          <a href="index.html#enterprise">Enterprise Solutions</a>
+          <a class="nav-cta" href="index.html#launch">Start now</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="studio-page">
+      <section class="studio-hero">
+        <p class="eyebrow">Approval Email Studio</p>
+        <h1>Create 35 approval emails from one message.</h1>
+        <p>
+          Build personalized client or team approval requests from a single template.
+          Review every version, copy what you need, or export the full batch.
+        </p>
+      </section>
+
+      <section class="studio-shell" aria-label="Approval email generator">
+        <form class="studio-panel studio-controls" data-email-studio-form>
+          <div class="studio-panel-heading">
+            <span>Step 1</span>
+            <h2>Master approval email</h2>
+          </div>
+          <label>
+            <span>Subject template</span>
+            <input
+              type="text"
+              name="subject_template"
+              value="Approval needed: {{campaign_name}} creative for {{client_name}}"
+              required
+            />
+          </label>
+          <label>
+            <span>Email template</span>
+            <textarea name="body_template" rows="12" required>Hi {{contact_name}},
+
+Sharing the {{campaign_name}} creative for {{client_name}} for your review.
+
+Please approve or send feedback by {{deadline}}:
+{{approval_link}}
+
+{{custom_note}}
+
+Thank you,
+{{sender_name}}</textarea>
+          </label>
+          <div class="token-row" aria-label="Available merge fields">
+            <span>{{client_name}}</span>
+            <span>{{contact_name}}</span>
+            <span>{{campaign_name}}</span>
+            <span>{{deadline}}</span>
+            <span>{{approval_link}}</span>
+            <span>{{custom_note}}</span>
+            <span>{{sender_name}}</span>
+          </div>
+          <label>
+            <span>Your name</span>
+            <input type="text" name="sender_name" value="Tricia" />
+          </label>
+          <div class="studio-actions">
+            <button class="button secondary" type="button" data-load-sample>Load sample list</button>
+            <button class="button primary" type="submit">Generate emails</button>
+          </div>
+        </form>
+
+        <section class="studio-panel recipient-panel">
+          <div class="studio-panel-heading">
+            <span>Step 2</span>
+            <h2>Approval recipients</h2>
+          </div>
+          <div class="recipient-table-wrap">
+            <table class="recipient-table">
+              <thead>
+                <tr>
+                  <th>Client/team</th>
+                  <th>Contact</th>
+                  <th>Campaign</th>
+                  <th>Deadline</th>
+                  <th>Approval link</th>
+                  <th>Note</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody data-recipient-body>
+                <tr>
+                  <td><input name="client_name" value="GLAM INC" /></td>
+                  <td><input name="contact_name" value="Tricia" /></td>
+                  <td><input name="campaign_name" value="Spring Campaign" /></td>
+                  <td><input name="deadline" value="Friday at 3 PM" /></td>
+                  <td><input name="approval_link" value="https://approval-link.com/glam" /></td>
+                  <td><input name="custom_note" value="Please focus on the hero concept and final CTA." /></td>
+                  <td><button class="table-button" type="button" data-remove-row>Remove</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="button secondary" type="button" data-add-row>Add recipient</button>
+        </section>
+      </section>
+
+      <section class="studio-output" aria-live="polite">
+        <div class="studio-output-heading">
+          <div>
+            <p class="eyebrow">Generated batch</p>
+            <h2 data-output-count>No emails generated yet.</h2>
+          </div>
+          <button class="button secondary" type="button" data-export-csv disabled>Export CSV</button>
+        </div>
+        <div class="email-preview-grid" data-email-output>
+          <article class="empty-state">
+            <h3>Your personalized approval emails will appear here.</h3>
+            <p>Load the sample list or add your own clients, then generate the batch.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>WorkSmartOS</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:contact@worksmartos.com">contact@worksmartos.com</a>
+      </div>
+    </footer>
+
+    <script src="email-studio.js"></script>
+  </body>
+</html>
