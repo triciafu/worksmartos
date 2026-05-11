@@ -30,8 +30,9 @@ const bodyTemplateEditor = document.querySelector("[data-body-template]");
 const formatButtons = document.querySelectorAll("[data-format]");
 const undoButton = document.querySelector("[data-format=\"undo\"]");
 const redoButton = document.querySelector("[data-format=\"redo\"]");
-const tokenButtons = document.querySelectorAll("[data-token]");
-const subjectTemplateInput = form.querySelector("[name=\"subject_template\"]");
+const tokenList = document.querySelector("[data-token-list]");
+const addPlaceholderButton = document.querySelector("[data-add-placeholder]");
+const subjectTemplateEditor = document.querySelector("[data-subject-template]");
 
 let currentStep = 0;
 let editorHistory = [];
@@ -40,7 +41,7 @@ let isRestoringHistory = false;
 
 let generatedEmails = [];
 
-const fields = [
+const defaultFields = [
   "client_name",
   "contact_firstname",
   "campaign_name",
@@ -48,6 +49,22 @@ const fields = [
   "approval_link",
   "custom_note",
 ];
+
+const fieldLabels = {
+  client_name: "Client/team",
+  contact_firstname: "Contact",
+  campaign_name: "Campaign",
+  deadline: "Deadline",
+  approval_link: "Approval link",
+  custom_note: "Note",
+};
+
+const fields = [...defaultFields];
+
+function recipientFieldTemplate(field, values = {}) {
+  const wideClass = ["approval_link", "custom_note"].includes(field) || !defaultFields.includes(field) ? " class=\"wide\"" : "";
+  return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
+}
 
 function rowTemplate(values = {}) {
   const row = document.createElement("article");
@@ -57,12 +74,7 @@ function rowTemplate(values = {}) {
       <strong>Recipient</strong>
       <button class="table-button" type="button" data-remove-row>Remove</button>
     </div>
-    <label><span>Client/team</span><input name="client_name" value="${escapeAttribute(values.client_name || "")}" /></label>
-    <label><span>Contact</span><input name="contact_firstname" value="${escapeAttribute(values.contact_firstname || "")}" /></label>
-    <label><span>Campaign</span><input name="campaign_name" value="${escapeAttribute(values.campaign_name || "")}" /></label>
-    <label><span>Deadline</span><input name="deadline" value="${escapeAttribute(values.deadline || "")}" /></label>
-    <label class="wide"><span>Approval link</span><input name="approval_link" value="${escapeAttribute(values.approval_link || "")}" /></label>
-    <label class="wide"><span>Note</span><input name="custom_note" value="${escapeAttribute(values.custom_note || "")}" /></label>
+    ${fields.map((field) => recipientFieldTemplate(field, values)).join("")}
   `;
   return row;
 }
@@ -100,45 +112,93 @@ function htmlToText(html) {
   return temp.innerText.trim();
 }
 
-function insertTokenIntoInput(input, token) {
-  const start = input.selectionStart ?? input.value.length;
-  const end = input.selectionEnd ?? input.value.length;
-  input.value = `${input.value.slice(0, start)}${token}${input.value.slice(end)}`;
-  input.focus();
-  input.setSelectionRange(start + token.length, start + token.length);
+function createTokenElement(token, label, removeAttribute = "data-remove-token") {
+  const chip = document.createElement("span");
+  chip.className = "merge-token";
+  chip.contentEditable = "false";
+  chip.draggable = true;
+  chip.dataset.token = token;
+  chip.dataset.label = label;
+  chip.textContent = label;
+
+  const removeButton = document.createElement("button");
+  removeButton.type = "button";
+  removeButton.setAttribute(removeAttribute, "");
+  removeButton.setAttribute("aria-label", `Remove ${label}`);
+  removeButton.textContent = "×";
+  chip.appendChild(removeButton);
+
+  return chip;
 }
 
-function insertTokenIntoEditor(editor, token) {
+function createPaletteToken(token, label) {
+  return createTokenElement(token, label, "data-remove-placeholder");
+}
+
+function labelFromTokenElement(element) {
+  return element.dataset.label || element.textContent.replace("×", "").trim();
+}
+
+function addRecipientField(field, label) {
+  if (fields.includes(field)) {
+    return;
+  }
+
+  fields.push(field);
+  fieldLabels[field] = label;
+
+  recipientBody.querySelectorAll(".recipient-card").forEach((card) => {
+    card.insertAdjacentHTML("beforeend", recipientFieldTemplate(field));
+  });
+}
+
+function templateHtmlToMergeHtml(html) {
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+  temp.querySelectorAll(".merge-token").forEach((token) => {
+    token.replaceWith(document.createTextNode(token.dataset.token || ""));
+  });
+  return temp.innerHTML;
+}
+
+function templateHtmlToMergeText(html) {
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+  temp.querySelectorAll(".merge-token").forEach((token) => {
+    token.replaceWith(document.createTextNode(token.dataset.token || ""));
+  });
+  return temp.innerText.trim();
+}
+
+function insertTokenIntoEditor(editor, token, label) {
   editor.focus();
   const selection = window.getSelection();
 
+  const node = createTokenElement(token, label);
+  const spacer = document.createTextNode(" ");
+
   if (!selection || !selection.rangeCount) {
-    editor.append(document.createTextNode(token));
+    editor.append(node, spacer);
     return;
   }
 
   const range = selection.getRangeAt(0);
   if (!editor.contains(range.commonAncestorContainer)) {
-    editor.append(document.createTextNode(token));
+    editor.append(node, spacer);
     return;
   }
 
   range.deleteContents();
-  const node = document.createTextNode(token);
+  range.insertNode(spacer);
   range.insertNode(node);
-  range.setStartAfter(node);
-  range.setEndAfter(node);
+  range.setStartAfter(spacer);
+  range.setEndAfter(spacer);
   selection.removeAllRanges();
   selection.addRange(range);
 }
 
-function insertToken(target, token) {
-  if (target === subjectTemplateInput) {
-    insertTokenIntoInput(subjectTemplateInput, token);
-    return;
-  }
-
-  insertTokenIntoEditor(bodyTemplateEditor, token);
+function insertToken(target, token, label) {
+  insertTokenIntoEditor(target, token, label);
 }
 
 function setEditorCaretFromPoint(editor, x, y) {
@@ -167,16 +227,14 @@ function setEditorCaretFromPoint(editor, x, y) {
 function handleTokenDrop(event, target) {
   event.preventDefault();
   const token = event.dataTransfer.getData("text/plain");
+  const label = event.dataTransfer.getData("application/x-worksmartos-label") || token;
 
   if (!token) {
     return;
   }
 
-  if (target === bodyTemplateEditor) {
-    setEditorCaretFromPoint(bodyTemplateEditor, event.clientX, event.clientY);
-  }
-
-  insertToken(target, token);
+  setEditorCaretFromPoint(target, event.clientX, event.clientY);
+  insertToken(target, token, label);
   saveEditorHistory();
 }
 
@@ -190,7 +248,7 @@ function saveEditorHistory() {
     return;
   }
 
-  const html = bodyTemplateEditor.innerHTML;
+  const html = `${subjectTemplateEditor.innerHTML}|||${bodyTemplateEditor.innerHTML}`;
   if (editorHistory[editorHistoryIndex] === html) {
     updateHistoryButtons();
     return;
@@ -209,7 +267,9 @@ function restoreEditorHistory(index) {
 
   isRestoringHistory = true;
   editorHistoryIndex = index;
-  bodyTemplateEditor.innerHTML = editorHistory[editorHistoryIndex];
+  const [subjectHtml = "", bodyHtml = ""] = editorHistory[editorHistoryIndex].split("|||");
+  subjectTemplateEditor.innerHTML = subjectHtml;
+  bodyTemplateEditor.innerHTML = bodyHtml;
   bodyTemplateEditor.focus();
   isRestoringHistory = false;
   updateHistoryButtons();
@@ -372,9 +432,10 @@ formatButtons.forEach((button) => {
   });
 });
 
+subjectTemplateEditor.addEventListener("input", saveEditorHistory);
 bodyTemplateEditor.addEventListener("input", saveEditorHistory);
 
-[subjectTemplateInput, bodyTemplateEditor].forEach((target) => {
+[subjectTemplateEditor, bodyTemplateEditor].forEach((target) => {
   target.addEventListener("dragover", (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "copy";
@@ -391,9 +452,10 @@ bodyTemplateEditor.addEventListener("input", saveEditorHistory);
   });
 });
 
-tokenButtons.forEach((tokenButton) => {
+function bindTokenDrag(tokenButton) {
   tokenButton.addEventListener("dragstart", (event) => {
     event.dataTransfer.setData("text/plain", tokenButton.dataset.token);
+    event.dataTransfer.setData("application/x-worksmartos-label", labelFromTokenElement(tokenButton));
     event.dataTransfer.effectAllowed = "copy";
     tokenButton.classList.add("is-dragging");
   });
@@ -401,8 +463,44 @@ tokenButtons.forEach((tokenButton) => {
   tokenButton.addEventListener("dragend", () => {
     tokenButton.classList.remove("is-dragging");
     bodyTemplateEditor.classList.remove("is-drag-over");
-    subjectTemplateInput.classList.remove("is-drag-over");
+    subjectTemplateEditor.classList.remove("is-drag-over");
   });
+}
+
+document.querySelectorAll("[data-token]").forEach(bindTokenDrag);
+
+tokenList.addEventListener("click", (event) => {
+  if (event.target.matches("[data-remove-placeholder]")) {
+    event.target.closest("[data-token]").remove();
+  }
+});
+
+[subjectTemplateEditor, bodyTemplateEditor].forEach((editor) => {
+  editor.addEventListener("click", (event) => {
+    if (event.target.matches("[data-remove-token]")) {
+      event.target.closest(".merge-token").remove();
+      saveEditorHistory();
+    }
+  });
+});
+
+addPlaceholderButton.addEventListener("click", () => {
+  const label = window.prompt("Placeholder name", "New Placeholder");
+  if (!label) {
+    return;
+  }
+
+  const field = label.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+  if (!field) {
+    return;
+  }
+
+  const cleanLabel = label.trim();
+  addRecipientField(field, cleanLabel);
+
+  const token = createPaletteToken(`{{${field}}}`, cleanLabel);
+  tokenList.appendChild(token);
+  bindTokenDrag(token);
 });
 
 nextStepButtons.forEach((button) => {
@@ -426,8 +524,8 @@ generateStepButton.addEventListener("click", () => {
 
 function generateEmails() {
   const formData = new FormData(form);
-  const subjectTemplate = formData.get("subject_template");
-  const bodyTemplate = bodyTemplateEditor.innerHTML;
+  const subjectTemplate = templateHtmlToMergeText(subjectTemplateEditor.innerHTML);
+  const bodyTemplate = templateHtmlToMergeHtml(bodyTemplateEditor.innerHTML);
   const senderName = formData.get("sender_name") || "";
 
   const emails = getRecipients().map((recipient) => {

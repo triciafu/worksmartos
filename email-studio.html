@@ -49,15 +49,10 @@
         <div class="stepper-track" data-stepper-track>
         <form class="studio-controls studio-step template-step" data-email-studio-form data-step-panel="0">
           <div class="template-card studio-panel">
-            <label>
+            <div class="template-field">
               <span>Subject</span>
-              <input
-                type="text"
-                name="subject_template"
-                value="Approval needed: {{campaign_name}} creative for {{client_name}}"
-                required
-              />
-            </label>
+              <div class="token-editor subject-editor" contenteditable="true" data-subject-template role="textbox" aria-label="Subject">Approval needed: <span class="merge-token" contenteditable="false" draggable="true" data-token="{{campaign_name}}">Campaign Name<button type="button" data-remove-token aria-label="Remove Campaign Name">×</button></span> creative for <span class="merge-token" contenteditable="false" draggable="true" data-token="{{client_name}}">Client Name<button type="button" data-remove-token aria-label="Remove Client Name">×</button></span></div>
+            </div>
             <div class="rich-field">
               <span>Email</span>
               <div class="format-toolbar" aria-label="Email formatting controls">
@@ -68,11 +63,11 @@
                 <button type="button" data-format="underline" aria-label="Underline"><u>U</u></button>
               </div>
               <div class="rich-editor" contenteditable="true" data-body-template role="textbox" aria-multiline="true">
-                <p>Hi {{contact_firstname}},</p>
-                <p>Sharing the {{campaign_name}} creative for {{client_name}} for your review.</p>
-                <p>Please approve or send feedback by {{deadline}}:<br />{{approval_link}}</p>
-                <p>{{custom_note}}</p>
-                <p>Thank you,<br />{{sender_name}}</p>
+                <p>Hi <span class="merge-token" contenteditable="false" draggable="true" data-token="{{contact_firstname}}">First Name<button type="button" data-remove-token aria-label="Remove First Name">×</button></span>,</p>
+                <p>Sharing the <span class="merge-token" contenteditable="false" draggable="true" data-token="{{campaign_name}}">Campaign Name<button type="button" data-remove-token aria-label="Remove Campaign Name">×</button></span> creative for <span class="merge-token" contenteditable="false" draggable="true" data-token="{{client_name}}">Client Name<button type="button" data-remove-token aria-label="Remove Client Name">×</button></span> for your review.</p>
+                <p>Please approve or send feedback by <span class="merge-token" contenteditable="false" draggable="true" data-token="{{deadline}}">Deadline<button type="button" data-remove-token aria-label="Remove Deadline">×</button></span>:<br /><span class="merge-token" contenteditable="false" draggable="true" data-token="{{approval_link}}">Approval Link<button type="button" data-remove-token aria-label="Remove Approval Link">×</button></span></p>
+                <p><span class="merge-token" contenteditable="false" draggable="true" data-token="{{custom_note}}">Custom Note<button type="button" data-remove-token aria-label="Remove Custom Note">×</button></span></p>
+                <p>Thank you,<br /><span class="merge-token" contenteditable="false" draggable="true" data-token="{{sender_name}}">Sender Name<button type="button" data-remove-token aria-label="Remove Sender Name">×</button></span></p>
               </div>
             </div>
           </div>
@@ -83,15 +78,16 @@
               <h2>Write your email template</h2>
               <p>Drag and drop placeholders into the email where each recipient detail should appear.</p>
             </div>
-            <div class="token-row" aria-label="Available merge fields">
-              <span draggable="true" data-token="{{client_name}}">Client Name</span>
-              <span draggable="true" data-token="{{contact_firstname}}">First Name</span>
-              <span draggable="true" data-token="{{campaign_name}}">Campaign Name</span>
-              <span draggable="true" data-token="{{deadline}}">Deadline</span>
-              <span draggable="true" data-token="{{approval_link}}">Approval Link</span>
-              <span draggable="true" data-token="{{custom_note}}">Custom Note</span>
-              <span draggable="true" data-token="{{sender_name}}">Sender Name</span>
+            <div class="token-row" aria-label="Available merge fields" data-token-list>
+              <span draggable="true" data-token="{{client_name}}" data-label="Client Name">Client Name<button type="button" data-remove-placeholder aria-label="Remove Client Name">×</button></span>
+              <span draggable="true" data-token="{{contact_firstname}}" data-label="First Name">First Name<button type="button" data-remove-placeholder aria-label="Remove First Name">×</button></span>
+              <span draggable="true" data-token="{{campaign_name}}" data-label="Campaign Name">Campaign Name<button type="button" data-remove-placeholder aria-label="Remove Campaign Name">×</button></span>
+              <span draggable="true" data-token="{{deadline}}" data-label="Deadline">Deadline<button type="button" data-remove-placeholder aria-label="Remove Deadline">×</button></span>
+              <span draggable="true" data-token="{{approval_link}}" data-label="Approval Link">Approval Link<button type="button" data-remove-placeholder aria-label="Remove Approval Link">×</button></span>
+              <span draggable="true" data-token="{{custom_note}}" data-label="Custom Note">Custom Note<button type="button" data-remove-placeholder aria-label="Remove Custom Note">×</button></span>
+              <span draggable="true" data-token="{{sender_name}}" data-label="Sender Name">Sender Name<button type="button" data-remove-placeholder aria-label="Remove Sender Name">×</button></span>
             </div>
+            <button class="add-placeholder" type="button" data-add-placeholder><span>+</span>Add a new placeholder</button>
             <label>
               <span>Sender name</span>
               <input type="text" name="sender_name" value="Tricia" />
