@@ -1499,3 +1499,65 @@ iframe[style*="position: fixed"] {
 .step-instruction {
   max-width: 600px;
 }
+
+
+.studio-steps {
+  border: 1px solid #e3e5ea;
+  border-radius: 8px;
+  background: #f5f5f5;
+}
+
+.studio-steps span {
+  border: 0;
+  border-right: 1px solid #e3e5ea;
+}
+
+.studio-steps span:last-child {
+  border-right: 0;
+}
+
+.studio-steps span:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.studio-steps span:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.stepper-track .studio-controls {
+  width: min(100%, 600px);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.stepper-track .studio-controls.studio-panel {
+  padding: 34px;
+}
+
+.stepper-track .studio-controls > label,
+.stepper-track .studio-controls .token-row,
+.stepper-track .studio-controls .studio-actions {
+  width: 100%;
+}
+
+.stepper-track .studio-controls .studio-actions {
+  justify-content: space-between;
+}
+
+@media (max-width: 720px) {
+  .studio-steps {
+    border: 0;
+    background: transparent;
+  }
+
+  .studio-steps span,
+  .studio-steps span:first-child,
+  .studio-steps span:last-child {
+    border: 1px solid #e3e5ea;
+    border-radius: 8px;
+  }
+
+  .stepper-track .studio-controls.studio-panel {
+    padding: 24px;
+  }
+}
