@@ -28,10 +28,15 @@ const prevStepButtons = document.querySelectorAll("[data-prev-step]");
 const generateStepButton = document.querySelector("[data-generate-step]");
 const bodyTemplateEditor = document.querySelector("[data-body-template]");
 const formatButtons = document.querySelectorAll("[data-format]");
+const undoButton = document.querySelector("[data-format=\"undo\"]");
+const redoButton = document.querySelector("[data-format=\"redo\"]");
 const tokenButtons = document.querySelectorAll("[data-token]");
 const subjectTemplateInput = form.querySelector("[name=\"subject_template\"]");
 
 let currentStep = 0;
+let editorHistory = [];
+let editorHistoryIndex = -1;
+let isRestoringHistory = false;
 
 let generatedEmails = [];
 
@@ -172,6 +177,42 @@ function handleTokenDrop(event, target) {
   }
 
   insertToken(target, token);
+  saveEditorHistory();
+}
+
+function updateHistoryButtons() {
+  undoButton.disabled = editorHistoryIndex <= 0;
+  redoButton.disabled = editorHistoryIndex >= editorHistory.length - 1;
+}
+
+function saveEditorHistory() {
+  if (isRestoringHistory) {
+    return;
+  }
+
+  const html = bodyTemplateEditor.innerHTML;
+  if (editorHistory[editorHistoryIndex] === html) {
+    updateHistoryButtons();
+    return;
+  }
+
+  editorHistory = editorHistory.slice(0, editorHistoryIndex + 1);
+  editorHistory.push(html);
+  editorHistoryIndex = editorHistory.length - 1;
+  updateHistoryButtons();
+}
+
+function restoreEditorHistory(index) {
+  if (index < 0 || index >= editorHistory.length) {
+    return;
+  }
+
+  isRestoringHistory = true;
+  editorHistoryIndex = index;
+  bodyTemplateEditor.innerHTML = editorHistory[editorHistoryIndex];
+  bodyTemplateEditor.focus();
+  isRestoringHistory = false;
+  updateHistoryButtons();
 }
 
 function renderEmails(emails) {
@@ -313,10 +354,25 @@ formatButtons.forEach((button) => {
   });
 
   button.addEventListener("click", () => {
+    const command = button.dataset.format;
+
+    if (command === "undo") {
+      restoreEditorHistory(editorHistoryIndex - 1);
+      return;
+    }
+
+    if (command === "redo") {
+      restoreEditorHistory(editorHistoryIndex + 1);
+      return;
+    }
+
     bodyTemplateEditor.focus();
-    document.execCommand(button.dataset.format, false, null);
+    document.execCommand(command, false, null);
+    saveEditorHistory();
   });
 });
+
+bodyTemplateEditor.addEventListener("input", saveEditorHistory);
 
 [subjectTemplateInput, bodyTemplateEditor].forEach((target) => {
   target.addEventListener("dragover", (event) => {
@@ -405,4 +461,5 @@ function renumberRecipients() {
 }
 
 renumberRecipients();
+saveEditorHistory();
 goToStep(0);
