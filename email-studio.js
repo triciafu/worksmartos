@@ -133,7 +133,7 @@ function splitEmailList(value) {
 }
 
 function looksCompleteEmail(value) {
-  return /^[^\s,;@]+@[^\s,;@]+\.(com|org|net|edu|gov|io|co|ai|app|biz|info|us)$/i.test(value.trim());
+  return /^[^\s,;@]+@[^\s,;@]+\.(com|org|net|edu|gov|io|ai|app|biz|info|us)$/i.test(value.trim());
 }
 
 function shouldCommitEmailInput(value) {
