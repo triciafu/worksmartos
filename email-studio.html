@@ -126,8 +126,11 @@
                   </select>
                 </label>
                 <label>
-                  <span>Email address</span>
-                  <input name="recipient_email" type="text" value="tricia@example.com" placeholder="name@example.com, team@example.com" />
+                  <span>Email address(es)</span>
+                  <div class="email-chip-input" data-email-chip-input>
+                    <span class="email-address-chip">tricia@example.com<button type="button" data-remove-email-chip aria-label="Remove tricia@example.com">×</button></span>
+                    <input name="recipient_email" type="text" value="" placeholder="name@example.com, team@example.com" />
+                  </div>
                 </label>
               </div>
               <button class="add-placeholder add-address-link" type="button" data-add-address-row><span>+</span>Add another email field</button>

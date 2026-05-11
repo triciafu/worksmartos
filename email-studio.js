@@ -68,6 +68,16 @@ function recipientFieldTemplate(field, values = {}) {
   return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
 }
 
+function emailChipsTemplate(value = "") {
+  const emails = splitEmailList(value);
+  return `
+    <div class="email-chip-input" data-email-chip-input>
+      ${emails.map((email) => `<span class="email-address-chip">${escapeHtml(email)}<button type="button" data-remove-email-chip aria-label="Remove ${escapeAttribute(email)}">×</button></span>`).join("")}
+      <input name="recipient_email" type="text" value="" placeholder="name@example.com, team@example.com" />
+    </div>
+  `;
+}
+
 function addressRowTemplate(values = {}) {
   return `
     <div class="recipient-address-row">
@@ -80,8 +90,8 @@ function addressRowTemplate(values = {}) {
         </select>
       </label>
       <label>
-        <span>Email address</span>
-        <input name="recipient_email" type="text" value="${escapeAttribute(values.recipient_email || "")}" placeholder="name@example.com, team@example.com" />
+        <span>Email address(es)</span>
+        ${emailChipsTemplate(values.recipient_email || "")}
       </label>
     </div>
   `;
@@ -112,6 +122,51 @@ function escapeHtml(value) {
   return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
+function splitEmailList(value) {
+  return String(value)
+    .split(/[,;]+/)
+    .map((email) => email.trim())
+    .filter(Boolean);
+}
+
+function getEmailChipValues(container) {
+  const chips = Array.from(container.querySelectorAll(".email-address-chip")).map((chip) => chip.firstChild?.textContent.trim() || "");
+  const inputValue = container.querySelector('[name="recipient_email"]')?.value || "";
+  return [...chips, ...splitEmailList(inputValue)].filter(Boolean);
+}
+
+function createEmailChip(email) {
+  const chip = document.createElement("span");
+  chip.className = "email-address-chip";
+  chip.appendChild(document.createTextNode(email));
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.setAttribute("data-remove-email-chip", "");
+  button.setAttribute("aria-label", `Remove ${email}`);
+  button.textContent = "×";
+  chip.appendChild(button);
+
+  return chip;
+}
+
+function commitEmailChips(input) {
+  const container = input.closest("[data-email-chip-input]");
+  const emails = splitEmailList(input.value);
+  if (!container || !emails.length) {
+    return;
+  }
+
+  const existing = new Set(Array.from(container.querySelectorAll(".email-address-chip")).map((chip) => chip.firstChild?.textContent.trim() || ""));
+  emails.forEach((email) => {
+    if (!existing.has(email)) {
+      container.insertBefore(createEmailChip(email), input);
+      existing.add(email);
+    }
+  });
+  input.value = "";
+}
+
 function getRecipients() {
   return Array.from(recipientBody.querySelectorAll(".recipient-card"))
     .map((row) => {
@@ -121,7 +176,7 @@ function getRecipients() {
       });
       const addresses = Array.from(row.querySelectorAll(".recipient-address-row")).map((addressRow) => ({
         type: addressRow.querySelector('[name="recipient_type"]')?.value || "To",
-        email: addressRow.querySelector('[name="recipient_email"]')?.value.trim() || "",
+        email: getEmailChipValues(addressRow.querySelector("[data-email-chip-input]")).join(", "),
       })).filter((address) => address.email);
       data.addresses = addresses;
       data.recipient_type = addresses.map((address) => address.type).join("; ");
@@ -438,6 +493,27 @@ recipientBody.addEventListener("click", (event) => {
     const card = event.target.closest(".recipient-card");
     const addButton = card.querySelector("[data-add-address-row]");
     addButton.insertAdjacentHTML("beforebegin", addressRowTemplate());
+  }
+
+  if (event.target.matches("[data-remove-email-chip]")) {
+    event.target.closest(".email-address-chip")?.remove();
+  }
+});
+
+recipientBody.addEventListener("keydown", (event) => {
+  if (!event.target.matches('[name="recipient_email"]')) {
+    return;
+  }
+
+  if (event.key === "Enter" || event.key === ",") {
+    event.preventDefault();
+    commitEmailChips(event.target);
+  }
+});
+
+recipientBody.addEventListener("focusout", (event) => {
+  if (event.target.matches('[name="recipient_email"]')) {
+    commitEmailChips(event.target);
   }
 });
 
