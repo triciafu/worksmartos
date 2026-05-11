@@ -1226,14 +1226,14 @@ iframe[style*="position: fixed"] {
 .email-body-preview {
   min-height: 260px;
   padding: 14px;
-  line-height: 1.55;
+  line-height: 1.15;
   outline: none;
 }
 
 .token-editor {
   min-height: 42px;
   padding: 10px 12px;
-  line-height: 1.35;
+  line-height: 1.15;
   outline: none;
 }
 
@@ -1255,12 +1255,12 @@ iframe[style*="position: fixed"] {
 
 .rich-editor p,
 .email-body-preview p {
-  margin: 0 0 14px;
+  margin: 0;
 }
 
-.rich-editor p:last-child,
-.email-body-preview p:last-child {
-  margin-bottom: 0;
+.rich-editor br,
+.email-body-preview br {
+  line-height: 1.15;
 }
 
 .token-row {
@@ -1724,10 +1724,13 @@ iframe[style*="position: fixed"] {
 
 .template-step {
   display: grid;
-  grid-template-columns: minmax(180px, 220px) 600px minmax(180px, 220px);
+  grid-template-columns: minmax(180px, 220px) 600px;
   align-items: start;
   justify-content: center;
-  gap: 28px;
+  gap: 40px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
   padding: 0 24px;
 }
 
@@ -1831,6 +1834,7 @@ iframe[style*="position: fixed"] {
   .template-step {
     grid-template-columns: minmax(0, 600px);
     justify-content: center;
+    width: auto;
   }
 
   .template-card,
