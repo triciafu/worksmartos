@@ -1488,17 +1488,19 @@ iframe[style*="position: fixed"] {
 .studio-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
+  gap: 0;
   overflow: hidden;
   max-width: 1180px;
-  margin: 0 auto 28px;
+  margin: 0 auto 34px;
   padding: 0 24px;
+  border-bottom: 1px solid #d8dbe2;
 }
 
 .studio-steps span {
-  padding: 16px 18px;
-  border: 1px solid #e3e5ea;
-  background: #f5f5f5;
+  padding: 12px 18px 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
   color: var(--muted);
   font-size: 14px;
   font-weight: 400;
@@ -1506,7 +1508,7 @@ iframe[style*="position: fixed"] {
 
 .studio-steps .is-active {
   color: var(--ink);
-  background: #ffffff;
+  border-bottom-color: var(--accent);
 }
 
 .studio-panel-heading p {
@@ -1665,26 +1667,12 @@ iframe[style*="position: fixed"] {
 
 
 .studio-steps {
-  border: 1px solid #e3e5ea;
-  border-radius: 8px;
-  background: #f5f5f5;
+  border-radius: 0;
+  background: transparent;
 }
 
 .studio-steps span {
-  border: 0;
-  border-right: 1px solid #e3e5ea;
-}
-
-.studio-steps span:last-child {
   border-right: 0;
-}
-
-.studio-steps span:first-child {
-  border-radius: 8px 0 0 8px;
-}
-
-.studio-steps span:last-child {
-  border-radius: 0 8px 8px 0;
 }
 
 .stepper-track .studio-controls {
@@ -1855,7 +1843,8 @@ iframe[style*="position: fixed"] {
   grid-row: 1;
   align-self: start;
   justify-content: flex-start;
-  padding-top: 42px;
+  padding-top: 36px;
+  transform: translateX(-18px);
 }
 
 
@@ -1882,6 +1871,7 @@ iframe[style*="position: fixed"] {
     grid-row: auto;
     padding-top: 0;
     justify-content: flex-end;
+    transform: none;
   }
 
 
