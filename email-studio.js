@@ -73,14 +73,14 @@ function emailChipsTemplate(value = "") {
   return `
     <div class="email-chip-input" data-email-chip-input>
       ${emails.map((email) => `<span class="email-address-chip">${escapeHtml(email)}<button type="button" data-remove-email-chip aria-label="Remove ${escapeAttribute(email)}">×</button></span>`).join("")}
-      <input name="recipient_email" type="text" value="" placeholder="name@example.com, team@example.com" />
+      <input name="recipient_email" type="text" value="" />
     </div>
   `;
 }
 
-function addressRowTemplate(values = {}) {
+function addressRowTemplate(values = {}, isExtra = false) {
   return `
-    <div class="recipient-address-row">
+    <div class="recipient-address-row${isExtra ? " is-extra" : ""}">
       <label>
         <span>Field</span>
         <select name="recipient_type">
@@ -103,11 +103,11 @@ function rowTemplate(values = {}) {
   row.innerHTML = `
     <div class="recipient-card-top">
       <strong>Email</strong>
-      <button class="table-button" type="button" data-remove-row>Remove</button>
+      <button class="table-button" type="button" data-remove-row>x Remove</button>
     </div>
     ${addressRowTemplate(values)}
     <div class="address-field-actions">
-      <button class="add-placeholder add-address-link" type="button" data-add-address-row><span>+</span>Add another email field</button>
+      <button class="add-placeholder add-address-link" type="button" data-add-address-row><span>+</span>Add email field</button>
       <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
     </div>
     <div class="recipient-detail-grid">
@@ -542,7 +542,7 @@ recipientBody.addEventListener("click", (event) => {
   if (event.target.closest("[data-add-address-row]")) {
     const card = event.target.closest(".recipient-card");
     const actions = card.querySelector(".address-field-actions");
-    actions.insertAdjacentHTML("beforebegin", addressRowTemplate());
+    actions.insertAdjacentHTML("beforebegin", addressRowTemplate({}, true));
     updateAddressRemoveButtons(card);
   }
 
