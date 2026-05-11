@@ -35,7 +35,7 @@ let generatedEmails = [];
 const sampleRecipients = [
   {
     client_name: "GLAM INC",
-    contact_name: "Tricia",
+    contact_firstname: "Tricia",
     campaign_name: "Spring Campaign",
     deadline: "Friday at 3 PM",
     approval_link: "https://approval-link.com/glam",
@@ -43,7 +43,7 @@ const sampleRecipients = [
   },
   {
     client_name: "Northline Retail",
-    contact_name: "Maya",
+    contact_firstname: "Maya",
     campaign_name: "June Storefront Refresh",
     deadline: "Wednesday EOD",
     approval_link: "https://approval-link.com/northline",
@@ -51,7 +51,7 @@ const sampleRecipients = [
   },
   {
     client_name: "BrightPath Health",
-    contact_name: "Jordan",
+    contact_firstname: "Jordan",
     campaign_name: "Member Welcome Series",
     deadline: "Thursday at noon",
     approval_link: "https://approval-link.com/brightpath",
@@ -61,7 +61,7 @@ const sampleRecipients = [
 
 const fields = [
   "client_name",
-  "contact_name",
+  "contact_firstname",
   "campaign_name",
   "deadline",
   "approval_link",
@@ -77,7 +77,7 @@ function rowTemplate(values = {}) {
       <button class="table-button" type="button" data-remove-row>Remove</button>
     </div>
     <label><span>Client/team</span><input name="client_name" value="${escapeAttribute(values.client_name || "")}" /></label>
-    <label><span>Contact</span><input name="contact_name" value="${escapeAttribute(values.contact_name || "")}" /></label>
+    <label><span>Contact</span><input name="contact_firstname" value="${escapeAttribute(values.contact_firstname || "")}" /></label>
     <label><span>Campaign</span><input name="campaign_name" value="${escapeAttribute(values.campaign_name || "")}" /></label>
     <label><span>Deadline</span><input name="deadline" value="${escapeAttribute(values.deadline || "")}" /></label>
     <label class="wide"><span>Approval link</span><input name="approval_link" value="${escapeAttribute(values.approval_link || "")}" /></label>
@@ -103,7 +103,7 @@ function getRecipients() {
       });
       return data;
     })
-    .filter((row) => row.client_name || row.contact_name || row.campaign_name || row.approval_link);
+    .filter((row) => row.client_name || row.contact_firstname || row.campaign_name || row.approval_link);
 }
 
 function mergeTemplate(template, data) {
@@ -177,7 +177,7 @@ async function copyText(text) {
 function exportCsv() {
   const rows = [["Client/team", "Contact", "Campaign", "Subject", "Body"]];
   generatedEmails.forEach((email) => {
-    rows.push([email.client_name, email.contact_name, email.campaign_name, email.subject, email.body]);
+    rows.push([email.client_name, email.contact_firstname, email.campaign_name, email.subject, email.body]);
   });
 
   const csv = rows.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\n");
