@@ -106,7 +106,10 @@ function rowTemplate(values = {}) {
       <button class="table-button" type="button" data-remove-row>Remove</button>
     </div>
     ${addressRowTemplate(values)}
-    <button class="add-placeholder add-address-link" type="button" data-add-address-row><span>+</span>Add another email field</button>
+    <div class="address-field-actions">
+      <button class="add-placeholder add-address-link" type="button" data-add-address-row><span>+</span>Add another email field</button>
+      <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
+    </div>
     <div class="recipient-detail-grid">
       ${fields.map((field) => recipientFieldTemplate(field, values)).join("")}
     </div>
@@ -124,9 +127,53 @@ function escapeHtml(value) {
 
 function splitEmailList(value) {
   return String(value)
-    .split(/[,;]+/)
+    .split(/[,;\s]+/)
     .map((email) => email.trim())
     .filter(Boolean);
+}
+
+function looksCompleteEmail(value) {
+  return /^[^\s,;@]+@[^\s,;@]+\.(com|org|net|edu|gov|io|co|ai|app|biz|info|us)$/i.test(value.trim());
+}
+
+function shouldCommitEmailInput(value) {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return false;
+  }
+
+  if (/[\s,;]$/.test(value)) {
+    return splitEmailList(value).some(looksCompleteEmail);
+  }
+
+  return looksCompleteEmail(trimmed);
+}
+
+function getAddressGroups(addresses = []) {
+  return addresses.reduce((groups, address) => {
+    const key = address.type || "To";
+    groups[key] = groups[key] || [];
+    splitEmailList(address.email).forEach((email) => groups[key].push(email));
+    return groups;
+  }, { To: [], Cc: [], Bcc: [] });
+}
+
+function addressPreviewHtml(addresses = []) {
+  const groups = getAddressGroups(addresses);
+  return ["To", "Cc", "Bcc"].map((group) => `
+    <label>
+      <span>${group}:</span>
+      <input value="${escapeAttribute(groups[group].join(", "))}" data-address-input="${group}" />
+    </label>
+  `).join("");
+}
+
+function updateAddressRemoveButtons(card) {
+  const rows = card.querySelectorAll(".recipient-address-row");
+  const removeButton = card.querySelector("[data-remove-address-row]");
+  if (removeButton) {
+    removeButton.disabled = rows.length <= 1;
+  }
 }
 
 function getEmailChipValues(container) {
@@ -392,6 +439,9 @@ function renderEmails(emails) {
         <span>${String(index + 1).padStart(2, "0")}</span>
         <strong>${escapeHtml(email.client_name || "Untitled recipient")}</strong>
       </div>
+      <div class="email-address-preview">
+        ${addressPreviewHtml(email.addresses)}
+      </div>
       <label>
         <span>Subject</span>
         <input value="${escapeAttribute(email.subject)}" data-subject-input />
@@ -491,8 +541,18 @@ recipientBody.addEventListener("click", (event) => {
 
   if (event.target.closest("[data-add-address-row]")) {
     const card = event.target.closest(".recipient-card");
-    const addButton = card.querySelector("[data-add-address-row]");
-    addButton.insertAdjacentHTML("beforebegin", addressRowTemplate());
+    const actions = card.querySelector(".address-field-actions");
+    actions.insertAdjacentHTML("beforebegin", addressRowTemplate());
+    updateAddressRemoveButtons(card);
+  }
+
+  if (event.target.closest("[data-remove-address-row]")) {
+    const card = event.target.closest(".recipient-card");
+    const rows = card.querySelectorAll(".recipient-address-row");
+    if (rows.length > 1) {
+      rows[rows.length - 1].remove();
+      updateAddressRemoveButtons(card);
+    }
   }
 
   if (event.target.matches("[data-remove-email-chip]")) {
@@ -505,8 +565,14 @@ recipientBody.addEventListener("keydown", (event) => {
     return;
   }
 
-  if (event.key === "Enter" || event.key === ",") {
+  if (event.key === "Enter" || event.key === "," || event.key === " ") {
     event.preventDefault();
+    commitEmailChips(event.target);
+  }
+});
+
+recipientBody.addEventListener("input", (event) => {
+  if (event.target.matches('[name="recipient_email"]') && shouldCommitEmailInput(event.target.value)) {
     commitEmailChips(event.target);
   }
 });
@@ -520,6 +586,7 @@ recipientBody.addEventListener("focusout", (event) => {
 addRowButton.addEventListener("click", () => {
   recipientBody.appendChild(rowTemplate());
   renumberRecipients();
+  document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
 });
 
 form.addEventListener("submit", (event) => {
@@ -682,5 +749,6 @@ function renumberRecipients() {
 }
 
 renumberRecipients();
+document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
 saveEditorHistory();
 goToStep(0);
