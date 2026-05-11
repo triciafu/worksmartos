@@ -1603,6 +1603,7 @@ iframe[style*="position: fixed"] {
 .stepper-shell {
   display: block;
   overflow: hidden;
+  max-width: 1272px;
 }
 
 .stepper-track {
@@ -1757,10 +1758,10 @@ iframe[style*="position: fixed"] {
   align-items: start;
   justify-content: center;
   gap: 36px;
-  width: 100%;
-  max-width: 1172px;
+  width: 1172px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0;
 }
 
 .template-card-wrap {
@@ -1798,6 +1799,7 @@ iframe[style*="position: fixed"] {
 
 .template-guide .studio-panel-heading p {
   max-width: 250px;
+  text-wrap: balance;
 }
 
 .template-guide label {
@@ -1838,6 +1840,7 @@ iframe[style*="position: fixed"] {
   gap: 8px;
   min-height: 34px;
   border-radius: 8px;
+  white-space: nowrap;
 }
 
 .format-toolbar {
@@ -1877,7 +1880,7 @@ iframe[style*="position: fixed"] {
   padding-top: 42px;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1220px) {
   .template-step {
     grid-template-columns: minmax(0, 600px);
     justify-content: center;
