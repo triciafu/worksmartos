@@ -1563,7 +1563,14 @@ iframe[style*="position: fixed"] {
   align-items: center;
   flex-wrap: wrap;
   gap: 18px;
-  margin-top: -4px;
+  margin-top: -2px;
+}
+
+.address-field-actions .add-placeholder {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  line-height: 1;
 }
 
 .remove-address-link {
@@ -1715,11 +1722,12 @@ iframe[style*="position: fixed"] {
 }
 
 .add-email-link {
-  margin-top: -4px;
+  margin-top: -2px;
+  margin-left: 24px;
 }
 
 .add-address-link {
-  margin-top: -6px;
+  margin-top: 0;
 }
 
 .template-guide input:focus,
