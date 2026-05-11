@@ -103,7 +103,7 @@ function rowTemplate(values = {}) {
   row.innerHTML = `
     <div class="recipient-card-top">
       <strong>Email</strong>
-      <button class="table-button" type="button" data-remove-row>x Remove</button>
+      <button class="table-button" type="button" data-remove-row>Remove</button>
     </div>
     ${addressRowTemplate(values)}
     <div class="address-field-actions">
