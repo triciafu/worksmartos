@@ -21,43 +21,17 @@ const output = document.querySelector("[data-email-output]");
 const outputCount = document.querySelector("[data-output-count]");
 const exportButton = document.querySelector("[data-export-csv]");
 const addRowButton = document.querySelector("[data-add-row]");
-const loadSampleButton = document.querySelector("[data-load-sample]");
 const stepperTrack = document.querySelector("[data-stepper-track]");
 const stepLabels = document.querySelectorAll(".studio-steps span");
 const nextStepButtons = document.querySelectorAll("[data-next-step]");
 const prevStepButtons = document.querySelectorAll("[data-prev-step]");
 const generateStepButton = document.querySelector("[data-generate-step]");
+const bodyTemplateEditor = document.querySelector("[data-body-template]");
+const formatButtons = document.querySelectorAll("[data-format]");
 
 let currentStep = 0;
 
 let generatedEmails = [];
-
-const sampleRecipients = [
-  {
-    client_name: "GLAM INC",
-    contact_firstname: "Tricia",
-    campaign_name: "Spring Campaign",
-    deadline: "Friday at 3 PM",
-    approval_link: "https://approval-link.com/glam",
-    custom_note: "Please focus on the hero concept and final CTA.",
-  },
-  {
-    client_name: "Northline Retail",
-    contact_firstname: "Maya",
-    campaign_name: "June Storefront Refresh",
-    deadline: "Wednesday EOD",
-    approval_link: "https://approval-link.com/northline",
-    custom_note: "The layout includes the updated offer language from last week.",
-  },
-  {
-    client_name: "BrightPath Health",
-    contact_firstname: "Jordan",
-    campaign_name: "Member Welcome Series",
-    deadline: "Thursday at noon",
-    approval_link: "https://approval-link.com/brightpath",
-    custom_note: "Please review the compliance language in panel three.",
-  },
-];
 
 const fields = [
   "client_name",
@@ -106,8 +80,17 @@ function getRecipients() {
     .filter((row) => row.client_name || row.contact_firstname || row.campaign_name || row.approval_link);
 }
 
-function mergeTemplate(template, data) {
-  return template.replace(/{{\s*([a-zA-Z0-9_]+)\s*}}/g, (_, key) => data[key] || "");
+function mergeTemplate(template, data, options = {}) {
+  return String(template).replace(/{{\s*([a-zA-Z0-9_]+)\s*}}/g, (_, key) => {
+    const value = data[key] || "";
+    return options.html ? escapeHtml(value) : value;
+  });
+}
+
+function htmlToText(html) {
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+  return temp.innerText.trim();
 }
 
 function renderEmails(emails) {
@@ -138,10 +121,10 @@ function renderEmails(emails) {
         <span>Subject</span>
         <input value="${escapeAttribute(email.subject)}" data-subject-input />
       </label>
-      <label>
+      <div class="email-body-field">
         <span>Body</span>
-        <textarea rows="10" data-body-input>${escapeHtml(email.body)}</textarea>
-      </label>
+        <div class="email-body-preview" contenteditable="true" data-body-input role="textbox" aria-multiline="true">${email.body}</div>
+      </div>
       <div class="email-preview-actions">
         <button class="button secondary" type="button" data-copy-subject>Copy subject</button>
         <button class="button primary" type="button" data-copy-body>Copy body</button>
@@ -153,7 +136,7 @@ function renderEmails(emails) {
     });
 
     card.querySelector("[data-copy-body]").addEventListener("click", () => {
-      copyText(card.querySelector("[data-body-input]").value);
+      copyRichText(card.querySelector("[data-body-input]"));
     });
 
     output.appendChild(card);
@@ -174,10 +157,40 @@ async function copyText(text) {
   temp.remove();
 }
 
+async function copyRichText(element) {
+  const html = element.innerHTML;
+  const text = element.innerText;
+
+  if (navigator.clipboard && window.ClipboardItem) {
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "text/html": new Blob([html], { type: "text/html" }),
+          "text/plain": new Blob([text], { type: "text/plain" }),
+        }),
+      ]);
+      return;
+    } catch (error) {
+      await copyText(text);
+      return;
+    }
+  }
+
+  await copyText(text);
+}
+
 function exportCsv() {
   const rows = [["Client/team", "Contact", "Campaign", "Subject", "Body"]];
-  generatedEmails.forEach((email) => {
-    rows.push([email.client_name, email.contact_firstname, email.campaign_name, email.subject, email.body]);
+
+  output.querySelectorAll(".email-preview-card").forEach((card, index) => {
+    const email = generatedEmails[index];
+    rows.push([
+      email.client_name,
+      email.contact_firstname,
+      email.campaign_name,
+      card.querySelector("[data-subject-input]").value,
+      card.querySelector("[data-body-input]").innerText.trim(),
+    ]);
   });
 
   const csv = rows.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\n");
@@ -205,12 +218,6 @@ addRowButton.addEventListener("click", () => {
   renumberRecipients();
 });
 
-loadSampleButton.addEventListener("click", () => {
-  recipientBody.innerHTML = "";
-  sampleRecipients.forEach((recipient) => recipientBody.appendChild(rowTemplate(recipient)));
-  renumberRecipients();
-});
-
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   generateEmails();
@@ -218,6 +225,17 @@ form.addEventListener("submit", (event) => {
 });
 
 exportButton.addEventListener("click", exportCsv);
+
+formatButtons.forEach((button) => {
+  button.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+  });
+
+  button.addEventListener("click", () => {
+    bodyTemplateEditor.focus();
+    document.execCommand(button.dataset.format, false, null);
+  });
+});
 
 nextStepButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -241,7 +259,7 @@ generateStepButton.addEventListener("click", () => {
 function generateEmails() {
   const formData = new FormData(form);
   const subjectTemplate = formData.get("subject_template");
-  const bodyTemplate = formData.get("body_template");
+  const bodyTemplate = bodyTemplateEditor.innerHTML;
   const senderName = formData.get("sender_name") || "";
 
   const emails = getRecipients().map((recipient) => {
@@ -249,7 +267,7 @@ function generateEmails() {
     return {
       ...recipient,
       subject: mergeTemplate(subjectTemplate, data),
-      body: mergeTemplate(bodyTemplate, data),
+      body: mergeTemplate(bodyTemplate, data, { html: true }),
     };
   });
 

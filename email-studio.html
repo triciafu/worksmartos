@@ -61,20 +61,21 @@
               required
             />
           </label>
-          <label>
+          <div class="rich-field">
             <span>Email</span>
-            <textarea name="body_template" rows="12" required>Hi {{contact_firstname}},
-
-Sharing the {{campaign_name}} creative for {{client_name}} for your review.
-
-Please approve or send feedback by {{deadline}}:
-{{approval_link}}
-
-{{custom_note}}
-
-Thank you,
-{{sender_name}}</textarea>
-          </label>
+            <div class="format-toolbar" aria-label="Email formatting controls">
+              <button type="button" data-format="bold" aria-label="Bold"><strong>B</strong></button>
+              <button type="button" data-format="italic" aria-label="Italic"><em>I</em></button>
+              <button type="button" data-format="underline" aria-label="Underline"><u>U</u></button>
+            </div>
+            <div class="rich-editor" contenteditable="true" data-body-template role="textbox" aria-multiline="true">
+              <p>Hi {{contact_firstname}},</p>
+              <p>Sharing the {{campaign_name}} creative for {{client_name}} for your review.</p>
+              <p>Please approve or send feedback by {{deadline}}:<br />{{approval_link}}</p>
+              <p>{{custom_note}}</p>
+              <p>Thank you,<br />{{sender_name}}</p>
+            </div>
+          </div>
           <div class="token-row" aria-label="Available merge fields">
             <span>{{client_name}}</span>
             <span>{{contact_firstname}}</span>
@@ -89,7 +90,6 @@ Thank you,
             <input type="text" name="sender_name" value="Tricia" />
           </label>
           <div class="studio-actions">
-            <button class="button secondary" type="button" data-load-sample>Load sample list</button>
             <button class="button primary" type="button" data-next-step>Next</button>
           </div>
         </form>
@@ -135,7 +135,7 @@ Thank you,
         <div class="email-preview-grid" data-email-output>
           <article class="empty-state">
             <h3>Your personalized approval emails will appear here.</h3>
-            <p>Load the sample list or add your own clients, then generate the batch.</p>
+            <p>Add your clients, then generate the batch.</p>
           </article>
         </div>
         </section>

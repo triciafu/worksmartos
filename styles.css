@@ -1133,7 +1133,7 @@ iframe[style*="position: fixed"] {
 .recipient-panel {
   display: grid;
   align-content: start;
-  gap: 18px;
+  gap: 24px;
   padding: 28px;
 }
 
@@ -1155,13 +1155,17 @@ iframe[style*="position: fixed"] {
 }
 
 .studio-controls label,
-.email-preview-card label {
+.email-preview-card label,
+.rich-field,
+.email-body-field {
   display: grid;
-  gap: 8px;
+  gap: 12px;
 }
 
 .studio-controls label span,
-.email-preview-card label span {
+.email-preview-card label span,
+.rich-field > span,
+.email-body-field > span {
   color: var(--muted);
   font-size: 13px;
   font-weight: 500;
@@ -1171,7 +1175,9 @@ iframe[style*="position: fixed"] {
 .studio-controls textarea,
 .recipient-table input,
 .email-preview-card input,
-.email-preview-card textarea {
+.email-preview-card textarea,
+.rich-editor,
+.email-body-preview {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1193,6 +1199,50 @@ iframe[style*="position: fixed"] {
 .email-preview-card textarea {
   padding: 12px;
   resize: vertical;
+}
+
+.format-toolbar {
+  display: flex;
+  gap: 8px;
+}
+
+.format-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.rich-editor,
+.email-body-preview {
+  min-height: 260px;
+  padding: 14px;
+  line-height: 1.55;
+  outline: none;
+}
+
+.rich-editor:focus,
+.email-body-preview:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+}
+
+.rich-editor p,
+.email-body-preview p {
+  margin: 0 0 14px;
+}
+
+.rich-editor p:last-child,
+.email-body-preview p:last-child {
+  margin-bottom: 0;
 }
 
 .token-row {
@@ -1357,14 +1407,14 @@ iframe[style*="position: fixed"] {
 
 .recipient-card-list {
   display: grid;
-  gap: 14px;
+  gap: 20px;
 }
 
 .recipient-card {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  padding: 18px;
+  gap: 20px;
+  padding: 24px;
   border: 1px solid #e3e5ea;
   border-radius: 8px;
   background: #ffffff;
@@ -1491,6 +1541,7 @@ iframe[style*="position: fixed"] {
 }
 
 .studio-controls > label,
+.studio-controls .rich-field,
 .studio-controls .token-row,
 .studio-controls .studio-actions {
   width: min(100%, 600px);
@@ -1535,6 +1586,7 @@ iframe[style*="position: fixed"] {
 }
 
 .stepper-track .studio-controls > label,
+.stepper-track .studio-controls .rich-field,
 .stepper-track .studio-controls .token-row,
 .stepper-track .studio-controls .studio-actions {
   width: 100%;
