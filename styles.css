@@ -1561,3 +1561,18 @@ iframe[style*="position: fixed"] {
     padding: 24px;
   }
 }
+
+
+.stepper-track .studio-step.studio-controls {
+  max-width: 600px;
+  margin-right: calc((100% / 3 - 600px) / 2);
+  margin-left: calc((100% / 3 - 600px) / 2);
+}
+
+@media (max-width: 680px) {
+  .stepper-track .studio-step.studio-controls {
+    max-width: none;
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
