@@ -1361,7 +1361,7 @@ iframe[style*="position: fixed"] {
 }
 
 .template-guide .add-placeholder {
-  max-width: 260px;
+  max-width: 250px;
 }
 
 .add-placeholder span {
@@ -1753,12 +1753,12 @@ iframe[style*="position: fixed"] {
 
 .template-step {
   display: grid;
-  grid-template-columns: 280px 600px 280px;
+  grid-template-columns: 250px 600px 250px;
   align-items: start;
   justify-content: center;
   gap: 36px;
   width: 100%;
-  max-width: 1272px;
+  max-width: 1172px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -1797,13 +1797,13 @@ iframe[style*="position: fixed"] {
 }
 
 .template-guide .studio-panel-heading p {
-  max-width: 260px;
+  max-width: 250px;
 }
 
 .template-guide label {
   display: grid;
   gap: 12px;
-  max-width: 260px;
+  max-width: 250px;
 }
 
 .template-guide label span {
@@ -1829,7 +1829,7 @@ iframe[style*="position: fixed"] {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
-  max-width: 260px;
+  max-width: 250px;
 }
 
 .template-guide .token-row span {
