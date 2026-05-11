@@ -1437,3 +1437,50 @@ iframe[style*="position: fixed"] {
     gap: 8px;
   }
 }
+
+
+.stepper-shell {
+  display: block;
+  overflow: hidden;
+}
+
+.stepper-track {
+  display: flex;
+  width: 300%;
+  transition: transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.studio-step {
+  width: calc(100% / 3);
+  flex: 0 0 calc(100% / 3);
+}
+
+.stepper-track .studio-panel,
+.stepper-track .studio-output {
+  margin: 0 12px;
+}
+
+.stepper-track .studio-output {
+  max-width: none;
+  padding: 28px;
+  border: 1px solid #e3e5ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.studio-actions.compact {
+  justify-content: flex-end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepper-track {
+    transition: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .stepper-track .studio-panel,
+  .stepper-track .studio-output {
+    margin: 0;
+  }
+}

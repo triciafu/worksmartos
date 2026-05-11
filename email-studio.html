@@ -45,8 +45,9 @@
         <span>3. Review emails</span>
       </nav>
 
-      <section class="studio-shell" aria-label="Approval email generator">
-        <form class="studio-panel studio-controls" data-email-studio-form>
+      <section class="studio-shell stepper-shell" aria-label="Approval email generator" data-stepper>
+        <div class="stepper-track" data-stepper-track>
+        <form class="studio-panel studio-controls studio-step" data-email-studio-form data-step-panel="0">
           <div class="studio-panel-heading">
             <span>Step 1</span>
             <h2>Write the approval request once.</h2>
@@ -90,11 +91,11 @@ Thank you,
           </label>
           <div class="studio-actions">
             <button class="button secondary" type="button" data-load-sample>Load sample list</button>
-            <button class="button primary" type="submit">Generate emails</button>
+            <button class="button primary" type="button" data-next-step>Next</button>
           </div>
         </form>
 
-        <section class="studio-panel recipient-panel">
+        <section class="studio-panel recipient-panel studio-step" data-step-panel="1">
           <div class="studio-panel-heading">
             <span>Step 2</span>
             <h2>Add the people who need to approve.</h2>
@@ -114,23 +115,31 @@ Thank you,
               <label class="wide"><span>Note</span><input name="custom_note" value="Please focus on the hero concept and final CTA." /></label>
             </article>
           </div>
-          <button class="button secondary" type="button" data-add-row>Add recipient</button>
+          <div class="studio-actions">
+            <button class="button secondary" type="button" data-prev-step>Back</button>
+            <button class="button secondary" type="button" data-add-row>Add recipient</button>
+            <button class="button primary" type="button" data-generate-step>Review emails</button>
+          </div>
         </section>
-      </section>
 
-      <section class="studio-output" aria-live="polite">
+        <section class="studio-output studio-step" aria-live="polite" data-step-panel="2">
         <div class="studio-output-heading">
           <div>
             <p class="eyebrow">Generated batch</p>
             <h2 data-output-count>Review every approval email before it leaves your desk.</h2>
           </div>
-          <button class="button secondary" type="button" data-export-csv disabled>Export CSV</button>
+          <div class="studio-actions compact">
+            <button class="button secondary" type="button" data-prev-step>Back</button>
+            <button class="button secondary" type="button" data-export-csv disabled>Export CSV</button>
+          </div>
         </div>
         <div class="email-preview-grid" data-email-output>
           <article class="empty-state">
             <h3>Your personalized approval emails will appear here.</h3>
             <p>Load the sample list or add your own clients, then generate the batch.</p>
           </article>
+        </div>
+        </section>
         </div>
       </section>
     </main>

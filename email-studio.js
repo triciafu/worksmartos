@@ -22,6 +22,13 @@ const outputCount = document.querySelector("[data-output-count]");
 const exportButton = document.querySelector("[data-export-csv]");
 const addRowButton = document.querySelector("[data-add-row]");
 const loadSampleButton = document.querySelector("[data-load-sample]");
+const stepperTrack = document.querySelector("[data-stepper-track]");
+const stepLabels = document.querySelectorAll(".studio-steps span");
+const nextStepButtons = document.querySelectorAll("[data-next-step]");
+const prevStepButtons = document.querySelectorAll("[data-prev-step]");
+const generateStepButton = document.querySelector("[data-generate-step]");
+
+let currentStep = 0;
 
 let generatedEmails = [];
 
@@ -206,6 +213,32 @@ loadSampleButton.addEventListener("click", () => {
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
+  generateEmails();
+  goToStep(2);
+});
+
+exportButton.addEventListener("click", exportCsv);
+
+nextStepButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    if (currentStep === 0 && !form.reportValidity()) {
+      return;
+    }
+
+    goToStep(currentStep + 1);
+  });
+});
+
+prevStepButtons.forEach((button) => {
+  button.addEventListener("click", () => goToStep(currentStep - 1));
+});
+
+generateStepButton.addEventListener("click", () => {
+  generateEmails();
+  goToStep(2);
+});
+
+function generateEmails() {
   const formData = new FormData(form);
   const subjectTemplate = formData.get("subject_template");
   const bodyTemplate = formData.get("body_template");
@@ -221,9 +254,16 @@ form.addEventListener("submit", (event) => {
   });
 
   renderEmails(emails);
-});
+}
 
-exportButton.addEventListener("click", exportCsv);
+function goToStep(step) {
+  currentStep = Math.max(0, Math.min(step, 2));
+  stepperTrack.style.transform = `translateX(-${currentStep * 100}%)`;
+
+  stepLabels.forEach((label, index) => {
+    label.classList.toggle("is-active", index === currentStep);
+  });
+}
 
 function renumberRecipients() {
   recipientBody.querySelectorAll(".recipient-card").forEach((card, index) => {
@@ -235,3 +275,4 @@ function renumberRecipients() {
 }
 
 renumberRecipients();
+goToStep(0);
