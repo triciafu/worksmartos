@@ -28,7 +28,10 @@ const prevStepButtons = document.querySelectorAll("[data-prev-step]");
 const generateStepButton = document.querySelector("[data-generate-step]");
 const bodyTemplateEditor = document.querySelector("[data-body-template]");
 const formatButtons = document.querySelectorAll("[data-format]");
+const tokenButtons = document.querySelectorAll("[data-token]");
+const subjectTemplateInput = form.querySelector("[name=\"subject_template\"]");
 
+let activeTemplateTarget = bodyTemplateEditor;
 let currentStep = 0;
 
 let generatedEmails = [];
@@ -91,6 +94,85 @@ function htmlToText(html) {
   const temp = document.createElement("div");
   temp.innerHTML = html;
   return temp.innerText.trim();
+}
+
+function insertTokenIntoInput(input, token) {
+  const start = input.selectionStart ?? input.value.length;
+  const end = input.selectionEnd ?? input.value.length;
+  input.value = `${input.value.slice(0, start)}${token}${input.value.slice(end)}`;
+  input.focus();
+  input.setSelectionRange(start + token.length, start + token.length);
+}
+
+function insertTokenIntoEditor(editor, token) {
+  editor.focus();
+  const selection = window.getSelection();
+
+  if (!selection || !selection.rangeCount) {
+    editor.append(document.createTextNode(token));
+    return;
+  }
+
+  const range = selection.getRangeAt(0);
+  if (!editor.contains(range.commonAncestorContainer)) {
+    editor.append(document.createTextNode(token));
+    return;
+  }
+
+  range.deleteContents();
+  const node = document.createTextNode(token);
+  range.insertNode(node);
+  range.setStartAfter(node);
+  range.setEndAfter(node);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+function insertToken(target, token) {
+  if (target === subjectTemplateInput) {
+    insertTokenIntoInput(subjectTemplateInput, token);
+    return;
+  }
+
+  insertTokenIntoEditor(bodyTemplateEditor, token);
+}
+
+function setEditorCaretFromPoint(editor, x, y) {
+  const selection = window.getSelection();
+  let range = null;
+
+  if (document.caretRangeFromPoint) {
+    range = document.caretRangeFromPoint(x, y);
+  } else if (document.caretPositionFromPoint) {
+    const position = document.caretPositionFromPoint(x, y);
+    if (position) {
+      range = document.createRange();
+      range.setStart(position.offsetNode, position.offset);
+    }
+  }
+
+  if (!selection || !range || !editor.contains(range.commonAncestorContainer)) {
+    return;
+  }
+
+  range.collapse(true);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+function handleTokenDrop(event, target) {
+  event.preventDefault();
+  const token = event.dataTransfer.getData("text/plain");
+
+  if (!token) {
+    return;
+  }
+
+  if (target === bodyTemplateEditor) {
+    setEditorCaretFromPoint(bodyTemplateEditor, event.clientX, event.clientY);
+  }
+
+  insertToken(target, token);
 }
 
 function renderEmails(emails) {
@@ -234,6 +316,39 @@ formatButtons.forEach((button) => {
   button.addEventListener("click", () => {
     bodyTemplateEditor.focus();
     document.execCommand(button.dataset.format, false, null);
+  });
+});
+
+subjectTemplateInput.addEventListener("focus", () => {
+  activeTemplateTarget = subjectTemplateInput;
+});
+
+bodyTemplateEditor.addEventListener("focus", () => {
+  activeTemplateTarget = bodyTemplateEditor;
+});
+
+[subjectTemplateInput, bodyTemplateEditor].forEach((target) => {
+  target.addEventListener("dragover", (event) => {
+    event.preventDefault();
+  });
+
+  target.addEventListener("drop", (event) => {
+    handleTokenDrop(event, target);
+  });
+});
+
+tokenButtons.forEach((tokenButton) => {
+  tokenButton.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+  });
+
+  tokenButton.addEventListener("dragstart", (event) => {
+    event.dataTransfer.setData("text/plain", tokenButton.dataset.token);
+    event.dataTransfer.effectAllowed = "copy";
+  });
+
+  tokenButton.addEventListener("click", () => {
+    insertToken(activeTemplateTarget, tokenButton.dataset.token);
   });
 });
 
