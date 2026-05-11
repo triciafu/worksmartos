@@ -76,12 +76,9 @@ function rowTemplate(values = {}) {
       <strong>Email</strong>
       <button class="table-button" type="button" data-remove-row>Remove</button>
     </div>
-    <div class="recipient-detail-grid">
-      ${fields.map((field) => recipientFieldTemplate(field, values)).join("")}
-    </div>
     <div class="recipient-address-row">
       <label>
-        <span>Send as</span>
+        <span>Field</span>
         <select name="recipient_type">
           <option value="To" ${values.recipient_type === "To" ? "selected" : ""}>To:</option>
           <option value="Cc" ${values.recipient_type === "Cc" ? "selected" : ""}>Cc:</option>
@@ -92,6 +89,9 @@ function rowTemplate(values = {}) {
         <span>Email address</span>
         <input name="recipient_email" type="email" value="${escapeAttribute(values.recipient_email || "")}" />
       </label>
+    </div>
+    <div class="recipient-detail-grid">
+      ${fields.map((field) => recipientFieldTemplate(field, values)).join("")}
     </div>
   `;
   return row;
