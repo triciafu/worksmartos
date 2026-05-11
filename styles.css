@@ -1603,7 +1603,6 @@ iframe[style*="position: fixed"] {
 .stepper-shell {
   display: block;
   overflow: hidden;
-  max-width: 1272px;
 }
 
 .stepper-track {
@@ -1754,14 +1753,14 @@ iframe[style*="position: fixed"] {
 
 .template-step {
   display: grid;
-  grid-template-columns: 250px 600px 250px;
+  grid-template-columns: minmax(180px, 220px) 600px minmax(180px, 220px);
   align-items: start;
   justify-content: center;
-  gap: 36px;
-  width: 1170px;
-  max-width: 100%;
+  gap: 40px;
+  width: 100%;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 24px;
 }
 
 .template-card-wrap {
@@ -1798,14 +1797,12 @@ iframe[style*="position: fixed"] {
 }
 
 .template-guide .studio-panel-heading p {
-  max-width: 250px;
-  text-wrap: balance;
+  max-width: 320px;
 }
 
 .template-guide label {
   display: grid;
   gap: 12px;
-  max-width: 250px;
 }
 
 .template-guide label span {
@@ -1831,7 +1828,6 @@ iframe[style*="position: fixed"] {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
-  max-width: 250px;
 }
 
 .template-guide .token-row span {
@@ -1859,14 +1855,10 @@ iframe[style*="position: fixed"] {
   opacity: 0.55;
 }
 
-.stepper-track .studio-controls.template-step,
 .stepper-track .studio-step.template-step {
-  width: 1170px;
-  max-width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 0;
-  padding-left: 0;
+  max-width: none;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .stepper-track .studio-controls.template-step > label,
@@ -1884,10 +1876,8 @@ iframe[style*="position: fixed"] {
   padding-top: 42px;
 }
 
-@media (max-width: 1220px) {
-  .template-step,
-  .stepper-track .studio-controls.template-step,
-  .stepper-track .studio-step.template-step {
+@media (max-width: 980px) {
+  .template-step {
     grid-template-columns: minmax(0, 600px);
     justify-content: center;
     width: auto;
