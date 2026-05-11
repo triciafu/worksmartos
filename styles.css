@@ -1850,6 +1850,14 @@ iframe[style*="position: fixed"] {
   width: auto;
 }
 
+.template-next-action {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: start;
+  justify-content: flex-start;
+  padding-top: 42px;
+}
+
 
 @media (max-width: 980px) {
   .template-step {
@@ -1859,7 +1867,8 @@ iframe[style*="position: fixed"] {
   }
 
   .template-card,
-  .template-guide {
+  .template-guide,
+  .template-next-action {
     grid-column: 1;
   }
 
@@ -1867,6 +1876,12 @@ iframe[style*="position: fixed"] {
     grid-row: auto;
     order: -1;
     padding-top: 0;
+  }
+
+  .template-next-action {
+    grid-row: auto;
+    padding-top: 0;
+    justify-content: flex-end;
   }
 
 
@@ -1886,6 +1901,10 @@ iframe[style*="position: fixed"] {
 
   .template-card {
     padding: 24px;
+  }
+
+  .template-next-action .button {
+    width: 100%;
   }
 
 
