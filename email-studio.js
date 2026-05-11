@@ -68,14 +68,8 @@ function recipientFieldTemplate(field, values = {}) {
   return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
 }
 
-function rowTemplate(values = {}) {
-  const row = document.createElement("article");
-  row.className = "recipient-card";
-  row.innerHTML = `
-    <div class="recipient-card-top">
-      <strong>Email</strong>
-      <button class="table-button" type="button" data-remove-row>Remove</button>
-    </div>
+function addressRowTemplate(values = {}) {
+  return `
     <div class="recipient-address-row">
       <label>
         <span>Field</span>
@@ -87,9 +81,22 @@ function rowTemplate(values = {}) {
       </label>
       <label>
         <span>Email address</span>
-        <input name="recipient_email" type="email" value="${escapeAttribute(values.recipient_email || "")}" />
+        <input name="recipient_email" type="text" value="${escapeAttribute(values.recipient_email || "")}" placeholder="name@example.com, team@example.com" />
       </label>
     </div>
+  `;
+}
+
+function rowTemplate(values = {}) {
+  const row = document.createElement("article");
+  row.className = "recipient-card";
+  row.innerHTML = `
+    <div class="recipient-card-top">
+      <strong>Email</strong>
+      <button class="table-button" type="button" data-remove-row>Remove</button>
+    </div>
+    ${addressRowTemplate(values)}
+    <button class="add-placeholder add-address-link" type="button" data-add-address-row><span>+</span>Add another email field</button>
     <div class="recipient-detail-grid">
       ${fields.map((field) => recipientFieldTemplate(field, values)).join("")}
     </div>
@@ -112,8 +119,13 @@ function getRecipients() {
       fields.forEach((field) => {
         data[field] = row.querySelector(`[name="${field}"]`)?.value.trim() || "";
       });
-      data.recipient_type = row.querySelector('[name="recipient_type"]')?.value || "To";
-      data.recipient_email = row.querySelector('[name="recipient_email"]')?.value.trim() || "";
+      const addresses = Array.from(row.querySelectorAll(".recipient-address-row")).map((addressRow) => ({
+        type: addressRow.querySelector('[name="recipient_type"]')?.value || "To",
+        email: addressRow.querySelector('[name="recipient_email"]')?.value.trim() || "",
+      })).filter((address) => address.email);
+      data.addresses = addresses;
+      data.recipient_type = addresses.map((address) => address.type).join("; ");
+      data.recipient_email = addresses.map((address) => address.email).join("; ");
       return data;
     })
     .filter((row) => row.client_name || row.contact_firstname || row.campaign_name || row.approval_link);
@@ -420,6 +432,12 @@ recipientBody.addEventListener("click", (event) => {
       event.target.closest(".recipient-card").remove();
       renumberRecipients();
     }
+  }
+
+  if (event.target.closest("[data-add-address-row]")) {
+    const card = event.target.closest(".recipient-card");
+    const addButton = card.querySelector("[data-add-address-row]");
+    addButton.insertAdjacentHTML("beforebegin", addressRowTemplate());
   }
 });
 

@@ -1534,7 +1534,8 @@ iframe[style*="position: fixed"] {
 
 .recipient-card-top,
 .recipient-detail-grid,
-.recipient-address-row {
+.recipient-address-row,
+.add-address-link {
   grid-column: 1 / -1;
 }
 
@@ -1603,6 +1604,10 @@ iframe[style*="position: fixed"] {
 
 .add-email-link {
   margin-top: -4px;
+}
+
+.add-address-link {
+  margin-top: -6px;
 }
 
 .template-guide input:focus,
