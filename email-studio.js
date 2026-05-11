@@ -556,10 +556,6 @@ function goToStep(step) {
   stepLabels.forEach((label, index) => {
     label.classList.toggle("is-active", index === currentStep);
   });
-
-  document.querySelectorAll("[data-step-panel]").forEach((panel) => {
-    panel.classList.toggle("is-current-step", Number(panel.dataset.stepPanel) === currentStep);
-  });
 }
 
 function renumberRecipients() {
