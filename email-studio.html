@@ -108,21 +108,37 @@
         <section class="studio-panel recipient-panel studio-step" data-step-panel="1">
           <div class="studio-panel-heading">
             <span>Step 2</span>
-            <h2>Add the people who need to approve.</h2>
-            <p>Each recipient gets the same request, customized with their own campaign details, deadline, link, and note.</p>
+            <h2>Add the recipient and details for each email</h2>
+            <p>Each email uses the same request, customized with its own campaign details, deadline, link, and note.</p>
           </div>
           <div class="recipient-card-list" data-recipient-body>
             <article class="recipient-card">
               <div class="recipient-card-top">
-                <strong>Recipient 01</strong>
+                <strong>Email 1</strong>
                 <button class="table-button" type="button" data-remove-row>Remove</button>
               </div>
-              <label><span>Company name</span><input name="client_name" value="GLAM INC" /></label>
-              <label><span>Recipient first name</span><input name="contact_firstname" value="Tricia" /></label>
-              <label><span>Campaign</span><input name="campaign_name" value="Spring Campaign" /></label>
-              <label><span>Deadline</span><input name="deadline" value="Friday at 3 PM" /></label>
-              <label class="wide"><span>Approval link</span><input name="approval_link" value="https://approval-link.com/glam" /></label>
-              <label class="wide"><span>Note</span><input name="custom_note" value="Please focus on the hero concept and final CTA." /></label>
+              <div class="recipient-detail-grid">
+                <label><span>Company name</span><input name="client_name" value="GLAM INC" /></label>
+                <label><span>Recipient first name</span><input name="contact_firstname" value="Tricia" /></label>
+                <label><span>Campaign</span><input name="campaign_name" value="Spring Campaign" /></label>
+                <label><span>Deadline</span><input name="deadline" value="Friday at 3 PM" /></label>
+                <label><span>Approval link</span><input name="approval_link" value="https://approval-link.com/glam" /></label>
+                <label><span>Note</span><input name="custom_note" value="Please focus on the hero concept and final CTA." /></label>
+              </div>
+              <div class="recipient-address-row">
+                <label>
+                  <span>Send as</span>
+                  <select name="recipient_type">
+                    <option value="To">To:</option>
+                    <option value="Cc">Cc:</option>
+                    <option value="Bcc">Bcc:</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Email address</span>
+                  <input name="recipient_email" type="email" value="tricia@example.com" />
+                </label>
+              </div>
             </article>
           </div>
           <div class="studio-actions">

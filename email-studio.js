@@ -73,10 +73,26 @@ function rowTemplate(values = {}) {
   row.className = "recipient-card";
   row.innerHTML = `
     <div class="recipient-card-top">
-      <strong>Recipient</strong>
+      <strong>Email</strong>
       <button class="table-button" type="button" data-remove-row>Remove</button>
     </div>
-    ${fields.map((field) => recipientFieldTemplate(field, values)).join("")}
+    <div class="recipient-detail-grid">
+      ${fields.map((field) => recipientFieldTemplate(field, values)).join("")}
+    </div>
+    <div class="recipient-address-row">
+      <label>
+        <span>Send as</span>
+        <select name="recipient_type">
+          <option value="To" ${values.recipient_type === "To" ? "selected" : ""}>To:</option>
+          <option value="Cc" ${values.recipient_type === "Cc" ? "selected" : ""}>Cc:</option>
+          <option value="Bcc" ${values.recipient_type === "Bcc" ? "selected" : ""}>Bcc:</option>
+        </select>
+      </label>
+      <label>
+        <span>Email address</span>
+        <input name="recipient_email" type="email" value="${escapeAttribute(values.recipient_email || "")}" />
+      </label>
+    </div>
   `;
   return row;
 }
@@ -96,6 +112,8 @@ function getRecipients() {
       fields.forEach((field) => {
         data[field] = row.querySelector(`[name="${field}"]`)?.value.trim() || "";
       });
+      data.recipient_type = row.querySelector('[name="recipient_type"]')?.value || "To";
+      data.recipient_email = row.querySelector('[name="recipient_email"]')?.value.trim() || "";
       return data;
     })
     .filter((row) => row.client_name || row.contact_firstname || row.campaign_name || row.approval_link);
@@ -149,7 +167,7 @@ function addRecipientField(field, label) {
   fieldLabels[field] = label;
 
   recipientBody.querySelectorAll(".recipient-card").forEach((card) => {
-    card.insertAdjacentHTML("beforeend", recipientFieldTemplate(field));
+    card.querySelector(".recipient-detail-grid")?.insertAdjacentHTML("beforeend", recipientFieldTemplate(field));
   });
 }
 
@@ -370,11 +388,13 @@ async function copyRichText(element) {
 }
 
 function exportCsv() {
-  const rows = [["Company name", "Recipient first name", "Campaign", "Subject", "Body"]];
+  const rows = [["Send as", "Email address", "Company name", "Recipient first name", "Campaign", "Subject", "Body"]];
 
   output.querySelectorAll(".email-preview-card").forEach((card, index) => {
     const email = generatedEmails[index];
     rows.push([
+      email.recipient_type,
+      email.recipient_email,
       email.client_name,
       email.contact_firstname,
       email.campaign_name,
@@ -562,7 +582,7 @@ function renumberRecipients() {
   recipientBody.querySelectorAll(".recipient-card").forEach((card, index) => {
     const label = card.querySelector(".recipient-card-top strong");
     if (label) {
-      label.textContent = `Recipient ${String(index + 1).padStart(2, "0")}`;
+      label.textContent = `Email ${index + 1}`;
     }
   });
 }

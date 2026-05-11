@@ -1525,8 +1525,7 @@ iframe[style*="position: fixed"] {
 
 .recipient-card {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+  gap: 18px;
   padding: 24px;
   border: 1px solid #e3e5ea;
   border-radius: 8px;
@@ -1534,8 +1533,23 @@ iframe[style*="position: fixed"] {
 }
 
 .recipient-card-top,
-.recipient-card .wide {
+.recipient-detail-grid,
+.recipient-address-row {
   grid-column: 1 / -1;
+}
+
+.recipient-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(150px, 1fr));
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.recipient-address-row {
+  display: grid;
+  grid-template-columns: minmax(96px, 120px) minmax(220px, 1fr);
+  gap: 14px;
 }
 
 .recipient-card-top {
@@ -1561,7 +1575,8 @@ iframe[style*="position: fixed"] {
   font-weight: 500;
 }
 
-.recipient-card input {
+.recipient-card input,
+.recipient-card select {
   width: 100%;
   height: 42px;
   padding: 0 12px;
@@ -1572,6 +1587,10 @@ iframe[style*="position: fixed"] {
   font: inherit;
   font-size: 15px;
   font-weight: 400;
+}
+
+.recipient-card select {
+  appearance: auto;
 }
 
 .recipient-panel {
@@ -1593,6 +1612,10 @@ iframe[style*="position: fixed"] {
 @media (max-width: 720px) {
   .studio-steps,
   .recipient-card {
+    grid-template-columns: 1fr;
+  }
+
+  .recipient-address-row {
     grid-template-columns: 1fr;
   }
 
