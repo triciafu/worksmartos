@@ -153,21 +153,52 @@ function addRecipientField(field, label) {
   });
 }
 
+function tokenFormatWrapper(token, textNode) {
+  let node = textNode;
+  const style = window.getComputedStyle(token);
+  const isBold = Number.parseInt(style.fontWeight, 10) >= 600 || style.fontWeight === "bold";
+  const isItalic = style.fontStyle === "italic";
+  const isUnderlined = style.textDecorationLine.includes("underline");
+
+  if (isBold) {
+    const strong = document.createElement("strong");
+    strong.appendChild(node);
+    node = strong;
+  }
+
+  if (isItalic) {
+    const em = document.createElement("em");
+    em.appendChild(node);
+    node = em;
+  }
+
+  if (isUnderlined) {
+    const underline = document.createElement("u");
+    underline.appendChild(node);
+    node = underline;
+  }
+
+  return node;
+}
+
+function replaceTokenChips(container, preserveFormatting = false) {
+  container.querySelectorAll(".merge-token").forEach((token) => {
+    const textNode = document.createTextNode(token.dataset.token || "");
+    token.replaceWith(preserveFormatting ? tokenFormatWrapper(token, textNode) : textNode);
+  });
+}
+
 function templateHtmlToMergeHtml(html) {
   const temp = document.createElement("div");
   temp.innerHTML = html;
-  temp.querySelectorAll(".merge-token").forEach((token) => {
-    token.replaceWith(document.createTextNode(token.dataset.token || ""));
-  });
+  replaceTokenChips(temp, true);
   return temp.innerHTML;
 }
 
 function templateHtmlToMergeText(html) {
   const temp = document.createElement("div");
   temp.innerHTML = html;
-  temp.querySelectorAll(".merge-token").forEach((token) => {
-    token.replaceWith(document.createTextNode(token.dataset.token || ""));
-  });
+  replaceTokenChips(temp);
   return temp.innerText.trim();
 }
 

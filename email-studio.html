@@ -43,7 +43,8 @@
       <section class="studio-shell stepper-shell" aria-label="Approval email generator" data-stepper>
         <div class="stepper-track" data-stepper-track>
         <form class="studio-controls studio-step template-step" data-email-studio-form data-step-panel="0">
-          <div class="template-card studio-panel">
+          <div class="template-card-wrap">
+            <div class="template-card studio-panel">
             <div class="template-field">
               <span>Subject</span>
               <div class="token-editor subject-editor" contenteditable="true" data-subject-template role="textbox" aria-label="Subject">FOR REVIEW BY <span class="merge-token" contenteditable="false" data-token="{{deadline}}" data-label="Deadline">Deadline<button type="button" data-remove-token aria-label="Remove Deadline">×</button></span>: <span class="merge-token" contenteditable="false" data-token="{{client_name}}" data-label="Company Name">Company Name<button type="button" data-remove-token aria-label="Remove Company Name">×</button></span> <span class="merge-token" contenteditable="false" data-token="{{campaign_name}}" data-label="Campaign Name">Campaign Name<button type="button" data-remove-token aria-label="Remove Campaign Name">×</button></span> Creative</div>
@@ -60,18 +61,26 @@
               <div class="rich-editor" contenteditable="true" data-body-template role="textbox" aria-multiline="true">
                 <p>Hi <span class="merge-token" contenteditable="false" data-token="{{contact_firstname}}" data-label="Client First Name">Client First Name<button type="button" data-remove-token aria-label="Remove Client First Name">×</button></span>,</p>
                 <p><br /></p>
+                <p><br /></p>
                 <p>I hope you're doing well.</p>
                 <p><br /></p>
                 <p>Attached are the latest creative assets for your review. Please take a look and send feedback by <span class="merge-token" contenteditable="false" data-token="{{deadline}}" data-label="Deadline">Deadline<button type="button" data-remove-token aria-label="Remove Deadline">×</button></span>.</p>
+                <p><br /></p>
                 <p><br /></p>
                 <p><span class="merge-token" contenteditable="false" data-token="{{approval_link}}" data-label="Approval Link">Approval Link<button type="button" data-remove-token aria-label="Remove Approval Link">×</button></span></p>
                 <p><br /></p>
                 <p><span class="merge-token" contenteditable="false" data-token="{{custom_note}}" data-label="Custom Note">Custom Note<button type="button" data-remove-token aria-label="Remove Custom Note">×</button></span></p>
                 <p><br /></p>
+                <p><br /></p>
                 <p>Thank you,</p>
+                <p><br /></p>
                 <p><span class="merge-token" contenteditable="false" data-token="{{sender_name}}" data-label="Sender Name">Sender Name<button type="button" data-remove-token aria-label="Remove Sender Name">×</button></span></p>
               </div>
             </div>
+          </div>
+
+          <div class="studio-actions template-next-action">
+            <button class="button primary" type="button" data-next-step>Next</button>
           </div>
 
           <aside class="template-guide" aria-label="Template instructions and placeholders">
@@ -94,9 +103,6 @@
               <span>Sender name</span>
               <input type="text" name="sender_name" value="Tricia" />
             </label>
-            <div class="studio-actions">
-              <button class="button primary" type="button" data-next-step>Next</button>
-            </div>
           </aside>
         </form>
 

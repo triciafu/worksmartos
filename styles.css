@@ -1748,9 +1748,17 @@ iframe[style*="position: fixed"] {
   padding: 0 24px;
 }
 
-.template-card {
+.template-card-wrap {
   display: grid;
   grid-column: 2;
+  gap: 18px;
+  width: 600px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.template-card {
+  display: grid;
   gap: 24px;
   width: 600px;
   max-width: 100%;
@@ -1844,8 +1852,12 @@ iframe[style*="position: fixed"] {
   width: auto;
 }
 
-.stepper-track .studio-controls.template-step .studio-actions {
+.template-next-action {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: start;
   justify-content: flex-start;
+  padding-top: 42px;
 }
 
 @media (max-width: 980px) {
@@ -1855,8 +1867,10 @@ iframe[style*="position: fixed"] {
     width: auto;
   }
 
+  .template-card-wrap,
   .template-card,
-  .template-guide {
+  .template-guide,
+  .template-next-action {
     grid-column: 1;
   }
 
@@ -1864,6 +1878,12 @@ iframe[style*="position: fixed"] {
     grid-row: auto;
     order: -1;
     padding-top: 0;
+  }
+
+  .template-next-action {
+    grid-row: auto;
+    padding-top: 0;
+    justify-content: flex-end;
   }
 
   .template-guide .studio-panel-heading p {
@@ -1882,6 +1902,10 @@ iframe[style*="position: fixed"] {
 
   .template-card {
     padding: 24px;
+  }
+
+  .template-next-action .button {
+    width: 100%;
   }
 
   .template-guide .token-row {
