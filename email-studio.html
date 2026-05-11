@@ -47,51 +47,59 @@
 
       <section class="studio-shell stepper-shell" aria-label="Approval email generator" data-stepper>
         <div class="stepper-track" data-stepper-track>
-        <form class="studio-panel studio-controls studio-step" data-email-studio-form data-step-panel="0">
-          <div class="studio-panel-heading">
-            <span>Step 1</span>
-            <h2>Write your email template</h2>
-          </div>
-          <label>
-            <span>Subject</span>
-            <input
-              type="text"
-              name="subject_template"
-              value="Approval needed: {{campaign_name}} creative for {{client_name}}"
-              required
-            />
-          </label>
-          <div class="rich-field">
-            <span>Email</span>
-            <div class="format-toolbar" aria-label="Email formatting controls">
-              <button type="button" data-format="bold" aria-label="Bold"><strong>B</strong></button>
-              <button type="button" data-format="italic" aria-label="Italic"><em>I</em></button>
-              <button type="button" data-format="underline" aria-label="Underline"><u>U</u></button>
+        <form class="studio-controls studio-step template-step" data-email-studio-form data-step-panel="0">
+          <div class="template-card studio-panel">
+            <label>
+              <span>Subject</span>
+              <input
+                type="text"
+                name="subject_template"
+                value="Approval needed: {{campaign_name}} creative for {{client_name}}"
+                required
+              />
+            </label>
+            <div class="rich-field">
+              <span>Email</span>
+              <div class="format-toolbar" aria-label="Email formatting controls">
+                <button type="button" data-format="undo" aria-label="Undo">Undo</button>
+                <button type="button" data-format="redo" aria-label="Redo">Redo</button>
+                <button type="button" data-format="bold" aria-label="Bold"><strong>B</strong></button>
+                <button type="button" data-format="italic" aria-label="Italic"><em>I</em></button>
+                <button type="button" data-format="underline" aria-label="Underline"><u>U</u></button>
+              </div>
+              <div class="rich-editor" contenteditable="true" data-body-template role="textbox" aria-multiline="true">
+                <p>Hi {{contact_firstname}},</p>
+                <p>Sharing the {{campaign_name}} creative for {{client_name}} for your review.</p>
+                <p>Please approve or send feedback by {{deadline}}:<br />{{approval_link}}</p>
+                <p>{{custom_note}}</p>
+                <p>Thank you,<br />{{sender_name}}</p>
+              </div>
             </div>
-            <div class="rich-editor" contenteditable="true" data-body-template role="textbox" aria-multiline="true">
-              <p>Hi {{contact_firstname}},</p>
-              <p>Sharing the {{campaign_name}} creative for {{client_name}} for your review.</p>
-              <p>Please approve or send feedback by {{deadline}}:<br />{{approval_link}}</p>
-              <p>{{custom_note}}</p>
-              <p>Thank you,<br />{{sender_name}}</p>
+          </div>
+
+          <aside class="template-guide" aria-label="Template instructions and placeholders">
+            <div class="studio-panel-heading">
+              <span>Step 1</span>
+              <h2>Write your email template</h2>
+              <p>Drag and drop placeholders into the email where each recipient detail should appear.</p>
             </div>
-          </div>
-          <div class="token-row" aria-label="Available merge fields">
-            <span draggable="true" data-token="{{client_name}}">{{client_name}}</span>
-            <span draggable="true" data-token="{{contact_firstname}}">{{contact_firstname}}</span>
-            <span draggable="true" data-token="{{campaign_name}}">{{campaign_name}}</span>
-            <span draggable="true" data-token="{{deadline}}">{{deadline}}</span>
-            <span draggable="true" data-token="{{approval_link}}">{{approval_link}}</span>
-            <span draggable="true" data-token="{{custom_note}}">{{custom_note}}</span>
-            <span draggable="true" data-token="{{sender_name}}">{{sender_name}}</span>
-          </div>
-          <label>
-            <span>Your name</span>
-            <input type="text" name="sender_name" value="Tricia" />
-          </label>
-          <div class="studio-actions">
-            <button class="button primary" type="button" data-next-step>Next</button>
-          </div>
+            <div class="token-row" aria-label="Available merge fields">
+              <span draggable="true" data-token="{{client_name}}">Client Name</span>
+              <span draggable="true" data-token="{{contact_firstname}}">First Name</span>
+              <span draggable="true" data-token="{{campaign_name}}">Campaign Name</span>
+              <span draggable="true" data-token="{{deadline}}">Deadline</span>
+              <span draggable="true" data-token="{{approval_link}}">Approval Link</span>
+              <span draggable="true" data-token="{{custom_note}}">Custom Note</span>
+              <span draggable="true" data-token="{{sender_name}}">Sender Name</span>
+            </div>
+            <label>
+              <span>Your name</span>
+              <input type="text" name="sender_name" value="Tricia" />
+            </label>
+            <div class="studio-actions">
+              <button class="button primary" type="button" data-next-step>Next</button>
+            </div>
+          </aside>
         </form>
 
         <section class="studio-panel recipient-panel studio-step" data-step-panel="1">

@@ -1231,12 +1231,14 @@ iframe[style*="position: fixed"] {
 
 .rich-editor:focus,
 .email-body-preview:focus,
-.rich-editor.is-drag-over {
+.rich-editor.is-drag-over,
+.studio-controls input.is-drag-over {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
 }
 
-.rich-editor.is-drag-over {
+.rich-editor.is-drag-over,
+.studio-controls input.is-drag-over {
   background: rgba(0, 113, 227, 0.04);
 }
 
@@ -1649,3 +1651,130 @@ iframe[style*="position: fixed"] {
     margin-left: 0;
   }
 }
+
+.template-step {
+  display: grid;
+  grid-template-columns: minmax(0, 600px) minmax(260px, 360px);
+  align-items: start;
+  justify-content: center;
+  gap: 36px;
+  padding: 0 24px;
+}
+
+.template-card {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+  margin: 0;
+  padding: 34px;
+}
+
+.template-guide {
+  display: grid;
+  align-content: start;
+  gap: 24px;
+  padding-top: 10px;
+}
+
+.template-guide .studio-panel-heading p {
+  max-width: 320px;
+}
+
+.template-guide label {
+  display: grid;
+  gap: 12px;
+}
+
+.template-guide label span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.template-guide input {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.template-guide .token-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.template-guide .token-row span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  border-radius: 8px;
+}
+
+.format-toolbar {
+  flex-wrap: wrap;
+}
+
+.format-toolbar button[aria-label="Undo"],
+.format-toolbar button[aria-label="Redo"] {
+  width: auto;
+  padding: 0 12px;
+}
+
+.stepper-track .studio-step.template-step {
+  max-width: none;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.stepper-track .studio-controls.template-step > label,
+.stepper-track .studio-controls.template-step .rich-field,
+.stepper-track .studio-controls.template-step .token-row,
+.stepper-track .studio-controls.template-step .studio-actions {
+  width: auto;
+}
+
+.stepper-track .studio-controls.template-step .studio-actions {
+  justify-content: flex-start;
+}
+
+@media (max-width: 980px) {
+  .template-step {
+    grid-template-columns: minmax(0, 600px);
+    justify-content: center;
+  }
+
+  .template-guide {
+    order: -1;
+    padding-top: 0;
+  }
+
+  .template-guide .studio-panel-heading p {
+    max-width: 600px;
+  }
+
+  .template-guide .token-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .template-step {
+    padding: 0;
+  }
+
+  .template-card {
+    padding: 24px;
+  }
+
+  .template-guide .token-row {
+    grid-template-columns: 1fr;
+  }
+}
+

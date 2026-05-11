@@ -318,19 +318,21 @@ formatButtons.forEach((button) => {
   });
 });
 
-bodyTemplateEditor.addEventListener("dragover", (event) => {
-  event.preventDefault();
-  event.dataTransfer.dropEffect = "copy";
-  bodyTemplateEditor.classList.add("is-drag-over");
-});
+[subjectTemplateInput, bodyTemplateEditor].forEach((target) => {
+  target.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "copy";
+    target.classList.add("is-drag-over");
+  });
 
-bodyTemplateEditor.addEventListener("dragleave", () => {
-  bodyTemplateEditor.classList.remove("is-drag-over");
-});
+  target.addEventListener("dragleave", () => {
+    target.classList.remove("is-drag-over");
+  });
 
-bodyTemplateEditor.addEventListener("drop", (event) => {
-  bodyTemplateEditor.classList.remove("is-drag-over");
-  handleTokenDrop(event, bodyTemplateEditor);
+  target.addEventListener("drop", (event) => {
+    target.classList.remove("is-drag-over");
+    handleTokenDrop(event, target);
+  });
 });
 
 tokenButtons.forEach((tokenButton) => {
@@ -343,6 +345,7 @@ tokenButtons.forEach((tokenButton) => {
   tokenButton.addEventListener("dragend", () => {
     tokenButton.classList.remove("is-dragging");
     bodyTemplateEditor.classList.remove("is-drag-over");
+    subjectTemplateInput.classList.remove("is-drag-over");
   });
 });
 
