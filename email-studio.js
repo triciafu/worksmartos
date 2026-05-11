@@ -62,15 +62,19 @@ const fields = [
 ];
 
 function rowTemplate(values = {}) {
-  const row = document.createElement("tr");
+  const row = document.createElement("article");
+  row.className = "recipient-card";
   row.innerHTML = `
-    <td><input name="client_name" value="${escapeAttribute(values.client_name || "")}" /></td>
-    <td><input name="contact_name" value="${escapeAttribute(values.contact_name || "")}" /></td>
-    <td><input name="campaign_name" value="${escapeAttribute(values.campaign_name || "")}" /></td>
-    <td><input name="deadline" value="${escapeAttribute(values.deadline || "")}" /></td>
-    <td><input name="approval_link" value="${escapeAttribute(values.approval_link || "")}" /></td>
-    <td><input name="custom_note" value="${escapeAttribute(values.custom_note || "")}" /></td>
-    <td><button class="table-button" type="button" data-remove-row>Remove</button></td>
+    <div class="recipient-card-top">
+      <strong>Recipient</strong>
+      <button class="table-button" type="button" data-remove-row>Remove</button>
+    </div>
+    <label><span>Client/team</span><input name="client_name" value="${escapeAttribute(values.client_name || "")}" /></label>
+    <label><span>Contact</span><input name="contact_name" value="${escapeAttribute(values.contact_name || "")}" /></label>
+    <label><span>Campaign</span><input name="campaign_name" value="${escapeAttribute(values.campaign_name || "")}" /></label>
+    <label><span>Deadline</span><input name="deadline" value="${escapeAttribute(values.deadline || "")}" /></label>
+    <label class="wide"><span>Approval link</span><input name="approval_link" value="${escapeAttribute(values.approval_link || "")}" /></label>
+    <label class="wide"><span>Note</span><input name="custom_note" value="${escapeAttribute(values.custom_note || "")}" /></label>
   `;
   return row;
 }
@@ -84,7 +88,7 @@ function escapeHtml(value) {
 }
 
 function getRecipients() {
-  return Array.from(recipientBody.querySelectorAll("tr"))
+  return Array.from(recipientBody.querySelectorAll(".recipient-card"))
     .map((row) => {
       const data = {};
       fields.forEach((field) => {
@@ -181,20 +185,23 @@ function exportCsv() {
 
 recipientBody.addEventListener("click", (event) => {
   if (event.target.matches("[data-remove-row]")) {
-    const rows = recipientBody.querySelectorAll("tr");
+    const rows = recipientBody.querySelectorAll(".recipient-card");
     if (rows.length > 1) {
-      event.target.closest("tr").remove();
+      event.target.closest(".recipient-card").remove();
+      renumberRecipients();
     }
   }
 });
 
 addRowButton.addEventListener("click", () => {
   recipientBody.appendChild(rowTemplate());
+  renumberRecipients();
 });
 
 loadSampleButton.addEventListener("click", () => {
   recipientBody.innerHTML = "";
   sampleRecipients.forEach((recipient) => recipientBody.appendChild(rowTemplate(recipient)));
+  renumberRecipients();
 });
 
 form.addEventListener("submit", (event) => {
@@ -217,3 +224,14 @@ form.addEventListener("submit", (event) => {
 });
 
 exportButton.addEventListener("click", exportCsv);
+
+function renumberRecipients() {
+  recipientBody.querySelectorAll(".recipient-card").forEach((card, index) => {
+    const label = card.querySelector(".recipient-card-top strong");
+    if (label) {
+      label.textContent = `Recipient ${String(index + 1).padStart(2, "0")}`;
+    }
+  });
+}
+
+renumberRecipients();
