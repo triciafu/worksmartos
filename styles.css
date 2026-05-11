@@ -1612,6 +1612,17 @@ iframe[style*="position: fixed"] {
   flex: 0 0 calc(100% / 3);
 }
 
+.studio-step:not(.is-current-step) {
+  max-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.studio-step.is-current-step {
+  max-height: none;
+  visibility: visible;
+}
+
 .stepper-track .studio-panel,
 .stepper-track .studio-output {
   margin: 0 12px;
