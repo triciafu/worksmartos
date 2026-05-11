@@ -551,7 +551,7 @@ function generateEmails() {
 
 function goToStep(step) {
   currentStep = Math.max(0, Math.min(step, 2));
-  stepperTrack.style.transform = `translateX(-${currentStep * 100}%)`;
+  stepperTrack.style.transform = `translateX(-${currentStep * (100 / 3)}%)`;
 
   stepLabels.forEach((label, index) => {
     label.classList.toggle("is-active", index === currentStep);
