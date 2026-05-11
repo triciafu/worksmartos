@@ -1758,7 +1758,7 @@ iframe[style*="position: fixed"] {
   align-items: start;
   justify-content: center;
   gap: 36px;
-  width: 1172px;
+  width: 1170px;
   max-width: 100%;
   margin: 0 auto;
   padding: 0;
@@ -1859,10 +1859,14 @@ iframe[style*="position: fixed"] {
   opacity: 0.55;
 }
 
+.stepper-track .studio-controls.template-step,
 .stepper-track .studio-step.template-step {
-  max-width: none;
-  margin-right: 0;
-  margin-left: 0;
+  width: 1170px;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 0;
+  padding-left: 0;
 }
 
 .stepper-track .studio-controls.template-step > label,
@@ -1881,7 +1885,9 @@ iframe[style*="position: fixed"] {
 }
 
 @media (max-width: 1220px) {
-  .template-step {
+  .template-step,
+  .stepper-track .studio-controls.template-step,
+  .stepper-track .studio-step.template-step {
     grid-template-columns: minmax(0, 600px);
     justify-content: center;
     width: auto;
