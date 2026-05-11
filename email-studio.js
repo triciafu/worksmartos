@@ -54,7 +54,7 @@ const defaultFields = [
 
 const fieldLabels = {
   client_name: "Company name",
-  contact_firstname: "Client first name",
+  contact_firstname: "Recipient first name",
   campaign_name: "Campaign",
   deadline: "Deadline",
   approval_link: "Approval link",
@@ -370,7 +370,7 @@ async function copyRichText(element) {
 }
 
 function exportCsv() {
-  const rows = [["Company name", "Client first name", "Campaign", "Subject", "Body"]];
+  const rows = [["Company name", "Recipient first name", "Campaign", "Subject", "Body"]];
 
   output.querySelectorAll(".email-preview-card").forEach((card, index) => {
     const email = generatedEmails[index];
