@@ -1230,9 +1230,14 @@ iframe[style*="position: fixed"] {
 }
 
 .rich-editor:focus,
-.email-body-preview:focus {
+.email-body-preview:focus,
+.rich-editor.is-drag-over {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+}
+
+.rich-editor.is-drag-over {
+  background: rgba(0, 113, 227, 0.04);
 }
 
 .rich-editor p,
@@ -1260,8 +1265,13 @@ iframe[style*="position: fixed"] {
   user-select: none;
 }
 
-.token-row span:active {
+.token-row span:active,
+.token-row span.is-dragging {
   cursor: grabbing;
+}
+
+.token-row span.is-dragging {
+  opacity: 0.55;
 }
 
 .token-row span:hover {

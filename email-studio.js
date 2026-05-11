@@ -31,7 +31,6 @@ const formatButtons = document.querySelectorAll("[data-format]");
 const tokenButtons = document.querySelectorAll("[data-token]");
 const subjectTemplateInput = form.querySelector("[name=\"subject_template\"]");
 
-let activeTemplateTarget = bodyTemplateEditor;
 let currentStep = 0;
 
 let generatedEmails = [];
@@ -319,36 +318,31 @@ formatButtons.forEach((button) => {
   });
 });
 
-subjectTemplateInput.addEventListener("focus", () => {
-  activeTemplateTarget = subjectTemplateInput;
+bodyTemplateEditor.addEventListener("dragover", (event) => {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "copy";
+  bodyTemplateEditor.classList.add("is-drag-over");
 });
 
-bodyTemplateEditor.addEventListener("focus", () => {
-  activeTemplateTarget = bodyTemplateEditor;
+bodyTemplateEditor.addEventListener("dragleave", () => {
+  bodyTemplateEditor.classList.remove("is-drag-over");
 });
 
-[subjectTemplateInput, bodyTemplateEditor].forEach((target) => {
-  target.addEventListener("dragover", (event) => {
-    event.preventDefault();
-  });
-
-  target.addEventListener("drop", (event) => {
-    handleTokenDrop(event, target);
-  });
+bodyTemplateEditor.addEventListener("drop", (event) => {
+  bodyTemplateEditor.classList.remove("is-drag-over");
+  handleTokenDrop(event, bodyTemplateEditor);
 });
 
 tokenButtons.forEach((tokenButton) => {
-  tokenButton.addEventListener("mousedown", (event) => {
-    event.preventDefault();
-  });
-
   tokenButton.addEventListener("dragstart", (event) => {
     event.dataTransfer.setData("text/plain", tokenButton.dataset.token);
     event.dataTransfer.effectAllowed = "copy";
+    tokenButton.classList.add("is-dragging");
   });
 
-  tokenButton.addEventListener("click", () => {
-    insertToken(activeTemplateTarget, tokenButton.dataset.token);
+  tokenButton.addEventListener("dragend", () => {
+    tokenButton.classList.remove("is-dragging");
+    bodyTemplateEditor.classList.remove("is-drag-over");
   });
 });
 
