@@ -30,13 +30,8 @@
     </header>
 
     <main class="studio-page">
-      <section class="studio-hero">
+      <section class="studio-hero compact">
         <p class="eyebrow">Approval Email Studio</p>
-        <h1>Create 35 approval emails from one message.</h1>
-        <p>
-          Build personalized client or team approval requests from a single template.
-          Review every version, copy what you need, or export the full batch.
-        </p>
       </section>
 
       <nav class="studio-steps" aria-label="Approval Email Studio steps">
@@ -51,7 +46,7 @@
           <div class="template-card studio-panel">
             <div class="template-field">
               <span>Subject</span>
-              <div class="token-editor subject-editor" contenteditable="true" data-subject-template role="textbox" aria-label="Subject">Approval needed: <span class="merge-token" contenteditable="false" draggable="true" data-token="{{campaign_name}}">Campaign Name<button type="button" data-remove-token aria-label="Remove Campaign Name">×</button></span> creative for <span class="merge-token" contenteditable="false" draggable="true" data-token="{{client_name}}">Client Name<button type="button" data-remove-token aria-label="Remove Client Name">×</button></span></div>
+              <div class="token-editor subject-editor" contenteditable="true" data-subject-template role="textbox" aria-label="Subject">FOR REVIEW BY <span class="merge-token" contenteditable="false" data-token="{{deadline}}" data-label="Deadline">Deadline<button type="button" data-remove-token aria-label="Remove Deadline">×</button></span>: <span class="merge-token" contenteditable="false" data-token="{{client_name}}" data-label="Company Name">Company Name<button type="button" data-remove-token aria-label="Remove Company Name">×</button></span> <span class="merge-token" contenteditable="false" data-token="{{campaign_name}}" data-label="Campaign Name">Campaign Name<button type="button" data-remove-token aria-label="Remove Campaign Name">×</button></span> Creative</div>
             </div>
             <div class="rich-field">
               <span>Email</span>
@@ -63,11 +58,18 @@
                 <button type="button" data-format="underline" aria-label="Underline"><u>U</u></button>
               </div>
               <div class="rich-editor" contenteditable="true" data-body-template role="textbox" aria-multiline="true">
-                <p>Hi <span class="merge-token" contenteditable="false" draggable="true" data-token="{{contact_firstname}}">First Name<button type="button" data-remove-token aria-label="Remove First Name">×</button></span>,</p>
-                <p>Sharing the <span class="merge-token" contenteditable="false" draggable="true" data-token="{{campaign_name}}">Campaign Name<button type="button" data-remove-token aria-label="Remove Campaign Name">×</button></span> creative for <span class="merge-token" contenteditable="false" draggable="true" data-token="{{client_name}}">Client Name<button type="button" data-remove-token aria-label="Remove Client Name">×</button></span> for your review.</p>
-                <p>Please approve or send feedback by <span class="merge-token" contenteditable="false" draggable="true" data-token="{{deadline}}">Deadline<button type="button" data-remove-token aria-label="Remove Deadline">×</button></span>:<br /><span class="merge-token" contenteditable="false" draggable="true" data-token="{{approval_link}}">Approval Link<button type="button" data-remove-token aria-label="Remove Approval Link">×</button></span></p>
-                <p><span class="merge-token" contenteditable="false" draggable="true" data-token="{{custom_note}}">Custom Note<button type="button" data-remove-token aria-label="Remove Custom Note">×</button></span></p>
-                <p>Thank you,<br /><span class="merge-token" contenteditable="false" draggable="true" data-token="{{sender_name}}">Sender Name<button type="button" data-remove-token aria-label="Remove Sender Name">×</button></span></p>
+                <p>Hi <span class="merge-token" contenteditable="false" data-token="{{contact_firstname}}" data-label="Client First Name">Client First Name<button type="button" data-remove-token aria-label="Remove Client First Name">×</button></span>,</p>
+                <p><br /></p>
+                <p>I hope you're doing well.</p>
+                <p><br /></p>
+                <p>Attached are the latest creative assets for your review. Please take a look and send feedback by <span class="merge-token" contenteditable="false" data-token="{{deadline}}" data-label="Deadline">Deadline<button type="button" data-remove-token aria-label="Remove Deadline">×</button></span>.</p>
+                <p><br /></p>
+                <p><span class="merge-token" contenteditable="false" data-token="{{approval_link}}" data-label="Approval Link">Approval Link<button type="button" data-remove-token aria-label="Remove Approval Link">×</button></span></p>
+                <p><br /></p>
+                <p><span class="merge-token" contenteditable="false" data-token="{{custom_note}}" data-label="Custom Note">Custom Note<button type="button" data-remove-token aria-label="Remove Custom Note">×</button></span></p>
+                <p><br /></p>
+                <p>Thank you,</p>
+                <p><span class="merge-token" contenteditable="false" data-token="{{sender_name}}" data-label="Sender Name">Sender Name<button type="button" data-remove-token aria-label="Remove Sender Name">×</button></span></p>
               </div>
             </div>
           </div>
@@ -76,16 +78,16 @@
             <div class="studio-panel-heading">
               <span>Step 1</span>
               <h2>Write your email template</h2>
-              <p>Drag and drop placeholders into the email where each recipient detail should appear.</p>
+              <p>Click a placeholder to insert it wherever your cursor is in the subject or email.</p>
             </div>
             <div class="token-row" aria-label="Available merge fields" data-token-list>
-              <span draggable="true" data-token="{{client_name}}" data-label="Client Name">Client Name<button type="button" data-remove-placeholder aria-label="Remove Client Name">×</button></span>
-              <span draggable="true" data-token="{{contact_firstname}}" data-label="First Name">First Name<button type="button" data-remove-placeholder aria-label="Remove First Name">×</button></span>
-              <span draggable="true" data-token="{{campaign_name}}" data-label="Campaign Name">Campaign Name<button type="button" data-remove-placeholder aria-label="Remove Campaign Name">×</button></span>
-              <span draggable="true" data-token="{{deadline}}" data-label="Deadline">Deadline<button type="button" data-remove-placeholder aria-label="Remove Deadline">×</button></span>
-              <span draggable="true" data-token="{{approval_link}}" data-label="Approval Link">Approval Link<button type="button" data-remove-placeholder aria-label="Remove Approval Link">×</button></span>
-              <span draggable="true" data-token="{{custom_note}}" data-label="Custom Note">Custom Note<button type="button" data-remove-placeholder aria-label="Remove Custom Note">×</button></span>
-              <span draggable="true" data-token="{{sender_name}}" data-label="Sender Name">Sender Name<button type="button" data-remove-placeholder aria-label="Remove Sender Name">×</button></span>
+              <span data-token="{{client_name}}" data-label="Company Name">Company Name<button type="button" data-remove-placeholder aria-label="Remove Company Name">×</button></span>
+              <span data-token="{{contact_firstname}}" data-label="Client First Name">Client First Name<button type="button" data-remove-placeholder aria-label="Remove Client First Name">×</button></span>
+              <span data-token="{{campaign_name}}" data-label="Campaign Name">Campaign Name<button type="button" data-remove-placeholder aria-label="Remove Campaign Name">×</button></span>
+              <span data-token="{{deadline}}" data-label="Deadline">Deadline<button type="button" data-remove-placeholder aria-label="Remove Deadline">×</button></span>
+              <span data-token="{{approval_link}}" data-label="Approval Link">Approval Link<button type="button" data-remove-placeholder aria-label="Remove Approval Link">×</button></span>
+              <span data-token="{{custom_note}}" data-label="Custom Note">Custom Note<button type="button" data-remove-placeholder aria-label="Remove Custom Note">×</button></span>
+              <span data-token="{{sender_name}}" data-label="Sender Name">Sender Name<button type="button" data-remove-placeholder aria-label="Remove Sender Name">×</button></span>
             </div>
             <button class="add-placeholder" type="button" data-add-placeholder><span>+</span>Add a new placeholder</button>
             <label>
@@ -110,8 +112,8 @@
                 <strong>Recipient 01</strong>
                 <button class="table-button" type="button" data-remove-row>Remove</button>
               </div>
-              <label><span>Client/team</span><input name="client_name" value="GLAM INC" /></label>
-              <label><span>Contact</span><input name="contact_firstname" value="Tricia" /></label>
+              <label><span>Company name</span><input name="client_name" value="GLAM INC" /></label>
+              <label><span>Client first name</span><input name="contact_firstname" value="Tricia" /></label>
               <label><span>Campaign</span><input name="campaign_name" value="Spring Campaign" /></label>
               <label><span>Deadline</span><input name="deadline" value="Friday at 3 PM" /></label>
               <label class="wide"><span>Approval link</span><input name="approval_link" value="https://approval-link.com/glam" /></label>

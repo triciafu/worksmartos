@@ -38,6 +38,8 @@ let currentStep = 0;
 let editorHistory = [];
 let editorHistoryIndex = -1;
 let isRestoringHistory = false;
+let activeTemplateEditor = bodyTemplateEditor;
+let savedTemplateRange = null;
 
 let generatedEmails = [];
 
@@ -51,8 +53,8 @@ const defaultFields = [
 ];
 
 const fieldLabels = {
-  client_name: "Client/team",
-  contact_firstname: "Contact",
+  client_name: "Company name",
+  contact_firstname: "Client first name",
   campaign_name: "Campaign",
   deadline: "Deadline",
   approval_link: "Approval link",
@@ -116,7 +118,6 @@ function createTokenElement(token, label, removeAttribute = "data-remove-token")
   const chip = document.createElement("span");
   chip.className = "merge-token";
   chip.contentEditable = "false";
-  chip.draggable = true;
   chip.dataset.token = token;
   chip.dataset.label = label;
   chip.textContent = label;
@@ -170,22 +171,33 @@ function templateHtmlToMergeText(html) {
   return temp.innerText.trim();
 }
 
-function insertTokenIntoEditor(editor, token, label) {
-  editor.focus();
+function rememberTemplateRange(editor) {
   const selection = window.getSelection();
-
-  const node = createTokenElement(token, label);
-  const spacer = document.createTextNode(" ");
-
   if (!selection || !selection.rangeCount) {
-    editor.append(node, spacer);
     return;
   }
 
   const range = selection.getRangeAt(0);
   if (!editor.contains(range.commonAncestorContainer)) {
-    editor.append(node, spacer);
     return;
+  }
+
+  activeTemplateEditor = editor;
+  savedTemplateRange = range.cloneRange();
+}
+
+function insertTokenIntoEditor(editor, token, label) {
+  editor.focus();
+  const selection = window.getSelection();
+  const node = createTokenElement(token, label);
+  const spacer = document.createTextNode(" ");
+  const range = savedTemplateRange && editor.contains(savedTemplateRange.commonAncestorContainer)
+    ? savedTemplateRange.cloneRange()
+    : document.createRange();
+
+  if (!savedTemplateRange || !editor.contains(savedTemplateRange.commonAncestorContainer)) {
+    range.selectNodeContents(editor);
+    range.collapse(false);
   }
 
   range.deleteContents();
@@ -195,47 +207,12 @@ function insertTokenIntoEditor(editor, token, label) {
   range.setEndAfter(spacer);
   selection.removeAllRanges();
   selection.addRange(range);
+  savedTemplateRange = range.cloneRange();
+  saveEditorHistory();
 }
 
 function insertToken(target, token, label) {
   insertTokenIntoEditor(target, token, label);
-}
-
-function setEditorCaretFromPoint(editor, x, y) {
-  const selection = window.getSelection();
-  let range = null;
-
-  if (document.caretRangeFromPoint) {
-    range = document.caretRangeFromPoint(x, y);
-  } else if (document.caretPositionFromPoint) {
-    const position = document.caretPositionFromPoint(x, y);
-    if (position) {
-      range = document.createRange();
-      range.setStart(position.offsetNode, position.offset);
-    }
-  }
-
-  if (!selection || !range || !editor.contains(range.commonAncestorContainer)) {
-    return;
-  }
-
-  range.collapse(true);
-  selection.removeAllRanges();
-  selection.addRange(range);
-}
-
-function handleTokenDrop(event, target) {
-  event.preventDefault();
-  const token = event.dataTransfer.getData("text/plain");
-  const label = event.dataTransfer.getData("application/x-worksmartos-label") || token;
-
-  if (!token) {
-    return;
-  }
-
-  setEditorCaretFromPoint(target, event.clientX, event.clientY);
-  insertToken(target, token, label);
-  saveEditorHistory();
 }
 
 function updateHistoryButtons() {
@@ -362,7 +339,7 @@ async function copyRichText(element) {
 }
 
 function exportCsv() {
-  const rows = [["Client/team", "Contact", "Campaign", "Subject", "Body"]];
+  const rows = [["Company name", "Client first name", "Campaign", "Subject", "Body"]];
 
   output.querySelectorAll(".email-preview-card").forEach((card, index) => {
     const email = generatedEmails[index];
@@ -426,8 +403,14 @@ formatButtons.forEach((button) => {
       return;
     }
 
-    bodyTemplateEditor.focus();
+    activeTemplateEditor.focus();
+    if (savedTemplateRange && activeTemplateEditor.contains(savedTemplateRange.commonAncestorContainer)) {
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(savedTemplateRange);
+    }
     document.execCommand(command, false, null);
+    rememberTemplateRange(activeTemplateEditor);
     saveEditorHistory();
   });
 });
@@ -435,39 +418,34 @@ formatButtons.forEach((button) => {
 subjectTemplateEditor.addEventListener("input", saveEditorHistory);
 bodyTemplateEditor.addEventListener("input", saveEditorHistory);
 
-[subjectTemplateEditor, bodyTemplateEditor].forEach((target) => {
-  target.addEventListener("dragover", (event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "copy";
-    target.classList.add("is-drag-over");
+[subjectTemplateEditor, bodyTemplateEditor].forEach((editor) => {
+  editor.addEventListener("focus", () => {
+    activeTemplateEditor = editor;
+    rememberTemplateRange(editor);
   });
 
-  target.addEventListener("dragleave", () => {
-    target.classList.remove("is-drag-over");
-  });
-
-  target.addEventListener("drop", (event) => {
-    target.classList.remove("is-drag-over");
-    handleTokenDrop(event, target);
-  });
+  editor.addEventListener("mouseup", () => rememberTemplateRange(editor));
+  editor.addEventListener("keyup", () => rememberTemplateRange(editor));
+  editor.addEventListener("input", () => rememberTemplateRange(editor));
 });
 
-function bindTokenDrag(tokenButton) {
-  tokenButton.addEventListener("dragstart", (event) => {
-    event.dataTransfer.setData("text/plain", tokenButton.dataset.token);
-    event.dataTransfer.setData("application/x-worksmartos-label", labelFromTokenElement(tokenButton));
-    event.dataTransfer.effectAllowed = "copy";
-    tokenButton.classList.add("is-dragging");
+function bindTokenControl(tokenButton) {
+  tokenButton.addEventListener("mousedown", (event) => {
+    if (!event.target.matches("button")) {
+      event.preventDefault();
+    }
   });
 
-  tokenButton.addEventListener("dragend", () => {
-    tokenButton.classList.remove("is-dragging");
-    bodyTemplateEditor.classList.remove("is-drag-over");
-    subjectTemplateEditor.classList.remove("is-drag-over");
+  tokenButton.addEventListener("click", (event) => {
+    if (event.target.matches("button")) {
+      return;
+    }
+
+    insertToken(activeTemplateEditor, tokenButton.dataset.token, labelFromTokenElement(tokenButton));
   });
 }
 
-document.querySelectorAll("[data-token]").forEach(bindTokenDrag);
+tokenList.querySelectorAll("[data-token]").forEach(bindTokenControl);
 
 tokenList.addEventListener("click", (event) => {
   if (event.target.matches("[data-remove-placeholder]")) {
@@ -500,7 +478,7 @@ addPlaceholderButton.addEventListener("click", () => {
 
   const token = createPaletteToken(`{{${field}}}`, cleanLabel);
   tokenList.appendChild(token);
-  bindTokenDrag(token);
+  bindTokenControl(token);
 });
 
 nextStepButtons.forEach((button) => {
