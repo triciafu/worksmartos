@@ -611,7 +611,7 @@ function restoreEditorHistory(index) {
 function renderEmails(emails) {
   output.innerHTML = "";
   generatedEmails = emails;
-  outputCount.textContent = emails.length ? `${emails.length} approval emails ready.` : "No emails generated yet.";
+  outputCount.textContent = "Review every email before it leaves your desk.";
   exportButton.disabled = emails.length === 0;
 
   if (!emails.length) {
