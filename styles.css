@@ -1958,11 +1958,9 @@ iframe[style*="position: fixed"] {
 }
 
 .draft-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 16px;
+  display: grid;
+  justify-items: start;
+  gap: 6px;
   margin-top: 4px;
 }
 
@@ -1983,8 +1981,25 @@ iframe[style*="position: fixed"] {
   line-height: 1;
 }
 
-.draft-link:hover {
+.draft-link:hover,
+.draft-secondary-links a:hover {
   text-decoration: underline;
+}
+
+.draft-secondary-links {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.draft-secondary-links a {
+  color: var(--accent);
+  text-decoration: none;
 }
 
 @media (max-width: 720px) {
