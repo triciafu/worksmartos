@@ -52,7 +52,6 @@ const defaultFields = [
   "campaign_name",
   "contact_firstname",
   "approval_link",
-  "custom_note",
 ];
 
 const fieldLabels = {
@@ -60,14 +59,13 @@ const fieldLabels = {
   contact_firstname: "Recipient first name",
   campaign_name: "Campaign",
   deadline: "Deadline",
-  approval_link: "Approval link",
-  custom_note: "Note",
+  approval_link: "Creative link",
 };
 
 const fields = [...defaultFields];
 
 function recipientFieldTemplate(field, values = {}) {
-  const wideClass = ["approval_link", "custom_note"].includes(field) || !defaultFields.includes(field) ? " class=\"wide\"" : "";
+  const wideClass = ["approval_link"].includes(field) || !defaultFields.includes(field) ? " class=\"wide\"" : "";
   return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
 }
 
