@@ -444,6 +444,15 @@ function linkifyCreativeLink(value) {
   return `<a href="${escapeAttribute(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(raw)}</a>`;
 }
 
+function normalizeLinkUrl(value) {
+  const raw = String(value || "").trim();
+  if (!raw) {
+    return "";
+  }
+
+  return /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+}
+
 function mergeTemplate(template, data, options = {}) {
   return String(template).replace(/{{\s*([a-zA-Z0-9_]+)\s*}}/g, (_, key) => {
     const value = data[key] || "";
@@ -864,7 +873,17 @@ formatButtons.forEach((button) => {
       selection.removeAllRanges();
       selection.addRange(savedTemplateRange);
     }
-    document.execCommand(command, false, null);
+
+    if (command === "createLink") {
+      const url = normalizeLinkUrl(window.prompt("Link URL", "https://"));
+      if (!url) {
+        return;
+      }
+      document.execCommand(command, false, url);
+    } else {
+      document.execCommand(command, false, null);
+    }
+
     rememberTemplateRange(activeTemplateEditor);
     saveEditorHistory();
   });
