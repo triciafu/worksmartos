@@ -1555,6 +1555,23 @@ iframe[style*="position: fixed"] {
   justify-content: flex-end;
 }
 
+.spreadsheet-actions .button.secondary {
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  background: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.spreadsheet-actions .button.secondary:hover {
+  border-color: var(--ink);
+  color: #ffffff;
+  background: var(--ink);
+}
+
 .upload-button {
   cursor: pointer;
 }
