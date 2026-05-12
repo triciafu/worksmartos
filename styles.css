@@ -1525,9 +1525,9 @@ iframe[style*="position: fixed"] {
 .spreadsheet-tools {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
+  gap: 14px;
   align-items: center;
-  padding: 18px;
+  padding: 14px 18px;
   border: 1px solid #e3e5ea;
   border-radius: 8px;
   background: #ffffff;
@@ -1541,7 +1541,7 @@ iframe[style*="position: fixed"] {
 }
 
 .spreadsheet-tools p {
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.45;

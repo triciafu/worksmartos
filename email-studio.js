@@ -47,10 +47,10 @@ let savedTemplateRange = null;
 let generatedEmails = [];
 
 const defaultFields = [
-  "deadline",
   "client_name",
-  "campaign_name",
   "contact_firstname",
+  "campaign_name",
+  "deadline",
   "approval_link",
 ];
 
@@ -73,9 +73,17 @@ function fieldFromToken(token) {
   return String(token || "").replace(/[{}]/g, "").trim();
 }
 
-function getTemplateFieldOrder() {
+function getRecipientFieldOrder() {
+  const naturalOrder = ["client_name", "contact_firstname", "campaign_name", "deadline", "approval_link"];
   const ordered = [];
   const seen = new Set();
+
+  naturalOrder.forEach((field) => {
+    if (fields.includes(field)) {
+      ordered.push(field);
+      seen.add(field);
+    }
+  });
 
   [subjectTemplateEditor, bodyTemplateEditor].forEach((editor) => {
     editor.querySelectorAll(".merge-token").forEach((token) => {
@@ -114,7 +122,7 @@ function syncRecipientDetailFieldOrder() {
     }
 
     const values = recipientValuesFromCard(card);
-    grid.innerHTML = getTemplateFieldOrder().map((field) => recipientFieldTemplate(field, values)).join("");
+    grid.innerHTML = getRecipientFieldOrder().map((field) => recipientFieldTemplate(field, values)).join("");
   });
 }
 
@@ -162,7 +170,7 @@ function rowTemplate(values = {}) {
       <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
     </div>
     <div class="recipient-detail-grid">
-      ${getTemplateFieldOrder().map((field) => recipientFieldTemplate(field, values)).join("")}
+      ${getRecipientFieldOrder().map((field) => recipientFieldTemplate(field, values)).join("")}
     </div>
   `;
   return row;
@@ -223,7 +231,7 @@ function updateAddressRemoveButtons(card) {
   const rows = card.querySelectorAll(".recipient-address-row");
   const removeButton = card.querySelector("[data-remove-address-row]");
   if (removeButton) {
-    removeButton.disabled = rows.length <= 1;
+    removeButton.hidden = rows.length <= 1;
   }
 }
 
@@ -329,7 +337,7 @@ function parseCsv(text) {
 }
 
 function csvHeaders() {
-  return ["To", "Cc", "Bcc", ...getTemplateFieldOrder().map(fieldHeader)];
+  return ["To", "Cc", "Bcc", ...getRecipientFieldOrder().map(fieldHeader)];
 }
 
 function downloadCsvTemplate() {
