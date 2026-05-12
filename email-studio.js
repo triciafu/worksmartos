@@ -228,11 +228,31 @@ function addressPreviewHtml(addresses = []) {
 }
 
 function updateAddressRemoveButtons(card) {
-  const rows = card.querySelectorAll(".recipient-address-row");
+  const rows = Array.from(card.querySelectorAll(".recipient-address-row"));
   const removeButton = card.querySelector("[data-remove-address-row]");
+  const addressTypes = new Set(rows.map((row) => row.querySelector('[name="recipient_type"]')?.value));
+
+  card.querySelectorAll("[data-add-address-row]").forEach((button) => {
+    button.hidden = addressTypes.has(button.dataset.addAddressRow);
+  });
+
   if (removeButton) {
     removeButton.hidden = rows.length <= 1;
   }
+}
+
+function updateEmailChipState(container) {
+  if (!container) {
+    return;
+  }
+
+  const inputValue = container.querySelector('[name="recipient_email"]')?.value.trim() || "";
+  const hasChips = Boolean(container.querySelector(".email-address-chip"));
+  container.classList.toggle("is-populated", Boolean(inputValue) || hasChips);
+}
+
+function updateAllEmailChipStates() {
+  recipientBody.querySelectorAll("[data-email-chip-input]").forEach(updateEmailChipState);
 }
 
 function getEmailChipValues(container) {
@@ -260,6 +280,7 @@ function commitEmailChips(input) {
   const container = input.closest("[data-email-chip-input]");
   const emails = splitEmailList(input.value);
   if (!container || !emails.length) {
+    updateEmailChipState(container);
     return;
   }
 
@@ -271,6 +292,7 @@ function commitEmailChips(input) {
     }
   });
   input.value = "";
+  updateEmailChipState(container);
 }
 
 function fieldHeader(field) {
@@ -379,6 +401,7 @@ function importCsv(text) {
   recipientBody.replaceChildren(...cards);
   renumberRecipients();
   document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
+  updateAllEmailChipStates();
   importStatus.textContent = `${cards.length} ${cards.length === 1 ? "email" : "emails"} imported from CSV.`;
 }
 
@@ -708,8 +731,12 @@ recipientBody.addEventListener("click", (event) => {
   const addAddressButton = event.target.closest("[data-add-address-row]");
   if (addAddressButton) {
     const card = event.target.closest(".recipient-card");
-    const actions = card.querySelector(".address-field-actions");
-    actions.insertAdjacentHTML("beforebegin", addressRowTemplate({}, addAddressButton.dataset.addAddressRow || "Cc", true));
+    const type = addAddressButton.dataset.addAddressRow || "Cc";
+    const alreadyExists = Array.from(card.querySelectorAll('[name="recipient_type"]')).some((input) => input.value === type);
+    if (!alreadyExists) {
+      const actions = card.querySelector(".address-field-actions");
+      actions.insertAdjacentHTML("beforebegin", addressRowTemplate({}, type, true));
+    }
     updateAddressRemoveButtons(card);
   }
 
@@ -723,7 +750,9 @@ recipientBody.addEventListener("click", (event) => {
   }
 
   if (event.target.matches("[data-remove-email-chip]")) {
+    const container = event.target.closest("[data-email-chip-input]");
     event.target.closest(".email-address-chip")?.remove();
+    updateEmailChipState(container);
   }
 });
 
@@ -739,7 +768,12 @@ recipientBody.addEventListener("keydown", (event) => {
 });
 
 recipientBody.addEventListener("input", (event) => {
-  if (event.target.matches('[name="recipient_email"]') && shouldCommitEmailInput(event.target.value)) {
+  if (!event.target.matches('[name="recipient_email"]')) {
+    return;
+  }
+
+  updateEmailChipState(event.target.closest("[data-email-chip-input]"));
+  if (shouldCommitEmailInput(event.target.value)) {
     commitEmailChips(event.target);
   }
 });
@@ -754,6 +788,7 @@ addRowButton.addEventListener("click", () => {
   recipientBody.appendChild(rowTemplate());
   renumberRecipients();
   document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
+  updateAllEmailChipStates();
 });
 
 form.addEventListener("submit", (event) => {
@@ -942,5 +977,6 @@ function renumberRecipients() {
 
 renumberRecipients();
 document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
+updateAllEmailChipStates();
 saveEditorHistory();
 goToStep(0);

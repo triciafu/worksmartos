@@ -1667,6 +1667,11 @@ iframe[style*="position: fixed"] {
   opacity: 0.45;
 }
 
+.add-address-link[hidden],
+.remove-address-link[hidden] {
+  display: none;
+}
+
 .email-address-preview {
   display: grid;
   gap: 10px;
@@ -1754,8 +1759,13 @@ iframe[style*="position: fixed"] {
   background: #ffffff;
 }
 
-.email-chip-input:focus-within {
+.email-chip-input:focus-within,
+.email-chip-input.is-populated {
   border-color: var(--accent);
+}
+
+.email-chip-input.is-populated {
+  background: rgba(0, 113, 227, 0.08);
 }
 
 .recipient-card .email-chip-input input {
@@ -1995,12 +2005,22 @@ iframe[style*="position: fixed"] {
 
 .template-card {
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   grid-column: 2;
+  align-self: stretch;
   gap: 24px;
   width: 600px;
   max-width: 100%;
   margin: 0 auto;
   padding: 34px;
+}
+
+.template-card .rich-field {
+  grid-template-rows: auto auto minmax(260px, 1fr);
+}
+
+.template-card .rich-editor {
+  min-height: 100%;
 }
 
 .template-guide {
