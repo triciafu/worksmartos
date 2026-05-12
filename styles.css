@@ -1958,14 +1958,26 @@ iframe[style*="position: fixed"] {
 }
 
 .draft-actions {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
   margin-top: 4px;
 }
 
-.draft-actions .button {
-  width: 100%;
+.draft-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--blue);
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.draft-link:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 720px) {
