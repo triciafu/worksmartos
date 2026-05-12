@@ -643,10 +643,6 @@ function renderEmails(emails) {
         <span class="field-label-row"><span>Body</span>${copyIconButton("body")}</span>
         <div class="email-body-preview" contenteditable="true" data-body-input role="textbox" aria-multiline="true">${email.body}</div>
       </div>
-      <div class="email-preview-actions">
-        <button class="button secondary" type="button" data-copy-subject>Copy subject</button>
-        <button class="button primary" type="button" data-copy-body>Copy body</button>
-      </div>
     `;
 
     card.querySelectorAll(".copy-icon-button").forEach((button) => {
@@ -666,13 +662,6 @@ function renderEmails(emails) {
       });
     });
 
-    card.querySelector("[data-copy-subject]").addEventListener("click", () => {
-      copyText(card.querySelector("[data-subject-input]").value);
-    });
-
-    card.querySelector("[data-copy-body]").addEventListener("click", () => {
-      copyRichText(card.querySelector("[data-body-input]"));
-    });
 
     output.appendChild(card);
   });
