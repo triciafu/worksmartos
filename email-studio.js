@@ -43,6 +43,7 @@ let editorHistoryIndex = -1;
 let isRestoringHistory = false;
 let activeTemplateEditor = bodyTemplateEditor;
 let savedTemplateRange = null;
+let emailInputCounter = 0;
 
 let generatedEmails = [];
 
@@ -126,12 +127,21 @@ function syncRecipientDetailFieldOrder() {
   });
 }
 
+function emailInputName() {
+  emailInputCounter += 1;
+  return `recipient_email_${emailInputCounter}`;
+}
+
+function emailInputSelector() {
+  return "[data-recipient-email-input]";
+}
+
 function emailChipsTemplate(value = "") {
   const emails = splitEmailList(value);
   return `
     <div class="email-chip-input" data-email-chip-input>
       ${emails.map((email) => `<span class="email-address-chip">${escapeHtml(email)}<button type="button" data-remove-email-chip aria-label="Remove ${escapeAttribute(email)}">×</button></span>`).join("")}
-      <input name="recipient_email" type="text" value="" />
+      <input name="${emailInputName()}" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
     </div>
   `;
 }
@@ -250,7 +260,7 @@ function updateEmailChipState(container) {
     return;
   }
 
-  const inputValue = container.querySelector('[name="recipient_email"]')?.value.trim() || "";
+  const inputValue = container.querySelector(emailInputSelector())?.value.trim() || "";
   const hasChips = Boolean(container.querySelector(".email-address-chip"));
   container.classList.toggle("is-populated", Boolean(inputValue) || hasChips);
 }
@@ -261,7 +271,7 @@ function updateAllEmailChipStates() {
 
 function getEmailChipValues(container) {
   const chips = Array.from(container.querySelectorAll(".email-address-chip")).map((chip) => chip.firstChild?.textContent.trim() || "");
-  const inputValue = container.querySelector('[name="recipient_email"]')?.value || "";
+  const inputValue = container.querySelector(emailInputSelector())?.value || "";
   return [...chips, ...splitEmailList(inputValue)].filter(Boolean);
 }
 
@@ -794,7 +804,7 @@ recipientBody.addEventListener("click", (event) => {
 });
 
 recipientBody.addEventListener("keydown", (event) => {
-  if (!event.target.matches('[name="recipient_email"]')) {
+  if (!event.target.matches(emailInputSelector())) {
     return;
   }
 
@@ -805,7 +815,7 @@ recipientBody.addEventListener("keydown", (event) => {
 });
 
 recipientBody.addEventListener("input", (event) => {
-  if (!event.target.matches('[name="recipient_email"]')) {
+  if (!event.target.matches(emailInputSelector())) {
     return;
   }
 
@@ -816,7 +826,7 @@ recipientBody.addEventListener("input", (event) => {
 });
 
 recipientBody.addEventListener("focusout", (event) => {
-  if (event.target.matches('[name="recipient_email"]')) {
+  if (event.target.matches(emailInputSelector())) {
     commitEmailChips(event.target);
   }
 });

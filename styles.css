@@ -1580,18 +1580,9 @@ iframe[style*="position: fixed"] {
 .spreadsheet-actions .button.secondary {
   min-height: 44px;
   padding: 0 20px;
-  border: 1px solid var(--line);
   border-radius: 999px;
-  color: var(--ink);
-  background: #ffffff;
   font-size: 15px;
   font-weight: 500;
-}
-
-.spreadsheet-actions .button.secondary:hover {
-  border-color: var(--ink);
-  color: #ffffff;
-  background: var(--ink);
 }
 
 .upload-button {
@@ -1889,6 +1880,15 @@ iframe[style*="position: fixed"] {
 .recipient-card .email-chip-input input:focus {
   border-color: transparent;
 }
+
+.recipient-card .email-chip-input input:-webkit-autofill,
+.recipient-card .email-chip-input input:-webkit-autofill:hover,
+.recipient-card .email-chip-input input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  -webkit-text-fill-color: var(--ink);
+  caret-color: var(--ink);
+}
+
 
 .email-address-chip {
   display: inline-flex;
