@@ -1521,6 +1521,57 @@ iframe[style*="position: fixed"] {
   line-height: 1.55;
 }
 
+
+.spreadsheet-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid #e3e5ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.spreadsheet-tools strong {
+  display: block;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.spreadsheet-tools p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.spreadsheet-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.upload-button {
+  cursor: pointer;
+}
+
+.upload-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.import-status {
+  grid-column: 1 / -1;
+}
+
 .recipient-card-list {
   display: grid;
   gap: 20px;

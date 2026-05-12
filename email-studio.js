@@ -33,6 +33,9 @@ const redoButton = document.querySelector("[data-format=\"redo\"]");
 const tokenList = document.querySelector("[data-token-list]");
 const addPlaceholderButton = document.querySelector("[data-add-placeholder]");
 const subjectTemplateEditor = document.querySelector("[data-subject-template]");
+const downloadTemplateButton = document.querySelector("[data-download-template]");
+const uploadCsvInput = document.querySelector("[data-upload-csv]");
+const importStatus = document.querySelector("[data-import-status]");
 
 let currentStep = 0;
 let editorHistory = [];
@@ -97,12 +100,15 @@ function addressRowTemplate(values = {}, type = "To", isExtra = false) {
 function rowTemplate(values = {}) {
   const row = document.createElement("article");
   row.className = "recipient-card";
+  const addressRows = values.addresses?.length
+    ? values.addresses.map((address, index) => addressRowTemplate({ recipient_email: address.email, recipient_type: address.type }, address.type, index > 0)).join("")
+    : addressRowTemplate(values);
   row.innerHTML = `
     <div class="recipient-card-top">
       <strong>Email</strong>
       <button class="table-button" type="button" data-remove-row>Remove</button>
     </div>
-    ${addressRowTemplate(values)}
+    ${addressRows}
     <div class="address-field-actions">
       <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
       <button class="add-placeholder add-address-link" type="button" data-add-address-row="Bcc"><span>+</span>Add bcc:</button>
@@ -210,6 +216,115 @@ function commitEmailChips(input) {
     }
   });
   input.value = "";
+}
+
+function fieldHeader(field) {
+  return fieldLabels[field] || field.replaceAll("_", " ");
+}
+
+function normalizeHeader(value) {
+  return String(value).trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+}
+
+function csvEscape(value) {
+  return `"${String(value ?? "").replaceAll('"', '""')}"`;
+}
+
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    const next = text[index + 1];
+
+    if (char === '"' && inQuotes && next === '"') {
+      cell += '"';
+      index += 1;
+      continue;
+    }
+
+    if (char === '"') {
+      inQuotes = !inQuotes;
+      continue;
+    }
+
+    if (char === "," && !inQuotes) {
+      row.push(cell);
+      cell = "";
+      continue;
+    }
+
+    if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && next === "\n") {
+        index += 1;
+      }
+      row.push(cell);
+      if (row.some((value) => value.trim())) {
+        rows.push(row);
+      }
+      row = [];
+      cell = "";
+      continue;
+    }
+
+    cell += char;
+  }
+
+  row.push(cell);
+  if (row.some((value) => value.trim())) {
+    rows.push(row);
+  }
+
+  return rows;
+}
+
+function csvHeaders() {
+  return ["To", "Cc", "Bcc", ...fields.map(fieldHeader)];
+}
+
+function downloadCsvTemplate() {
+  const csv = `${csvHeaders().map(csvEscape).join(",")}\n`;
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "worksmartos-approval-email-template.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function valuesFromCsvRow(headers, row) {
+  const byHeader = new Map(headers.map((header, index) => [normalizeHeader(header), row[index]?.trim() || ""]));
+  const values = {};
+  fields.forEach((field) => {
+    values[field] = byHeader.get(normalizeHeader(fieldHeader(field))) || byHeader.get(normalizeHeader(field)) || "";
+  });
+
+  values.addresses = [
+    { type: "To", email: byHeader.get("to") || "" },
+    { type: "Cc", email: byHeader.get("cc") || "" },
+    { type: "Bcc", email: byHeader.get("bcc") || "" },
+  ].filter((address) => address.email);
+
+  return values;
+}
+
+function importCsv(text) {
+  const rows = parseCsv(text);
+  if (rows.length < 2) {
+    importStatus.textContent = "No recipient rows found in the CSV.";
+    return;
+  }
+
+  const [headers, ...dataRows] = rows;
+  const cards = dataRows.map((row) => rowTemplate(valuesFromCsvRow(headers, row)));
+  recipientBody.replaceChildren(...cards);
+  renumberRecipients();
+  document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
+  importStatus.textContent = `${cards.length} ${cards.length === 1 ? "email" : "emails"} imported from CSV.`;
 }
 
 function getRecipients() {
@@ -595,6 +710,18 @@ form.addEventListener("submit", (event) => {
 });
 
 exportButton.addEventListener("click", exportCsv);
+downloadTemplateButton.addEventListener("click", downloadCsvTemplate);
+
+uploadCsvInput.addEventListener("change", async () => {
+  const file = uploadCsvInput.files?.[0];
+  if (!file) {
+    return;
+  }
+
+  importCsv(await file.text());
+  uploadCsvInput.value = "";
+});
+
 
 formatButtons.forEach((button) => {
   button.addEventListener("mousedown", (event) => {

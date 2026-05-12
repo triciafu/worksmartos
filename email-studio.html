@@ -110,6 +110,20 @@
             <span>Step 2</span>
             <h2>Add the recipients and details for each email</h2>
           </div>
+          <div class="spreadsheet-tools" aria-label="Spreadsheet recipient import options">
+            <div>
+              <strong>Use a spreadsheet</strong>
+              <p>Download a template based on your fields, fill out as many rows as you need, then upload the CSV.</p>
+            </div>
+            <div class="spreadsheet-actions">
+              <button class="button secondary" type="button" data-download-template>Download CSV template</button>
+              <label class="button secondary upload-button">
+                Upload completed CSV
+                <input type="file" accept=".csv,text/csv" data-upload-csv />
+              </label>
+            </div>
+            <p class="import-status" data-import-status aria-live="polite"></p>
+          </div>
           <div class="recipient-card-list" data-recipient-body>
             <article class="recipient-card">
               <div class="recipient-card-top">
