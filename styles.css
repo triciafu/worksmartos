@@ -1424,6 +1424,14 @@ iframe[style*="position: fixed"] {
   margin-bottom: 24px;
 }
 
+.studio-output-note {
+  margin: 8px 0 0;
+  max-width: 420px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 .email-preview-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1542,7 +1550,7 @@ iframe[style*="position: fixed"] {
   padding: 14px 18px;
   border: 1px solid #e3e5ea;
   border-radius: 8px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .spreadsheet-tools strong {
