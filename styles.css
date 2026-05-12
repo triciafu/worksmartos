@@ -1827,7 +1827,7 @@ iframe[style*="position: fixed"] {
 }
 
 .email-preview-card {
-  background: #fbfbfd;
+  background: #ffffff;
 }
 
 .email-preview-card textarea {
@@ -1881,7 +1881,7 @@ iframe[style*="position: fixed"] {
   padding: 28px;
   border: 1px solid #e3e5ea;
   border-radius: 8px;
-  background: #ffffff;
+  background: #f5f5f5;
 }
 
 .studio-actions.compact {
