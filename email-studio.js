@@ -47,10 +47,10 @@ let savedTemplateRange = null;
 let generatedEmails = [];
 
 const defaultFields = [
-  "client_name",
-  "contact_firstname",
-  "campaign_name",
   "deadline",
+  "client_name",
+  "campaign_name",
+  "contact_firstname",
   "approval_link",
   "custom_note",
 ];
@@ -69,6 +69,55 @@ const fields = [...defaultFields];
 function recipientFieldTemplate(field, values = {}) {
   const wideClass = ["approval_link", "custom_note"].includes(field) || !defaultFields.includes(field) ? " class=\"wide\"" : "";
   return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
+}
+
+function fieldFromToken(token) {
+  return String(token || "").replace(/[{}]/g, "").trim();
+}
+
+function getTemplateFieldOrder() {
+  const ordered = [];
+  const seen = new Set();
+
+  [subjectTemplateEditor, bodyTemplateEditor].forEach((editor) => {
+    editor.querySelectorAll(".merge-token").forEach((token) => {
+      const field = fieldFromToken(token.dataset.token);
+      if (!field || field === "sender_name" || !fields.includes(field) || seen.has(field)) {
+        return;
+      }
+
+      ordered.push(field);
+      seen.add(field);
+    });
+  });
+
+  fields.forEach((field) => {
+    if (!seen.has(field)) {
+      ordered.push(field);
+    }
+  });
+
+  return ordered;
+}
+
+function recipientValuesFromCard(card) {
+  const values = {};
+  fields.forEach((field) => {
+    values[field] = card.querySelector(`[name="${field}"]`)?.value || "";
+  });
+  return values;
+}
+
+function syncRecipientDetailFieldOrder() {
+  recipientBody.querySelectorAll(".recipient-card").forEach((card) => {
+    const grid = card.querySelector(".recipient-detail-grid");
+    if (!grid) {
+      return;
+    }
+
+    const values = recipientValuesFromCard(card);
+    grid.innerHTML = getTemplateFieldOrder().map((field) => recipientFieldTemplate(field, values)).join("");
+  });
 }
 
 function emailChipsTemplate(value = "") {
@@ -115,7 +164,7 @@ function rowTemplate(values = {}) {
       <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
     </div>
     <div class="recipient-detail-grid">
-      ${fields.map((field) => recipientFieldTemplate(field, values)).join("")}
+      ${getTemplateFieldOrder().map((field) => recipientFieldTemplate(field, values)).join("")}
     </div>
   `;
   return row;
@@ -282,7 +331,7 @@ function parseCsv(text) {
 }
 
 function csvHeaders() {
-  return ["To", "Cc", "Bcc", ...fields.map(fieldHeader)];
+  return ["To", "Cc", "Bcc", ...getTemplateFieldOrder().map(fieldHeader)];
 }
 
 function downloadCsvTemplate() {
@@ -393,9 +442,7 @@ function addRecipientField(field, label) {
   fields.push(field);
   fieldLabels[field] = label;
 
-  recipientBody.querySelectorAll(".recipient-card").forEach((card) => {
-    card.querySelector(".recipient-detail-grid")?.insertAdjacentHTML("beforeend", recipientFieldTemplate(field));
-  });
+  syncRecipientDetailFieldOrder();
 }
 
 function tokenFormatWrapper(token, textNode) {
@@ -868,6 +915,9 @@ function generateEmails() {
 
 function goToStep(step) {
   currentStep = Math.max(0, Math.min(step, 2));
+  if (currentStep === 1) {
+    syncRecipientDetailFieldOrder();
+  }
   stepperTrack.style.transform = `translateX(-${currentStep * (100 / 3)}%)`;
 
   stepLabels.forEach((label, index) => {
