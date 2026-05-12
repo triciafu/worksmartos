@@ -1731,8 +1731,8 @@ iframe[style*="position: fixed"] {
 
 .copy-icon-button {
   position: relative;
-  width: 22px;
-  height: 22px;
+  width: 17px;
+  height: 17px;
   border: 0;
   background: transparent;
   color: var(--muted);
@@ -1749,21 +1749,21 @@ iframe[style*="position: fixed"] {
 .copy-icon-button span::after {
   content: "";
   position: absolute;
-  width: 10px;
-  height: 12px;
-  border: 1.5px solid currentColor;
+  width: 8px;
+  height: 9px;
+  border: 1.25px solid currentColor;
   border-radius: 2px;
   background: #ffffff;
 }
 
 .copy-icon-button span::before {
-  top: 4px;
-  left: 6px;
+  top: 3px;
+  left: 5px;
 }
 
 .copy-icon-button span::after {
-  top: 7px;
-  left: 3px;
+  top: 5px;
+  left: 2px;
 }
 
 .copy-icon-button::after {
@@ -1981,25 +1981,8 @@ iframe[style*="position: fixed"] {
   line-height: 1;
 }
 
-.draft-link:hover,
-.draft-secondary-links a:hover {
+.draft-link:hover {
   text-decoration: underline;
-}
-
-.draft-secondary-links {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.35;
-  font-weight: 500;
-}
-
-.draft-secondary-links a {
-  color: var(--accent);
-  text-decoration: none;
 }
 
 @media (max-width: 720px) {

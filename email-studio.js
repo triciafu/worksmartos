@@ -270,13 +270,9 @@ function draftLinksHtml(email) {
 
   return `
     <div class="draft-actions" aria-label="Draft actions">
-      <a class="draft-link draft-link-primary" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">+</span> Open Gmail draft</a>
-      <div class="draft-secondary-links" aria-label="Other draft options">
-        <span>Other options:</span>
-        <a href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer">Outlook</a>
-        <span aria-hidden="true">·</span>
-        <a href="${escapeAttribute(mailtoHref)}">Default email app</a>
-      </div>
+      <a class="draft-link" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">+</span> Open Gmail draft</a>
+      <a class="draft-link" href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">+</span> Open Outlook</a>
+      <a class="draft-link" href="${escapeAttribute(mailtoHref)}"><span aria-hidden="true">+</span> Default email app</a>
     </div>
   `;
 }
