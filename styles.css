@@ -1441,7 +1441,13 @@ iframe[style*="position: fixed"] {
   gap: 16px;
 }
 
-.email-preview-top strong,
+.email-preview-top strong {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.24;
+  font-weight: 500;
+}
+
 .empty-state h3 {
   font-size: 20px;
   line-height: 1.24;
@@ -1705,6 +1711,78 @@ iframe[style*="position: fixed"] {
   outline: none;
 }
 
+.copyable-field {
+  position: relative;
+}
+
+.field-label-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.copy-icon-button {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0.72;
+}
+
+.copy-icon-button:hover,
+.copy-icon-button:focus-visible {
+  opacity: 1;
+}
+
+.copy-icon-button span::before,
+.copy-icon-button span::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 12px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  background: #ffffff;
+}
+
+.copy-icon-button span::before {
+  top: 4px;
+  left: 6px;
+}
+
+.copy-icon-button span::after {
+  top: 7px;
+  left: 3px;
+}
+
+.copy-icon-button::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  right: 50%;
+  bottom: calc(100% + 7px);
+  transform: translateX(50%);
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+  white-space: nowrap;
+}
+
+.copy-icon-button:hover::after,
+.copy-icon-button:focus-visible::after {
+  opacity: 1;
+}
+
 .recipient-card-top {
   display: flex;
   align-items: center;
@@ -1765,7 +1843,7 @@ iframe[style*="position: fixed"] {
 }
 
 .email-chip-input.is-populated {
-  background: rgba(0, 113, 227, 0.08);
+  background: #ffffff;
 }
 
 .recipient-card .email-chip-input input {

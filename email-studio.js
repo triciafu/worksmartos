@@ -217,11 +217,15 @@ function getAddressGroups(addresses = []) {
   }, { To: [], Cc: [], Bcc: [] });
 }
 
+function copyIconButton(label) {
+  return `<button class="copy-icon-button" type="button" title="Copy" aria-label="Copy ${escapeAttribute(label)}" data-tooltip="Copy"><span aria-hidden="true"></span></button>`;
+}
+
 function addressPreviewHtml(addresses = []) {
   const groups = getAddressGroups(addresses);
-  return ["To", "Cc", "Bcc"].map((group) => `
-    <label>
-      <span>${group}:</span>
+  return ["To", "Cc", "Bcc"].filter((group) => group === "To" || groups[group].length).map((group) => `
+    <label class="copyable-field">
+      <span class="field-label-row"><span>${group}:</span>${copyIconButton(group)}</span>
       <input value="${escapeAttribute(groups[group].join(", "))}" data-address-input="${group}" />
     </label>
   `).join("");
@@ -631,12 +635,12 @@ function renderEmails(emails) {
       <div class="email-address-preview">
         ${addressPreviewHtml(email.addresses)}
       </div>
-      <label>
-        <span>Subject</span>
+      <label class="copyable-field">
+        <span class="field-label-row"><span>Subject</span>${copyIconButton("subject")}</span>
         <input value="${escapeAttribute(email.subject)}" data-subject-input />
       </label>
-      <div class="email-body-field">
-        <span>Body</span>
+      <div class="email-body-field copyable-field">
+        <span class="field-label-row"><span>Body</span>${copyIconButton("body")}</span>
         <div class="email-body-preview" contenteditable="true" data-body-input role="textbox" aria-multiline="true">${email.body}</div>
       </div>
       <div class="email-preview-actions">
@@ -644,6 +648,23 @@ function renderEmails(emails) {
         <button class="button primary" type="button" data-copy-body>Copy body</button>
       </div>
     `;
+
+    card.querySelectorAll(".copy-icon-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const field = button.closest(".copyable-field");
+        const body = field?.querySelector("[data-body-input]");
+        const input = field?.querySelector("input");
+
+        if (body) {
+          copyRichText(body);
+          return;
+        }
+
+        if (input) {
+          copyText(input.value);
+        }
+      });
+    });
 
     card.querySelector("[data-copy-subject]").addEventListener("click", () => {
       copyText(card.querySelector("[data-subject-input]").value);
