@@ -1269,6 +1269,12 @@ iframe[style*="position: fixed"] {
   line-height: 1.15;
 }
 
+.email-body-preview a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .token-row {
   display: flex;
   flex-wrap: wrap;

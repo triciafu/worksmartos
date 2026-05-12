@@ -428,9 +428,28 @@ function getRecipients() {
     .filter((row) => row.client_name || row.contact_firstname || row.campaign_name || row.approval_link);
 }
 
+function linkifyCreativeLink(value) {
+  const raw = String(value || "").trim();
+  if (!raw) {
+    return "";
+  }
+
+  const href = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  try {
+    new URL(href);
+  } catch {
+    return escapeHtml(raw);
+  }
+
+  return `<a href="${escapeAttribute(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(raw)}</a>`;
+}
+
 function mergeTemplate(template, data, options = {}) {
   return String(template).replace(/{{\s*([a-zA-Z0-9_]+)\s*}}/g, (_, key) => {
     const value = data[key] || "";
+    if (options.html && key === "approval_link") {
+      return linkifyCreativeLink(value);
+    }
     return options.html ? escapeHtml(value) : value;
   });
 }
@@ -611,7 +630,7 @@ function restoreEditorHistory(index) {
 function renderEmails(emails) {
   output.innerHTML = "";
   generatedEmails = emails;
-  outputCount.textContent = "Review every email before it leaves your desk.";
+  outputCount.textContent = "Review and copy each email";
   exportButton.disabled = emails.length === 0;
 
   if (!emails.length) {
