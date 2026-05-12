@@ -1853,6 +1853,12 @@ iframe[style*="position: fixed"] {
   padding: 0 4px;
   border: 0;
   border-radius: 0;
+  background: #ffffff;
+}
+
+.recipient-card .email-chip-input input::selection {
+  background: transparent;
+  color: inherit;
 }
 
 .recipient-card .email-chip-input input:focus {
