@@ -35,9 +35,9 @@
       </section>
 
       <nav class="studio-steps" aria-label="Approval Email Studio steps">
-        <span class="is-active">1. Write template</span>
-        <span>2. Add recipients</span>
-        <span>3. Review emails</span>
+        <button class="is-active" type="button" data-step-button="0">1. Write template</button>
+        <button type="button" data-step-button="1">2. Add recipients</button>
+        <button type="button" data-step-button="2">3. Review emails</button>
       </nav>
 
       <section class="studio-shell stepper-shell" aria-label="Approval email generator" data-stepper>
@@ -117,14 +117,10 @@
                 <button class="table-button" type="button" data-remove-row>Remove</button>
               </div>
               <div class="recipient-address-row">
-                <label>
-                  <span>Field</span>
-                  <select name="recipient_type">
-                    <option value="To">To:</option>
-                    <option value="Cc">Cc:</option>
-                    <option value="Bcc">Bcc:</option>
-                  </select>
-                </label>
+                <div class="address-field-static">
+                  <span>To:</span>
+                  <input type="hidden" name="recipient_type" value="To" />
+                </div>
                 <label>
                   <span>Email address(es)</span>
                   <div class="email-chip-input" data-email-chip-input>
@@ -133,7 +129,8 @@
                 </label>
               </div>
               <div class="address-field-actions">
-                <button class="add-placeholder add-address-link" type="button" data-add-address-row><span>+</span>Add email field</button>
+                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
+                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Bcc"><span>+</span>Add bcc:</button>
                 <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
               </div>
               <div class="recipient-detail-grid">

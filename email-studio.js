@@ -22,7 +22,7 @@ const outputCount = document.querySelector("[data-output-count]");
 const exportButton = document.querySelector("[data-export-csv]");
 const addRowButton = document.querySelector("[data-add-row]");
 const stepperTrack = document.querySelector("[data-stepper-track]");
-const stepLabels = document.querySelectorAll(".studio-steps span");
+const stepLabels = document.querySelectorAll(".studio-steps button");
 const nextStepButtons = document.querySelectorAll("[data-next-step]");
 const prevStepButtons = document.querySelectorAll("[data-prev-step]");
 const generateStepButton = document.querySelector("[data-generate-step]");
@@ -78,19 +78,16 @@ function emailChipsTemplate(value = "") {
   `;
 }
 
-function addressRowTemplate(values = {}, isExtra = false) {
+function addressRowTemplate(values = {}, type = "To", isExtra = false) {
+  const fieldType = values.recipient_type || type;
   return `
     <div class="recipient-address-row${isExtra ? " is-extra" : ""}">
+      <div class="address-field-static">
+        <span>${fieldType}:</span>
+        <input type="hidden" name="recipient_type" value="${fieldType}" />
+      </div>
       <label>
-        <span>Field</span>
-        <select name="recipient_type">
-          <option value="To" ${values.recipient_type === "To" ? "selected" : ""}>To:</option>
-          <option value="Cc" ${values.recipient_type === "Cc" ? "selected" : ""}>Cc:</option>
-          <option value="Bcc" ${values.recipient_type === "Bcc" ? "selected" : ""}>Bcc:</option>
-        </select>
-      </label>
-      <label>
-        <span>Email address(es)</span>
+        <span class="email-address-label">Email address(es)</span>
         ${emailChipsTemplate(values.recipient_email || "")}
       </label>
     </div>
@@ -107,7 +104,8 @@ function rowTemplate(values = {}) {
     </div>
     ${addressRowTemplate(values)}
     <div class="address-field-actions">
-      <button class="add-placeholder add-address-link" type="button" data-add-address-row><span>+</span>Add email field</button>
+      <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
+      <button class="add-placeholder add-address-link" type="button" data-add-address-row="Bcc"><span>+</span>Add bcc:</button>
       <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
     </div>
     <div class="recipient-detail-grid">
@@ -539,10 +537,11 @@ recipientBody.addEventListener("click", (event) => {
     }
   }
 
-  if (event.target.closest("[data-add-address-row]")) {
+  const addAddressButton = event.target.closest("[data-add-address-row]");
+  if (addAddressButton) {
     const card = event.target.closest(".recipient-card");
     const actions = card.querySelector(".address-field-actions");
-    actions.insertAdjacentHTML("beforebegin", addressRowTemplate({}, true));
+    actions.insertAdjacentHTML("beforebegin", addressRowTemplate({}, addAddressButton.dataset.addAddressRow || "Cc", true));
     updateAddressRemoveButtons(card);
   }
 
@@ -691,6 +690,16 @@ addPlaceholderButton.addEventListener("click", () => {
   const token = createPaletteToken(`{{${field}}}`, cleanLabel);
   tokenList.appendChild(token);
   bindTokenControl(token);
+});
+
+
+stepLabels.forEach((button, index) => {
+  button.addEventListener("click", () => {
+    if (index === 2) {
+      generateEmails();
+    }
+    goToStep(index);
+  });
 });
 
 nextStepButtons.forEach((button) => {

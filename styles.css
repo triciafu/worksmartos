@@ -1496,14 +1496,17 @@ iframe[style*="position: fixed"] {
   border-bottom: 1px solid #d8dbe2;
 }
 
-.studio-steps span {
+.studio-steps button {
   padding: 12px 18px 14px;
   border: 0;
   border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--muted);
+  font: inherit;
   font-size: 14px;
   font-weight: 400;
+  text-align: left;
+  cursor: pointer;
 }
 
 .studio-steps .is-active {
@@ -1554,8 +1557,22 @@ iframe[style*="position: fixed"] {
   gap: 14px;
 }
 
-.recipient-address-row.is-extra label span {
+.recipient-address-row.is-extra .email-address-label {
   display: none;
+}
+
+.address-field-static {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding-top: 22px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.recipient-address-row.is-extra .address-field-static {
+  padding-top: 0;
 }
 
 .address-field-actions {
@@ -1838,7 +1855,7 @@ iframe[style*="position: fixed"] {
   background: transparent;
 }
 
-.studio-steps span {
+.studio-steps button {
   border-right: 0;
 }
 
@@ -1869,9 +1886,9 @@ iframe[style*="position: fixed"] {
     background: transparent;
   }
 
-  .studio-steps span,
-  .studio-steps span:first-child,
-  .studio-steps span:last-child {
+  .studio-steps button,
+  .studio-steps button:first-child,
+  .studio-steps button:last-child {
     border: 1px solid #e3e5ea;
     border-radius: 8px;
   }
