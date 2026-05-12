@@ -993,8 +993,9 @@ function goToStep(step) {
   const activePanel = document.querySelector(`[data-step-panel="${currentStep}"]`);
   if (activePanel) {
     activePanel.classList.remove("is-entering");
-    void activePanel.offsetWidth;
-    activePanel.classList.add("is-entering");
+    window.requestAnimationFrame(() => {
+      activePanel.classList.add("is-entering");
+    });
   }
 
   stepLabels.forEach((label, index) => {
