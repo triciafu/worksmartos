@@ -56,7 +56,12 @@
                 <button type="button" data-format="bold" aria-label="Bold"><strong>B</strong></button>
                 <button type="button" data-format="italic" aria-label="Italic"><em>I</em></button>
                 <button type="button" data-format="underline" aria-label="Underline"><u>U</u></button>
-                <button type="button" data-format="createLink" aria-label="Link">Link</button>
+                <button type="button" data-format="createLink" aria-label="Link" title="Link">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M10 13a5 5 0 0 0 7.07 0l2.12-2.12a5 5 0 0 0-7.07-7.07l-1.21 1.21" />
+                    <path d="M14 11a5 5 0 0 0-7.07 0L4.81 13.12a5 5 0 0 0 7.07 7.07l1.21-1.21" />
+                  </svg>
+                </button>
               </div>
               <div class="rich-editor" contenteditable="true" data-body-template role="textbox" aria-multiline="true">
                 <p>Hi <span class="merge-token" contenteditable="false" data-token="{{contact_firstname}}" data-label="Recipient First Name">Recipient First Name<button type="button" data-remove-token aria-label="Remove Recipient First Name">×</button></span>,</p>
@@ -173,8 +178,7 @@
         </div>
         <div class="email-preview-grid" data-email-output>
           <article class="empty-state">
-            <h3>Your personalized approval emails will appear here.</h3>
-            <p>Add your clients, then generate the batch.</p>
+            <h3>Add at least one recipient to generate an email.</h3>
           </article>
         </div>
         </section>

@@ -645,8 +645,7 @@ function renderEmails(emails) {
   if (!emails.length) {
     output.innerHTML = `
       <article class="empty-state">
-        <h3>Your personalized approval emails will appear here.</h3>
-        <p>Add at least one recipient row, then generate the batch.</p>
+        <h3>Add at least one recipient to generate an email.</h3>
       </article>
     `;
     return;
@@ -1002,16 +1001,20 @@ function generateEmails() {
   renderEmails(emails);
 }
 
-function goToStep(step) {
+function goToStep(step, options = {}) {
   currentStep = Math.max(0, Math.min(step, 2));
   if (currentStep === 1) {
     syncRecipientDetailFieldOrder();
   }
   stepperTrack.style.transform = `translateX(-${currentStep * (100 / 3)}%)`;
 
+  document.querySelectorAll(".studio-step.is-entering").forEach((panel) => {
+    panel.classList.remove("is-entering");
+  });
+
   const activePanel = document.querySelector(`[data-step-panel="${currentStep}"]`);
-  if (activePanel) {
-    activePanel.classList.remove("is-entering");
+  const shouldAnimatePanel = currentStep !== 0 || options.initial;
+  if (activePanel && shouldAnimatePanel) {
     window.requestAnimationFrame(() => {
       activePanel.classList.add("is-entering");
     });
@@ -1035,4 +1038,4 @@ renumberRecipients();
 document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
 updateAllEmailChipStates();
 saveEditorHistory();
-goToStep(0);
+goToStep(0, { initial: true });

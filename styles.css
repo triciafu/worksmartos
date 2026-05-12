@@ -2233,10 +2233,19 @@ iframe[style*="position: fixed"] {
 }
 
 .format-toolbar button[aria-label="Undo"],
-.format-toolbar button[aria-label="Redo"],
-.format-toolbar button[aria-label="Link"] {
+.format-toolbar button[aria-label="Redo"] {
   width: auto;
   padding: 0 12px;
+}
+
+.format-toolbar svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .format-toolbar button:disabled {
