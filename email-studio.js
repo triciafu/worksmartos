@@ -990,6 +990,13 @@ function goToStep(step) {
   }
   stepperTrack.style.transform = `translateX(-${currentStep * (100 / 3)}%)`;
 
+  const activePanel = document.querySelector(`[data-step-panel="${currentStep}"]`);
+  if (activePanel) {
+    activePanel.classList.remove("is-entering");
+    void activePanel.offsetWidth;
+    activePanel.classList.add("is-entering");
+  }
+
   stepLabels.forEach((label, index) => {
     label.classList.toggle("is-active", index === currentStep);
   });
