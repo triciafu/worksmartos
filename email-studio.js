@@ -241,6 +241,42 @@ function addressPreviewHtml(addresses = []) {
   `).join("");
 }
 
+function encodedDraftParams(email) {
+  const groups = getAddressGroups(email.addresses);
+  const body = htmlToText(email.body);
+  return {
+    to: groups.To.join(","),
+    cc: groups.Cc.join(","),
+    bcc: groups.Bcc.join(","),
+    subject: email.subject || "",
+    body,
+  };
+}
+
+function queryString(params, aliases = {}) {
+  return Object.entries(params)
+    .filter(([, value]) => value)
+    .map(([key, value]) => `${aliases[key] || key}=${encodeURIComponent(value)}`)
+    .join("&");
+}
+
+function draftLinksHtml(email) {
+  const params = encodedDraftParams(email);
+  const gmailQuery = queryString(params, { subject: "su" });
+  const outlookQuery = queryString(params);
+  const mailtoRecipients = params.to.split(",").filter(Boolean).map(encodeURIComponent).join(",");
+  const mailtoQuery = queryString({ cc: params.cc, bcc: params.bcc, subject: params.subject, body: params.body });
+  const mailtoHref = `mailto:${mailtoRecipients}${mailtoQuery ? `?${mailtoQuery}` : ""}`;
+
+  return `
+    <div class="draft-actions" aria-label="Draft actions">
+      <a class="button secondary" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer">Open Gmail draft</a>
+      <a class="button secondary" href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer">Open Outlook draft</a>
+      <a class="button secondary" href="${escapeAttribute(mailtoHref)}">Open in default email app</a>
+    </div>
+  `;
+}
+
 function updateAddressRemoveButtons(card) {
   const rows = Array.from(card.querySelectorAll(".recipient-address-row"));
   const removeButton = card.querySelector("[data-remove-address-row]");
@@ -680,6 +716,7 @@ function renderEmails(emails) {
         <span class="field-label-row"><span>Body</span>${copyIconButton("body")}</span>
         <div class="email-body-preview" contenteditable="true" data-body-input role="textbox" aria-multiline="true">${email.body}</div>
       </div>
+      ${draftLinksHtml(email)}
     `;
 
     card.querySelectorAll(".copy-icon-button").forEach((button) => {

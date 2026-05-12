@@ -1957,6 +1957,17 @@ iframe[style*="position: fixed"] {
   flex: 1;
 }
 
+.draft-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.draft-actions .button {
+  width: 100%;
+}
+
 @media (max-width: 720px) {
   .studio-steps,
   .recipient-card {
