@@ -1969,11 +1969,18 @@ iframe[style*="position: fixed"] {
 .draft-link {
   display: inline-flex;
   align-items: center;
-  color: var(--blue);
-  font-size: 15px;
+  gap: 7px;
+  width: fit-content;
+  color: var(--accent);
+  font-size: 13px;
   line-height: 1.35;
   font-weight: 500;
   text-decoration: none;
+}
+
+.draft-link span {
+  font-size: 18px;
+  line-height: 1;
 }
 
 .draft-link:hover {
