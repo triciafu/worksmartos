@@ -1952,9 +1952,15 @@ iframe[style*="position: fixed"] {
   font-size: 24px;
 }
 
+.add-email-row {
+  display: flex;
+  justify-content: flex-end;
+  width: min(100%, 860px);
+  margin: -2px auto 0;
+}
+
 .add-email-link {
-  margin-top: -2px;
-  margin-left: calc(50% + 10px);
+  margin: 0;
 }
 
 .add-address-link {
@@ -2020,6 +2026,11 @@ iframe[style*="position: fixed"] {
 
   .recipient-card-list {
     grid-template-columns: 1fr;
+  }
+
+  .add-email-row {
+    justify-content: flex-start;
+    width: 100%;
   }
 
   .add-email-link {
