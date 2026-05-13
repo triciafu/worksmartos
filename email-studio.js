@@ -561,6 +561,83 @@ function addRecipientField(field, label) {
   syncRecipientDetailFieldOrder();
 }
 
+function paletteFieldsFromTemplate() {
+  return Array.from(tokenList.querySelectorAll("[data-token]")).map((token) => ({
+    field: fieldFromToken(token.dataset.token),
+    token: token.dataset.token,
+    label: labelFromTokenElement(token),
+  }));
+}
+
+function getTemplateState() {
+  return {
+    subjectHtml: subjectTemplateEditor.innerHTML,
+    bodyHtml: bodyTemplateEditor.innerHTML,
+    senderName: form.elements.sender_name?.value || "",
+    paletteFields: paletteFieldsFromTemplate(),
+    recipientFields: fields.map((field) => ({
+      field,
+      label: fieldLabels[field] || field,
+    })),
+  };
+}
+
+function resetTemplateFields(template) {
+  const paletteFields = Array.isArray(template.paletteFields) && template.paletteFields.length
+    ? template.paletteFields
+    : [
+        ...defaultFields.map((field) => ({ field, token: `{{${field}}}`, label: fieldLabels[field] || field })),
+        { field: "sender_name", token: "{{sender_name}}", label: "Sender Name" },
+      ];
+  const recipientFields = Array.isArray(template.recipientFields) && template.recipientFields.length
+    ? template.recipientFields
+    : paletteFields.filter((item) => item.field !== "sender_name");
+
+  fields.length = 0;
+  Object.keys(fieldLabels).forEach((field) => {
+    delete fieldLabels[field];
+  });
+
+  recipientFields.forEach((item) => {
+    if (!item.field || item.field === "sender_name") {
+      return;
+    }
+
+    fields.push(item.field);
+    fieldLabels[item.field] = item.label || item.field;
+  });
+
+  tokenList.innerHTML = "";
+  paletteFields.forEach((item) => {
+    if (!item.token || !item.label) {
+      return;
+    }
+
+    const token = createPaletteToken(item.token, item.label);
+    tokenList.appendChild(token);
+    bindTokenControl(token);
+  });
+
+  syncRecipientDetailFieldOrder();
+}
+
+function loadTemplateState(template = {}) {
+  if (template.subjectHtml) {
+    subjectTemplateEditor.innerHTML = template.subjectHtml;
+  }
+
+  if (template.bodyHtml) {
+    bodyTemplateEditor.innerHTML = template.bodyHtml;
+  }
+
+  if (typeof template.senderName === "string" && form.elements.sender_name) {
+    form.elements.sender_name.value = template.senderName;
+  }
+
+  resetTemplateFields(template);
+  saveEditorHistory();
+}
+
 function tokenFormatWrapper(token, textNode) {
   let node = textNode;
   const style = window.getComputedStyle(token);
@@ -1095,3 +1172,8 @@ document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons)
 updateAllEmailChipStates();
 saveEditorHistory();
 goToStep(0, { initial: true });
+
+window.WorkSmartEmailStudio = {
+  getTemplateState,
+  loadTemplateState,
+};

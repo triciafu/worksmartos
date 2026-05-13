@@ -24,6 +24,8 @@
         <div class="nav-links" data-nav>
           <a href="index.html#tools">Explore tools</a>
           <a href="index.html#enterprise">Enterprise Solutions</a>
+          <button class="auth-nav-link" type="button" data-auth-open>Sign in</button>
+          <button class="auth-nav-link is-hidden" type="button" data-auth-signout>Sign out</button>
           <a class="nav-cta" href="index.html#launch">Start now</a>
         </div>
       </nav>
@@ -99,6 +101,20 @@
               <span>Sender name</span>
               <input type="text" name="sender_name" value="" />
             </label>
+            <div class="template-save-tools" aria-label="Saved templates">
+              <label>
+                <span>Template name</span>
+                <input type="text" data-template-name placeholder="Creative approval request" />
+              </label>
+              <button class="add-placeholder" type="button" data-save-template><span>+</span>Save template</button>
+              <label>
+                <span>Saved templates</span>
+                <select data-template-select>
+                  <option value="">No saved templates</option>
+                </select>
+              </label>
+              <p class="template-save-status" data-template-status aria-live="polite"></p>
+            </div>
           </aside>
 
           <div class="studio-actions template-next-action">
@@ -216,6 +232,28 @@
       </section>
     </main>
 
+    <div class="auth-modal is-hidden" data-auth-modal aria-hidden="true">
+      <div class="auth-modal-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+        <button class="auth-modal-close" type="button" data-auth-close aria-label="Close sign in">×</button>
+        <p class="eyebrow">Saved templates</p>
+        <h2 id="auth-title">Sign in to save templates</h2>
+        <p>Use your work account to save email templates and come back to them later.</p>
+        <div class="auth-provider-list">
+          <button class="button secondary" type="button" data-auth-provider="google">Continue with Google</button>
+          <button class="button secondary" type="button" data-auth-provider="microsoft">Continue with Microsoft</button>
+          <button class="button secondary" type="button" data-auth-provider="apple">Continue with Apple</button>
+        </div>
+        <form class="email-link-form" data-auth-email-form>
+          <label>
+            <span>Email link</span>
+            <input type="email" data-auth-email placeholder="you@company.com" autocomplete="email" />
+          </label>
+          <button class="button secondary" type="submit">Send sign-in link</button>
+        </form>
+        <p class="auth-message" data-auth-message aria-live="polite"></p>
+      </div>
+    </div>
+
     <footer class="site-footer">
       <span>WorkSmartOS</span>
       <div class="footer-links">
@@ -226,5 +264,6 @@
     </footer>
 
     <script src="email-studio.js"></script>
+    <script type="module" src="firebase-worksmartos.js"></script>
   </body>
 </html>

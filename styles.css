@@ -2368,3 +2368,142 @@ iframe[style*="position: fixed"] {
   }
 }
 
+
+
+.auth-nav-link {
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.auth-nav-link:hover,
+.auth-nav-link:focus-visible {
+  color: var(--accent);
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+.template-save-tools {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.template-save-tools select {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+
+.template-save-tools select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+  outline: none;
+}
+
+.template-save-status,
+.auth-message {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.template-save-status[data-tone="success"],
+.auth-message[data-tone="success"] {
+  color: #18794e;
+}
+
+.template-save-status[data-tone="error"],
+.auth-message[data-tone="error"] {
+  color: #c21f13;
+}
+
+.auth-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.auth-modal-card {
+  position: relative;
+  width: min(100%, 460px);
+  padding: 34px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.16);
+}
+
+.auth-modal-card h2 {
+  margin: 8px 0 10px;
+  color: var(--ink);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.auth-modal-card p {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.auth-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.auth-provider-list,
+.email-link-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.email-link-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.email-link-form label span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.email-link-form input {
+  height: 46px;
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  font: inherit;
+}
+
+.email-link-form input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+  outline: none;
+}
