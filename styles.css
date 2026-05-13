@@ -1671,9 +1671,14 @@ iframe[style*="position: fixed"] {
 .address-field-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  justify-self: stretch;
   flex-wrap: wrap;
   gap: 18px;
+  width: 100%;
   margin-top: -2px;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .address-field-actions .add-placeholder {
@@ -1690,6 +1695,11 @@ iframe[style*="position: fixed"] {
 .remove-address-link:disabled {
   cursor: default;
   opacity: 0.45;
+}
+
+.address-field-actions .add-address-link,
+.address-field-actions .remove-address-link {
+  margin-left: 0;
 }
 
 .add-address-link[hidden],
@@ -2196,7 +2206,7 @@ iframe[style*="position: fixed"] {
 
 .template-card {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
   grid-column: 2;
   align-self: stretch;
   gap: 24px;
@@ -2212,6 +2222,10 @@ iframe[style*="position: fixed"] {
 
 .template-card .rich-editor {
   min-height: 100%;
+}
+
+.sender-name-field {
+  margin-top: 0;
 }
 
 .template-guide {
