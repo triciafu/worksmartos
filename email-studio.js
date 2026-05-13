@@ -163,10 +163,12 @@ function emailChipsTemplate(value = "") {
 
 function addressRowTemplate(values = {}, type = "To", isExtra = false) {
   const fieldType = values.recipient_type || type;
+  const typeClass = `type-${fieldType.toLowerCase()}`;
+  const visibleLabel = fieldType === "To" ? "" : `<span>${fieldType}:</span>`;
   return `
-    <div class="recipient-address-row${isExtra ? " is-extra" : ""}">
+    <div class="recipient-address-row ${typeClass}${isExtra ? " is-extra" : ""}">
       <div class="address-field-static">
-        <span>${fieldType}:</span>
+        ${visibleLabel}
         <input type="hidden" name="recipient_type" value="${fieldType}" />
       </div>
       <label>

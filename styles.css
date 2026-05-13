@@ -1642,6 +1642,14 @@ iframe[style*="position: fixed"] {
   gap: 14px;
 }
 
+.recipient-address-row.type-to {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.recipient-address-row.type-to .address-field-static {
+  display: none;
+}
+
 .recipient-address-row.is-extra .email-address-label {
   display: none;
 }
