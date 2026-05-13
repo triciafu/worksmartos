@@ -1237,6 +1237,11 @@ iframe[style*="position: fixed"] {
   outline: none;
 }
 
+.rich-editor *,
+.email-body-preview * {
+  line-height: 1.15;
+}
+
 .token-editor {
   min-height: 42px;
   padding: 10px 12px;
