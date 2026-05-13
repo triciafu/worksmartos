@@ -1881,8 +1881,8 @@ iframe[style*="position: fixed"] {
 }
 
 .recipient-card .email-chip-input input {
-  flex: 1 1 180px;
-  min-width: 140px;
+  flex: 1 1 72px;
+  min-width: 24px;
   height: 30px;
   padding: 0 4px;
   border: 0;
@@ -1906,6 +1906,11 @@ iframe[style*="position: fixed"] {
 
 .recipient-card .email-chip-input input:focus {
   border-color: transparent;
+}
+
+.recipient-card .email-chip-input.is-populated input {
+  flex-basis: 24px;
+  min-width: 24px;
 }
 
 .recipient-card .email-chip-input input:-webkit-autofill,
