@@ -36,6 +36,9 @@ const subjectTemplateEditor = document.querySelector("[data-subject-template]");
 const downloadTemplateButton = document.querySelector("[data-download-template]");
 const uploadCsvInput = document.querySelector("[data-upload-csv]");
 const importStatus = document.querySelector("[data-import-status]");
+const templateSaveToggle = document.querySelector("[data-template-save-toggle]");
+const templateSavePanel = document.querySelector("[data-template-save-panel]");
+const templateNameInput = document.querySelector("[data-template-name]");
 
 let currentStep = 0;
 let editorHistory = [];
@@ -46,6 +49,18 @@ let savedTemplateRange = null;
 let emailInputCounter = 1;
 
 let generatedEmails = [];
+
+if (templateSaveToggle && templateSavePanel) {
+  templateSaveToggle.addEventListener("click", () => {
+    const willOpen = templateSavePanel.classList.contains("is-hidden");
+    templateSavePanel.classList.toggle("is-hidden", !willOpen);
+    templateSaveToggle.setAttribute("aria-expanded", String(willOpen));
+
+    if (willOpen) {
+      window.requestAnimationFrame(() => templateNameInput?.focus());
+    }
+  });
+}
 
 const defaultFields = [
   "client_name",

@@ -103,19 +103,16 @@
 
           <div class="studio-actions template-next-action">
             <button class="button primary" type="button" data-next-step>Add recipients</button>
-            <div class="template-save-tools" aria-label="Saved templates">
-              <label>
-                <span>Template name</span>
-                <input type="text" data-template-name placeholder="Creative approval request" />
-              </label>
-              <button class="add-placeholder" type="button" data-save-template><span>+</span>Save template</button>
-              <label>
-                <span>Saved templates</span>
-                <select data-template-select>
+            <div class="template-save-tools" aria-label="Save template">
+              <button class="add-placeholder template-save-toggle" type="button" data-template-save-toggle aria-expanded="false" aria-controls="template-save-panel"><span>+</span>Save template</button>
+              <div class="template-save-panel is-hidden" id="template-save-panel" data-template-save-panel>
+                <input type="text" data-template-name placeholder="Name this template" aria-label="Template name" />
+                <button class="button secondary template-save-submit" type="button" data-save-template>Save</button>
+                <select class="is-hidden" data-template-select aria-hidden="true" tabindex="-1">
                   <option value="">No saved templates</option>
                 </select>
-              </label>
-              <p class="template-save-status" data-template-status aria-live="polite"></p>
+                <p class="template-save-status" data-template-status aria-live="polite"></p>
+              </div>
             </div>
           </div>
         </form>
