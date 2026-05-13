@@ -1604,7 +1604,7 @@ iframe[style*="position: fixed"] {
 
 .recipient-card-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 420px));
+  grid-template-columns: repeat(2, minmax(360px, 420px));
   justify-content: center;
   gap: 20px;
 }
@@ -1992,6 +1992,10 @@ iframe[style*="position: fixed"] {
 @media (max-width: 720px) {
   .studio-steps,
   .recipient-card {
+    grid-template-columns: 1fr;
+  }
+
+  .recipient-card-list {
     grid-template-columns: 1fr;
   }
 
