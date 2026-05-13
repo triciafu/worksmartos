@@ -2304,12 +2304,20 @@ iframe[style*="position: fixed"] {
 }
 
 .template-next-action {
+  display: grid;
   grid-column: 3;
   grid-row: 1;
   align-self: start;
   justify-content: flex-start;
+  align-content: start;
+  gap: 22px;
+  width: 100%;
   padding-top: 36px;
   transform: translateX(-18px);
+}
+
+.template-next-action .button {
+  justify-self: start;
 }
 
 
@@ -2335,8 +2343,12 @@ iframe[style*="position: fixed"] {
   .template-next-action {
     grid-row: auto;
     padding-top: 0;
-    justify-content: flex-end;
+    justify-content: stretch;
     transform: none;
+  }
+
+  .template-next-action .button {
+    justify-self: end;
   }
 
 
@@ -2392,7 +2404,8 @@ iframe[style*="position: fixed"] {
 .template-save-tools {
   display: grid;
   gap: 12px;
-  margin-top: 18px;
+  width: 100%;
+  margin-top: 0;
 }
 
 .template-save-tools select {
