@@ -1642,15 +1642,15 @@ iframe[style*="position: fixed"] {
   gap: 14px;
 }
 
-.recipient-address-row.type-to {
+.recipient-address-row.type-to,
+.recipient-address-row.type-cc,
+.recipient-address-row.type-bcc {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.recipient-address-row.type-to .address-field-static {
-  display: none;
-}
-
-.recipient-address-row.is-extra .email-address-label {
+.recipient-address-row.type-to .address-field-static,
+.recipient-address-row.type-cc .address-field-static,
+.recipient-address-row.type-bcc .address-field-static {
   display: none;
 }
 
