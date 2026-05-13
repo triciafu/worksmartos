@@ -1954,7 +1954,7 @@ iframe[style*="position: fixed"] {
 
 .add-email-link {
   margin-top: -2px;
-  margin-left: 24px;
+  margin-left: calc(50% + 10px);
 }
 
 .add-address-link {
@@ -2020,6 +2020,10 @@ iframe[style*="position: fixed"] {
 
   .recipient-card-list {
     grid-template-columns: 1fr;
+  }
+
+  .add-email-link {
+    margin-left: 0;
   }
 
   .recipient-address-row {
