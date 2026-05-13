@@ -272,7 +272,7 @@ function draftLinksHtml(email) {
     <div class="draft-actions" aria-label="Draft actions">
       <a class="draft-link" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">+</span> Open Gmail draft</a>
       <a class="draft-link" href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">+</span> Open Outlook</a>
-      <a class="draft-link" href="${escapeAttribute(mailtoHref)}"><span aria-hidden="true">+</span> Default email app</a>
+      <a class="draft-link" href="${escapeAttribute(mailtoHref)}"><span aria-hidden="true">+</span> Open Default email</a>
     </div>
   `;
 }
@@ -509,10 +509,19 @@ function mergeTemplate(template, data, options = {}) {
   });
 }
 
+function normalizeDraftText(value) {
+  return String(value)
+    .replace(/\u00a0/g, " ")
+    .split("\n")
+    .map((line) => line.replace(/^\s+/, ""))
+    .join("\n")
+    .trim();
+}
+
 function htmlToText(html) {
   const temp = document.createElement("div");
   temp.innerHTML = html;
-  return temp.innerText.trim();
+  return normalizeDraftText(temp.innerText);
 }
 
 function createTokenElement(token, label, removeAttribute = "data-remove-token") {
