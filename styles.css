@@ -1604,12 +1604,16 @@ iframe[style*="position: fixed"] {
 
 .recipient-card-list {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 420px));
+  justify-content: start;
   gap: 20px;
 }
 
 .recipient-card {
   display: grid;
+  align-content: start;
   gap: 18px;
+  min-height: 520px;
   padding: 24px;
   border: 1px solid #e3e5ea;
   border-radius: 8px;
@@ -1625,16 +1629,16 @@ iframe[style*="position: fixed"] {
 
 .recipient-detail-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(150px, 1fr));
+  grid-template-columns: 1fr;
   gap: 14px;
   margin-top: 20px;
-  overflow-x: auto;
-  padding-bottom: 4px;
+  overflow: visible;
+  padding-bottom: 0;
 }
 
 .recipient-address-row {
   display: grid;
-  grid-template-columns: minmax(96px, 120px) minmax(220px, 1fr);
+  grid-template-columns: 54px minmax(0, 1fr);
   gap: 14px;
 }
 
