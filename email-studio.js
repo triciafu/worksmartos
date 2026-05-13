@@ -43,7 +43,7 @@ let editorHistoryIndex = -1;
 let isRestoringHistory = false;
 let activeTemplateEditor = bodyTemplateEditor;
 let savedTemplateRange = null;
-let emailInputCounter = 0;
+let emailInputCounter = 1;
 
 let generatedEmails = [];
 

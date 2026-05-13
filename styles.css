@@ -1604,8 +1604,8 @@ iframe[style*="position: fixed"] {
 
 .recipient-card-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 420px));
-  justify-content: start;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 420px));
+  justify-content: center;
   gap: 20px;
 }
 
