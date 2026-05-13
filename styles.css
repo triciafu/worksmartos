@@ -1368,7 +1368,7 @@ iframe[style*="position: fixed"] {
   color: var(--accent);
   font: inherit;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 400;
   cursor: pointer;
 }
 
@@ -2010,7 +2010,7 @@ iframe[style*="position: fixed"] {
   color: var(--accent);
   font-size: 13px;
   line-height: 1.35;
-  font-weight: 500;
+  font-weight: 400;
   text-decoration: none;
 }
 
