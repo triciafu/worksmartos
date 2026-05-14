@@ -2737,6 +2737,8 @@ iframe[style*="position: fixed"] {
   outline: none;
 }
 
+.recipient-card input[aria-invalid="true"],
+.email-chip-input.is-invalid,
 .creative-link-fields.is-invalid input {
   border-color: #d92d20;
 }

@@ -1262,45 +1262,96 @@ generateStepButton.addEventListener("click", () => {
   }
 });
 
-function validateCreativeLinks() {
+function hasRecipientContent(card) {
+  return Boolean(card) && Array.from(card.querySelectorAll("input")).some((input) => {
+    if (input.name === "recipient_type") {
+      return false;
+    }
+    if (input.matches(emailInputSelector())) {
+      return Boolean(input.value.trim()) || Boolean(input.closest("[data-email-chip-input]")?.querySelector(".email-address-chip"));
+    }
+    return Boolean(input.value.trim());
+  });
+}
+
+function setInputValidity(input, isInvalid) {
+  if (!input) {
+    return;
+  }
+
+  input.toggleAttribute("aria-invalid", isInvalid);
+  input.closest("[data-email-chip-input]")?.classList.toggle("is-invalid", isInvalid);
+}
+
+function setCreativeLinkValidity(field, nameInvalid, urlInvalid) {
+  field.classList.toggle("is-invalid", nameInvalid || urlInvalid);
+  setInputValidity(field.querySelector('[name="approval_link_name"]'), nameInvalid);
+  setInputValidity(field.querySelector('[name="approval_link_url"]'), urlInvalid);
+}
+
+function validateRecipientRows() {
   let firstInvalidInput = null;
+  const messages = new Set();
 
-  recipientBody.querySelectorAll("[data-creative-link-field]").forEach((field) => {
-    const card = field.closest(".recipient-card");
-    const nameInput = field.querySelector('[name="approval_link_name"]');
-    const urlInput = field.querySelector('[name="approval_link_url"]');
-    const name = nameInput?.value.trim() || "";
-    const url = urlInput?.value.trim() || "";
-    const hasRecipientContent = Boolean(card) && Array.from(card.querySelectorAll("input")).some((input) => {
-      if (input.name === "recipient_type") {
-        return false;
-      }
-      if (input.matches(emailInputSelector())) {
-        return Boolean(input.value.trim()) || Boolean(input.closest("[data-email-chip-input]")?.querySelector(".email-address-chip"));
-      }
-      return Boolean(input.value.trim());
-    });
+  recipientBody.querySelectorAll(".recipient-card").forEach((card) => {
+    card.querySelectorAll("[aria-invalid]").forEach((input) => input.removeAttribute("aria-invalid"));
+    card.querySelectorAll(".is-invalid").forEach((field) => field.classList.remove("is-invalid"));
 
-    if (!hasRecipientContent) {
-      field.classList.remove("is-invalid");
-      [nameInput, urlInput].forEach((input) => input?.removeAttribute("aria-invalid"));
+    if (!hasRecipientContent(card)) {
       return;
     }
 
-    const hasValidUrl = Boolean(url) && hasLinkDomain(url);
-    const isInvalid = !name || !hasValidUrl;
-
-    field.classList.toggle("is-invalid", isInvalid);
-    [nameInput, urlInput].forEach((input) => input?.setAttribute("aria-invalid", String(isInvalid)));
-
-    if (isInvalid && !firstInvalidInput) {
-      firstInvalidInput = name ? urlInput : nameInput;
+    const emailInput = card.querySelector(".recipient-address-row.type-to [data-recipient-email-input]");
+    const emailChipContainer = emailInput?.closest("[data-email-chip-input]");
+    const hasEmail = Boolean(emailChipContainer) && getEmailChipValues(emailChipContainer).length > 0;
+    setInputValidity(emailInput, !hasEmail);
+    if (!hasEmail) {
+      messages.add("Email address(es) is required.");
+      firstInvalidInput = firstInvalidInput || emailInput;
     }
+
+    getRecipientFieldOrder().forEach((field) => {
+      if (field === "approval_link") {
+        const creativeField = card.querySelector("[data-creative-link-field]");
+        const nameInput = creativeField?.querySelector('[name="approval_link_name"]');
+        const urlInput = creativeField?.querySelector('[name="approval_link_url"]');
+        const name = nameInput?.value.trim() || "";
+        const url = urlInput?.value.trim() || "";
+        const nameInvalid = !name;
+        const urlInvalid = !url || !hasLinkDomain(url);
+
+        if (creativeField) {
+          setCreativeLinkValidity(creativeField, nameInvalid, urlInvalid);
+        }
+
+        if (nameInvalid) {
+          messages.add("Creative link name is required.");
+          firstInvalidInput = firstInvalidInput || nameInput;
+        }
+
+        if (!url) {
+          messages.add("Creative link URL is required.");
+          firstInvalidInput = firstInvalidInput || urlInput;
+        } else if (urlInvalid) {
+          messages.add("Creative link URL must include a domain.");
+          firstInvalidInput = firstInvalidInput || urlInput;
+        }
+        return;
+      }
+
+      const input = card.querySelector(`[name="${field}"]`);
+      const isInvalid = !input?.value.trim();
+      setInputValidity(input, isInvalid);
+      if (isInvalid) {
+        messages.add(`${fieldLabels[field] || field.replaceAll("_", " ")} is required.`);
+        firstInvalidInput = firstInvalidInput || input;
+      }
+    });
   });
 
   if (firstInvalidInput) {
     firstInvalidInput.focus();
-    setImportStatus("Add both a creative link name and a URL with a domain before reviewing emails.", "error");
+    setImportStatus(Array.from(messages).join(" "), "error");
     return false;
   }
 
@@ -1309,7 +1360,7 @@ function validateCreativeLinks() {
 }
 
 function generateEmails() {
-  if (!validateCreativeLinks()) {
+  if (!validateRecipientRows()) {
     return false;
   }
 
