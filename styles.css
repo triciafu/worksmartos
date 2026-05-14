@@ -1924,7 +1924,7 @@ iframe[style*="position: fixed"] {
   border-color: var(--accent);
 }
 
-.email-chip-input:focus-within {
+.email-chip-input.is-expanded {
   align-items: flex-start;
   flex-wrap: wrap;
   height: auto;
@@ -1970,7 +1970,7 @@ iframe[style*="position: fixed"] {
   padding: 0;
 }
 
-.recipient-card .email-chip-input.is-populated:focus-within input {
+.recipient-card .email-chip-input.is-populated.is-expanded input {
   flex: 1 1 24px;
   min-width: 16px;
   width: auto;
@@ -2006,11 +2006,12 @@ iframe[style*="position: fixed"] {
   white-space: nowrap;
 }
 
-.email-chip-input:focus-within .email-address-chip {
+.email-chip-input.is-expanded .email-address-chip {
   white-space: normal;
 }
 
 .email-address-chip button {
+  display: none;
   border: 0;
   background: transparent;
   color: var(--muted);
@@ -2018,6 +2019,10 @@ iframe[style*="position: fixed"] {
   font: inherit;
   line-height: 1;
   padding: 0;
+}
+
+.email-chip-input.is-expanded .email-address-chip button {
+  display: inline;
 }
 
 .recipient-panel {
