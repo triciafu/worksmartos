@@ -178,7 +178,7 @@ function syncRecipientSheetHeader() {
     return;
   }
 
-  const headers = ["Email No.:", "Actions", "Email address(es)", ...getRecipientFieldOrder().flatMap(fieldHeader)];
+  const headers = ["Email No.", "Actions", "Email address(es)", ...getRecipientFieldOrder().flatMap(fieldHeader)];
   recipientSheet.style.setProperty("--recipient-sheet-columns", recipientSheetColumnWidths());
   recipientSheet.style.setProperty("--recipient-sheet-min-width", `${headers.length === 9 ? 1490 : Math.max(980, 352 + ((headers.length - 3) * 170))}px`);
   recipientSheetHeader.innerHTML = headers.map((header) => `<span>${escapeHtml(header)}</span>`).join("");
@@ -374,6 +374,12 @@ function updateAllEmailChipStates() {
   recipientBody.querySelectorAll("[data-email-chip-input]").forEach(updateEmailChipState);
 }
 
+function setImportStatus(message = "", tone = "") {
+  importStatus.textContent = message;
+  importStatus.classList.toggle("is-error", tone === "error");
+  importStatus.classList.toggle("is-success", tone === "success");
+}
+
 function getEmailChipValues(container) {
   const chips = Array.from(container.querySelectorAll(".email-address-chip")).map((chip) => chip.firstChild?.textContent.trim() || "");
   const inputValue = container.querySelector(emailInputSelector())?.value || "";
@@ -521,7 +527,7 @@ function valuesFromCsvRow(headers, row) {
 function importCsv(text) {
   const rows = parseCsv(text);
   if (rows.length < 2) {
-    importStatus.textContent = "No recipient rows found in the CSV.";
+    setImportStatus("No recipient rows found in the CSV.", "error");
     return;
   }
 
@@ -531,7 +537,7 @@ function importCsv(text) {
   renumberRecipients();
   document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
   updateAllEmailChipStates();
-  importStatus.textContent = `${cards.length} ${cards.length === 1 ? "email" : "emails"} imported from CSV.`;
+  setImportStatus(`${cards.length} ${cards.length === 1 ? "email" : "emails"} imported from CSV.`, "success");
 }
 
 function getRecipients() {
@@ -1019,6 +1025,13 @@ recipientBody.addEventListener("click", (event) => {
     const container = event.target.closest("[data-email-chip-input]");
     event.target.closest(".email-address-chip")?.remove();
     updateEmailChipState(container);
+    container?.querySelector(emailInputSelector())?.focus();
+    return;
+  }
+
+  const emailChipContainer = event.target.closest("[data-email-chip-input]");
+  if (emailChipContainer) {
+    emailChipContainer.querySelector(emailInputSelector())?.focus();
   }
 });
 
@@ -1251,11 +1264,11 @@ function validateCreativeLinks() {
 
   if (firstInvalidInput) {
     firstInvalidInput.focus();
-    importStatus.textContent = "Add both a creative link name and a URL with a domain before reviewing emails.";
+    setImportStatus("Add both a creative link name and a URL with a domain before reviewing emails.", "error");
     return false;
   }
 
-  importStatus.textContent = "";
+  setImportStatus("");
   return true;
 }
 

@@ -1616,6 +1616,14 @@ iframe[style*="position: fixed"] {
   grid-column: 1 / -1;
 }
 
+.import-status.is-error {
+  color: #d92d20;
+}
+
+.import-status.is-success {
+  color: var(--muted);
+}
+
 .recipient-sheet {
   max-width: 100%;
   overflow-x: auto;
@@ -1694,6 +1702,7 @@ iframe[style*="position: fixed"] {
 
 .recipient-card-top .table-button {
   margin-top: 8px;
+  margin-left: 0;
 }
 
 .recipient-address-stack {
@@ -1852,7 +1861,14 @@ iframe[style*="position: fixed"] {
   display: grid;
   align-content: start;
   justify-content: start;
+  justify-items: start;
   gap: 8px;
+}
+
+.recipient-card-top .table-button {
+  margin-left: 0;
+  padding: 0;
+  text-align: left;
 }
 
 .recipient-card-top strong {
@@ -1893,18 +1909,26 @@ iframe[style*="position: fixed"] {
   display: flex;
   min-height: 42px;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   width: 100%;
   padding: 5px 8px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #ffffff;
+  overflow: hidden;
 }
 
 .email-chip-input:focus-within,
 .email-chip-input.is-populated {
   border-color: var(--accent);
+}
+
+.email-chip-input:focus-within {
+  align-items: flex-start;
+  flex-wrap: wrap;
+  height: auto;
+  overflow: visible;
 }
 
 .email-chip-input.is-populated {
@@ -1913,7 +1937,7 @@ iframe[style*="position: fixed"] {
 
 .recipient-card .email-chip-input input {
   flex: 1 1 72px;
-  min-width: 24px;
+  min-width: 0;
   height: 30px;
   padding: 0 4px;
   border: 0;
@@ -1940,8 +1964,17 @@ iframe[style*="position: fixed"] {
 }
 
 .recipient-card .email-chip-input.is-populated input {
-  flex-basis: 24px;
-  min-width: 24px;
+  flex: 0 0 0;
+  min-width: 0;
+  width: 0;
+  padding: 0;
+}
+
+.recipient-card .email-chip-input.is-populated:focus-within input {
+  flex: 1 1 24px;
+  min-width: 16px;
+  width: auto;
+  padding: 0 4px;
 }
 
 .recipient-card .email-chip-input input:-webkit-autofill,
@@ -1956,7 +1989,9 @@ iframe[style*="position: fixed"] {
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  flex: 0 1 auto;
   max-width: 100%;
+  min-width: 0;
   min-height: 28px;
   padding: 0 9px;
   border: 1px solid #dfe2e8;
@@ -1966,7 +2001,13 @@ iframe[style*="position: fixed"] {
   font-size: 12px;
   font-weight: 500;
   line-height: 1;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email-chip-input:focus-within .email-address-chip {
+  white-space: normal;
 }
 
 .email-address-chip button {
