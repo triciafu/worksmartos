@@ -25,6 +25,13 @@ body {
   letter-spacing: 0;
 }
 
+button,
+.button {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -216,7 +223,6 @@ h1 {
   min-height: 44px;
   padding: 0 20px;
   border-radius: 999px;
-  font-size: 15px;
   font-weight: 500;
   transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
 }
@@ -1225,7 +1231,7 @@ iframe[style*="position: fixed"] {
   background: #ffffff;
   color: var(--ink);
   font: inherit;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
 }
 
@@ -1529,8 +1535,9 @@ iframe[style*="position: fixed"] {
   border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--muted);
-  font: inherit;
-  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
   font-weight: 400;
   text-align: left;
   cursor: pointer;
@@ -1639,6 +1646,25 @@ iframe[style*="position: fixed"] {
   margin-top: 20px;
   overflow: visible;
   padding-bottom: 0;
+}
+
+.creative-link-fields {
+  display: grid;
+  gap: 12px;
+}
+
+.creative-link-fields > span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.creative-link-fields label {
+  gap: 8px;
+}
+
+.creative-link-fields label span {
+  font-size: 12px;
 }
 
 .recipient-address-row {
@@ -2586,4 +2612,15 @@ iframe[style*="position: fixed"] {
   border-color: var(--accent);
   box-shadow: 0 0 0 1px var(--accent);
   outline: none;
+}
+
+.creative-link-fields.is-invalid input {
+  border-color: #d92d20;
+}
+
+button,
+.button {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
 }

@@ -82,6 +82,15 @@ const fields = [...defaultFields];
 
 function recipientFieldTemplate(field, values = {}) {
   const wideClass = ["approval_link"].includes(field) || !defaultFields.includes(field) ? " class=\"wide\"" : "";
+  if (field === "approval_link") {
+    return `
+      <div class="creative-link-fields wide" data-creative-link-field>
+        <span>${escapeHtml(fieldLabels[field] || field)}</span>
+        <label><span>Link name</span><input name="approval_link_name" value="${escapeAttribute(values.approval_link_name || "")}" required /></label>
+        <label><span>URL</span><input name="approval_link_url" value="${escapeAttribute(values.approval_link_url || "")}" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
+      </div>
+    `;
+  }
   return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
 }
 
@@ -127,6 +136,8 @@ function recipientValuesFromCard(card) {
   fields.forEach((field) => {
     values[field] = card.querySelector(`[name="${field}"]`)?.value || "";
   });
+  values.approval_link_name = card.querySelector('[name="approval_link_name"]')?.value || "";
+  values.approval_link_url = card.querySelector('[name="approval_link_url"]')?.value || values.approval_link || "";
   return values;
 }
 
@@ -362,6 +373,9 @@ function commitEmailChips(input) {
 }
 
 function fieldHeader(field) {
+  if (field === "approval_link") {
+    return ["Creative link name", "Creative link URL"];
+  }
   return fieldLabels[field] || field.replaceAll("_", " ");
 }
 
@@ -425,7 +439,7 @@ function parseCsv(text) {
 }
 
 function csvHeaders() {
-  return ["To", "Cc", "Bcc", ...getRecipientFieldOrder().map(fieldHeader)];
+  return ["To", "Cc", "Bcc", ...getRecipientFieldOrder().flatMap(fieldHeader)];
 }
 
 function downloadCsvTemplate() {
@@ -443,6 +457,13 @@ function valuesFromCsvRow(headers, row) {
   const byHeader = new Map(headers.map((header, index) => [normalizeHeader(header), row[index]?.trim() || ""]));
   const values = {};
   fields.forEach((field) => {
+    if (field === "approval_link") {
+      values.approval_link_name = byHeader.get("creative_link_name") || byHeader.get("approval_link_name") || "";
+      values.approval_link_url = byHeader.get("creative_link_url") || byHeader.get("approval_link_url") || byHeader.get("creative_link") || byHeader.get("approval_link") || "";
+      values.approval_link = values.approval_link_url;
+      return;
+    }
+
     values[field] = byHeader.get(normalizeHeader(fieldHeader(field))) || byHeader.get(normalizeHeader(field)) || "";
   });
 
@@ -476,6 +497,13 @@ function getRecipients() {
     .map((row) => {
       const data = {};
       fields.forEach((field) => {
+        if (field === "approval_link") {
+          data.approval_link_name = row.querySelector('[name="approval_link_name"]')?.value.trim() || "";
+          data.approval_link_url = row.querySelector('[name="approval_link_url"]')?.value.trim() || "";
+          data.approval_link = data.approval_link_name || data.approval_link_url;
+          return;
+        }
+
         data[field] = row.querySelector(`[name="${field}"]`)?.value.trim() || "";
       });
       const addresses = Array.from(row.querySelectorAll(".recipient-address-row")).map((addressRow) => ({
@@ -487,23 +515,28 @@ function getRecipients() {
       data.recipient_email = addresses.map((address) => address.email).join("; ");
       return data;
     })
-    .filter((row) => row.client_name || row.contact_firstname || row.campaign_name || row.approval_link);
+    .filter((row) => row.client_name || row.contact_firstname || row.campaign_name || row.approval_link_name || row.approval_link_url);
 }
 
-function linkifyCreativeLink(value) {
-  const raw = String(value || "").trim();
-  if (!raw) {
+function linkifyCreativeLink(data) {
+  const label = String(data.approval_link_name || "").trim();
+  const rawUrl = String(data.approval_link_url || "").trim();
+  if (!label && !rawUrl) {
     return "";
   }
 
-  const href = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  if (!label || !rawUrl) {
+    return escapeHtml(label || rawUrl);
+  }
+
+  const href = normalizeLinkUrl(rawUrl);
   try {
     new URL(href);
   } catch {
-    return escapeHtml(raw);
+    return escapeHtml(label);
   }
 
-  return `<a href="${escapeAttribute(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(raw)}</a>`;
+  return `<a href="${escapeAttribute(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
 }
 
 function normalizeLinkUrl(value) {
@@ -519,7 +552,7 @@ function mergeTemplate(template, data, options = {}) {
   return String(template).replace(/{{\s*([a-zA-Z0-9_]+)\s*}}/g, (_, key) => {
     const value = data[key] || "";
     if (options.html && key === "approval_link") {
-      return linkifyCreativeLink(value);
+      return linkifyCreativeLink(data);
     }
     return options.html ? escapeHtml(value) : value;
   });
@@ -1106,8 +1139,8 @@ addPlaceholderButton.addEventListener("click", () => {
 
 stepLabels.forEach((button, index) => {
   button.addEventListener("click", () => {
-    if (index === 2) {
-      generateEmails();
+    if (index === 2 && !generateEmails()) {
+      return;
     }
     goToStep(index);
   });
@@ -1128,11 +1161,69 @@ prevStepButtons.forEach((button) => {
 });
 
 generateStepButton.addEventListener("click", () => {
-  generateEmails();
-  goToStep(2);
+  if (generateEmails()) {
+    goToStep(2);
+  }
 });
 
+function validateCreativeLinks() {
+  let firstInvalidInput = null;
+
+  recipientBody.querySelectorAll("[data-creative-link-field]").forEach((field) => {
+    const card = field.closest(".recipient-card");
+    const nameInput = field.querySelector('[name="approval_link_name"]');
+    const urlInput = field.querySelector('[name="approval_link_url"]');
+    const name = nameInput?.value.trim() || "";
+    const url = urlInput?.value.trim() || "";
+    const hasRecipientContent = Boolean(card) && Array.from(card.querySelectorAll("input")).some((input) => {
+      if (input.name === "recipient_type") {
+        return false;
+      }
+      if (input.matches(emailInputSelector())) {
+        return Boolean(input.value.trim()) || Boolean(input.closest("[data-email-chip-input]")?.querySelector(".email-address-chip"));
+      }
+      return Boolean(input.value.trim());
+    });
+
+    if (!hasRecipientContent) {
+      field.classList.remove("is-invalid");
+      [nameInput, urlInput].forEach((input) => input?.removeAttribute("aria-invalid"));
+      return;
+    }
+
+    const hasValidUrl = Boolean(url) && (() => {
+      try {
+        new URL(normalizeLinkUrl(url));
+        return true;
+      } catch {
+        return false;
+      }
+    })();
+    const isInvalid = !name || !hasValidUrl;
+
+    field.classList.toggle("is-invalid", isInvalid);
+    [nameInput, urlInput].forEach((input) => input?.setAttribute("aria-invalid", String(isInvalid)));
+
+    if (isInvalid && !firstInvalidInput) {
+      firstInvalidInput = name ? urlInput : nameInput;
+    }
+  });
+
+  if (firstInvalidInput) {
+    firstInvalidInput.focus();
+    importStatus.textContent = "Add both a creative link name and a valid URL before reviewing emails.";
+    return false;
+  }
+
+  importStatus.textContent = "";
+  return true;
+}
+
 function generateEmails() {
+  if (!validateCreativeLinks()) {
+    return false;
+  }
+
   const formData = new FormData(form);
   const subjectTemplate = templateHtmlToMergeText(subjectTemplateEditor.innerHTML);
   const bodyTemplate = templateHtmlToMergeHtml(bodyTemplateEditor.innerHTML);
@@ -1148,6 +1239,7 @@ function generateEmails() {
   });
 
   renderEmails(emails);
+  return true;
 }
 
 function goToStep(step, options = {}) {
