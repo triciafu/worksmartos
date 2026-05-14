@@ -570,6 +570,13 @@ function normalizeDraftText(value) {
 function htmlToText(html) {
   const temp = document.createElement("div");
   temp.innerHTML = html;
+
+  temp.querySelectorAll("a[href]").forEach((link) => {
+    const label = link.textContent.trim();
+    const href = link.href;
+    link.replaceWith(document.createTextNode(label && label !== href ? `${label}: ${href}` : href));
+  });
+
   return normalizeDraftText(temp.innerText);
 }
 
