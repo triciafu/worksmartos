@@ -525,18 +525,19 @@ function linkifyCreativeLink(data) {
     return "";
   }
 
-  if (!label || !rawUrl) {
-    return escapeHtml(label || rawUrl);
+  if (!rawUrl) {
+    return escapeHtml(label);
   }
 
   const href = normalizeLinkUrl(rawUrl);
   try {
     new URL(href);
   } catch {
-    return escapeHtml(label);
+    return escapeHtml(label || rawUrl);
   }
 
-  return `<a href="${escapeAttribute(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+  const link = `<a href="${escapeAttribute(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(href)}</a>`;
+  return label ? `${escapeHtml(label)}<br>${link}` : link;
 }
 
 function normalizeLinkUrl(value) {
@@ -572,9 +573,7 @@ function htmlToText(html) {
   temp.innerHTML = html;
 
   temp.querySelectorAll("a[href]").forEach((link) => {
-    const label = link.textContent.trim();
-    const href = link.href;
-    link.replaceWith(document.createTextNode(label && label !== href ? `${label}: ${href}` : href));
+    link.replaceWith(document.createTextNode(link.href));
   });
 
   return normalizeDraftText(temp.innerText);
