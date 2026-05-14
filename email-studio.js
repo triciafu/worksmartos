@@ -254,15 +254,11 @@ function getAddressGroups(addresses = []) {
   }, { To: [], Cc: [], Bcc: [] });
 }
 
-function copyIconButton(label) {
-  return `<button class="copy-icon-button" type="button" title="Copy" aria-label="Copy ${escapeAttribute(label)}" data-tooltip="Copy"><span aria-hidden="true"></span></button>`;
-}
-
 function addressPreviewHtml(addresses = []) {
   const groups = getAddressGroups(addresses);
   return ["To", "Cc", "Bcc"].filter((group) => group === "To" || groups[group].length).map((group) => `
-    <label class="copyable-field">
-      <span class="field-label-row"><span>${group}:</span>${copyIconButton(group)}</span>
+    <label>
+      <span>${group}:</span>
       <input value="${escapeAttribute(groups[group].join(", "))}" data-address-input="${group}" />
     </label>
   `).join("");
@@ -849,33 +845,16 @@ function renderEmails(emails) {
       <div class="email-address-preview">
         ${addressPreviewHtml(email.addresses)}
       </div>
-      <label class="copyable-field">
-        <span class="field-label-row"><span>Subject</span>${copyIconButton("subject")}</span>
+      <label>
+        <span>Subject</span>
         <input value="${escapeAttribute(email.subject)}" data-subject-input />
       </label>
-      <div class="email-body-field copyable-field">
-        <span class="field-label-row"><span>Body</span>${copyIconButton("body")}</span>
+      <div class="email-body-field">
+        <span>Body</span>
         <div class="email-body-preview" contenteditable="true" data-body-input role="textbox" aria-multiline="true">${email.body}</div>
       </div>
       ${draftLinksHtml(email)}
     `;
-
-    card.querySelectorAll(".copy-icon-button").forEach((button) => {
-      button.addEventListener("click", () => {
-        const field = button.closest(".copyable-field");
-        const body = field?.querySelector("[data-body-input]");
-        const input = field?.querySelector("input");
-
-        if (body) {
-          copyRichText(body);
-          return;
-        }
-
-        if (input) {
-          copyText(input.value);
-        }
-      });
-    });
 
     card.querySelectorAll("[data-body-input] a[href]").forEach((link) => {
       link.addEventListener("click", (event) => {
