@@ -23,6 +23,7 @@ const output = document.querySelector("[data-email-output]");
 const outputCount = document.querySelector("[data-output-count]");
 const exportButton = document.querySelector("[data-export-csv]");
 const addRowButton = document.querySelector("[data-add-row]");
+const addRowCountInput = document.querySelector("[data-add-row-count]");
 const stepperTrack = document.querySelector("[data-stepper-track]");
 const stepLabels = document.querySelectorAll(".studio-steps button");
 const nextStepButtons = document.querySelectorAll("[data-next-step]");
@@ -1226,12 +1227,29 @@ recipientBody.addEventListener("focusout", (event) => {
   }
 });
 
-addRowButton.addEventListener("click", () => {
-  recipientBody.appendChild(rowTemplate());
+function addRecipientRows(count = 1) {
+  const rowCount = Math.min(Math.max(Number.parseInt(count, 10) || 1, 1), 50);
+  const fragment = document.createDocumentFragment();
+  for (let index = 0; index < rowCount; index += 1) {
+    fragment.appendChild(rowTemplate());
+  }
+
+  recipientBody.appendChild(fragment);
   renumberRecipients();
   document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
   updateAllEmailChipStates();
   scheduleAutosave();
+}
+
+addRowButton.addEventListener("click", () => {
+  addRecipientRows(addRowCountInput?.value);
+});
+
+addRowCountInput?.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    addRecipientRows(addRowCountInput.value);
+  }
 });
 
 form.addEventListener("submit", (event) => {

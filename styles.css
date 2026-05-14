@@ -2031,13 +2031,35 @@ iframe[style*="position: fixed"] {
 
 .add-email-row {
   display: flex;
+  align-items: center;
+  gap: 8px;
   justify-content: flex-end;
   width: 100%;
   margin: -2px auto 0;
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .add-email-link {
   margin: 0;
+}
+
+.add-row-count {
+  width: 64px;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  text-align: center;
+}
+
+.add-row-count:focus {
+  border-color: var(--accent);
+  outline: none;
 }
 
 .add-address-link {
