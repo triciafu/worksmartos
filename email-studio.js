@@ -86,18 +86,12 @@ function recipientFieldTemplate(field, values = {}) {
     return `
       <div class="creative-link-fields wide" data-creative-link-field>
         <span>${escapeHtml(fieldLabels[field] || field)}</span>
-        <label><span>Link name</span><input name="approval_link_name" value="${escapeAttribute(values.approval_link_name || "")}" placeholder="GLAM INC" required /></label>
-        <label><span>URL</span><input name="approval_link_url" value="${escapeAttribute(values.approval_link_url || "")}" placeholder="https://glaminc.com" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
+        <label><span>Link name</span><input name="approval_link_name" value="${escapeAttribute(values.approval_link_name || "")}" required /></label>
+        <label><span>URL</span><input name="approval_link_url" value="${escapeAttribute(values.approval_link_url || "")}" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
       </div>
     `;
   }
-  const placeholders = {
-    client_name: "GLAM INC",
-    contact_firstname: "Trish",
-    campaign_name: "Spring creative review",
-    deadline: "May 15",
-  };
-  return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" placeholder="${escapeAttribute(placeholders[field] || "")}" /></label>`;
+  return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
 }
 
 function fieldFromToken(token) {
@@ -173,7 +167,7 @@ function emailChipsTemplate(value = "") {
   return `
     <div class="email-chip-input" data-email-chip-input>
       ${emails.map((email) => `<span class="email-address-chip">${escapeHtml(email)}<button type="button" data-remove-email-chip aria-label="Remove ${escapeAttribute(email)}">×</button></span>`).join("")}
-      <input name="${emailInputName()}" data-recipient-email-input type="text" value="" placeholder="trish@glaminc.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+      <input name="${emailInputName()}" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
     </div>
   `;
 }
