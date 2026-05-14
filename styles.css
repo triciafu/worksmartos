@@ -1919,15 +1919,11 @@ iframe[style*="position: fixed"] {
   overflow: hidden;
 }
 
-.email-chip-input:focus-within,
-.email-chip-input.is-populated {
-  border-color: var(--accent);
-}
-
 .email-chip-input.is-expanded {
   align-items: flex-start;
   flex-wrap: wrap;
   height: auto;
+  border-color: var(--line);
   overflow: visible;
 }
 
