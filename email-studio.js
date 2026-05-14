@@ -1380,9 +1380,10 @@ stepLabels.forEach((button, index) => {
   button.addEventListener("click", () => {
     if (index === 2) {
       if (currentStep !== 1) {
-        goToStep(1, { skipAutosave: true });
+        goToStep(1, { skipAutosave: true, immediate: true });
       }
       if (!generateEmails()) {
+        goToStep(1, { skipAutosave: true, immediate: true });
         scheduleAutosave();
         return;
       }
@@ -1483,7 +1484,7 @@ function validateRecipientRows() {
   });
 
   if (firstInvalidInput) {
-    firstInvalidInput.focus();
+    firstInvalidInput.focus({ preventScroll: true });
     setImportStatus("Please check below and fill in blank fields or incomplete domains before reviewing emails.", "error");
     return false;
   }
@@ -1520,7 +1521,14 @@ function goToStep(step, options = {}) {
   if (currentStep === 1) {
     syncRecipientDetailFieldOrder();
   }
+  if (options.immediate) {
+    stepperTrack.style.transition = "none";
+  }
   stepperTrack.style.transform = `translateX(-${currentStep * (100 / 3)}%)`;
+  if (options.immediate) {
+    stepperTrack.getBoundingClientRect();
+    stepperTrack.style.transition = "";
+  }
 
   document.querySelectorAll(".studio-step.is-entering").forEach((panel) => {
     panel.classList.remove("is-entering");
