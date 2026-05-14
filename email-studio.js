@@ -16,6 +16,8 @@ if (navToggle && nav) {
 }
 
 const form = document.querySelector("[data-email-studio-form]");
+const recipientSheet = document.querySelector(".recipient-sheet");
+const recipientSheetHeader = document.querySelector(".recipient-sheet-header");
 const recipientBody = document.querySelector("[data-recipient-body]");
 const output = document.querySelector("[data-email-output]");
 const outputCount = document.querySelector("[data-output-count]");
@@ -80,18 +82,19 @@ const fieldLabels = {
 
 const fields = [...defaultFields];
 
-function recipientFieldTemplate(field, values = {}) {
+function recipientFieldTemplate(field, values = {}, sheetColumn = null) {
   const wideClass = ["approval_link"].includes(field) || !defaultFields.includes(field) ? " class=\"wide\"" : "";
+  const columnStyle = sheetColumn ? ` style="--sheet-column: ${sheetColumn};"` : "";
   if (field === "approval_link") {
     return `
       <div class="creative-link-fields wide" data-creative-link-field>
         <span>${escapeHtml(fieldLabels[field] || field)}</span>
-        <label><span>Link name</span><input name="approval_link_name" value="${escapeAttribute(values.approval_link_name || "")}" required /></label>
-        <label><span>URL</span><input name="approval_link_url" value="${escapeAttribute(values.approval_link_url || "")}" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
+        <label${columnStyle}><span>Link name</span><input name="approval_link_name" value="${escapeAttribute(values.approval_link_name || "")}" required /></label>
+        <label${sheetColumn ? ` style="--sheet-column: ${sheetColumn + 1};"` : ""}><span>URL</span><input name="approval_link_url" value="${escapeAttribute(values.approval_link_url || "")}" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
       </div>
     `;
   }
-  return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
+  return `<label${wideClass}${columnStyle}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
 }
 
 function fieldFromToken(token) {
@@ -141,7 +144,48 @@ function recipientValuesFromCard(card) {
   return values;
 }
 
+function recipientFieldColumnTemplates(values = {}) {
+  let sheetColumn = 3;
+  return getRecipientFieldOrder().map((field) => {
+    const template = recipientFieldTemplate(field, values, sheetColumn);
+    sheetColumn += field === "approval_link" ? 2 : 1;
+    return template;
+  }).join("");
+}
+
+function recipientSheetColumnWidths() {
+  const fieldColumns = getRecipientFieldOrder().flatMap((field) => {
+    if (field === "approval_link") {
+      return ["minmax(170px, 1fr)", "minmax(220px, 1.2fr)"];
+    }
+
+    if (field === "contact_firstname") {
+      return ["minmax(150px, 0.95fr)"];
+    }
+
+    if (field === "deadline") {
+      return ["minmax(140px, 0.85fr)"];
+    }
+
+    return ["minmax(160px, 1fr)"];
+  });
+
+  return ["92px", "minmax(260px, 1.45fr)", ...fieldColumns, "74px"].join(" ");
+}
+
+function syncRecipientSheetHeader() {
+  if (!recipientSheet || !recipientSheetHeader) {
+    return;
+  }
+
+  const headers = ["Email", "Recipients", ...getRecipientFieldOrder().flatMap(fieldHeader), "Actions"];
+  recipientSheet.style.setProperty("--recipient-sheet-columns", recipientSheetColumnWidths());
+  recipientSheet.style.setProperty("--recipient-sheet-min-width", `${headers.length === 9 ? 1490 : Math.max(980, 352 + ((headers.length - 3) * 170))}px`);
+  recipientSheetHeader.innerHTML = headers.map((header) => `<span>${escapeHtml(header)}</span>`).join("");
+}
+
 function syncRecipientDetailFieldOrder() {
+  syncRecipientSheetHeader();
   recipientBody.querySelectorAll(".recipient-card").forEach((card) => {
     const grid = card.querySelector(".recipient-detail-grid");
     if (!grid) {
@@ -149,7 +193,7 @@ function syncRecipientDetailFieldOrder() {
     }
 
     const values = recipientValuesFromCard(card);
-    grid.innerHTML = getRecipientFieldOrder().map((field) => recipientFieldTemplate(field, values)).join("");
+    grid.innerHTML = recipientFieldColumnTemplates(values);
   });
 }
 
@@ -200,14 +244,16 @@ function rowTemplate(values = {}) {
       <strong>Email</strong>
       <button class="table-button" type="button" data-remove-row>Remove</button>
     </div>
-    ${addressRows}
+    <div class="recipient-address-stack" data-address-stack>
+      ${addressRows}
+    </div>
     <div class="address-field-actions">
       <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
       <button class="add-placeholder add-address-link" type="button" data-add-address-row="Bcc"><span>+</span>Add bcc:</button>
       <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
     </div>
     <div class="recipient-detail-grid">
-      ${getRecipientFieldOrder().map((field) => recipientFieldTemplate(field, values)).join("")}
+      ${recipientFieldColumnTemplates(values)}
     </div>
   `;
   return row;
@@ -526,9 +572,7 @@ function linkifyCreativeLink(data) {
   }
 
   const href = normalizeLinkUrl(rawUrl);
-  try {
-    new URL(href);
-  } catch {
+  if (!hasLinkDomain(href)) {
     return escapeHtml(label || rawUrl);
   }
 
@@ -543,6 +587,17 @@ function normalizeLinkUrl(value) {
   }
 
   return /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+}
+
+function hasLinkDomain(value) {
+  try {
+    const { hostname } = new URL(normalizeLinkUrl(value));
+    const topLevelDomain = hostname.split(".").pop() || "";
+    return /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i.test(hostname)
+      && /[a-z]/i.test(topLevelDomain);
+  } catch {
+    return false;
+  }
 }
 
 function mergeTemplate(template, data, options = {}) {
@@ -945,8 +1000,8 @@ recipientBody.addEventListener("click", (event) => {
     const type = addAddressButton.dataset.addAddressRow || "Cc";
     const alreadyExists = Array.from(card.querySelectorAll('[name="recipient_type"]')).some((input) => input.value === type);
     if (!alreadyExists) {
-      const actions = card.querySelector(".address-field-actions");
-      actions.insertAdjacentHTML("beforebegin", addressRowTemplate({}, type, true));
+      const stack = card.querySelector("[data-address-stack]");
+      stack?.insertAdjacentHTML("beforeend", addressRowTemplate({}, type, true));
     }
     updateAddressRemoveButtons(card);
   }
@@ -1183,14 +1238,7 @@ function validateCreativeLinks() {
       return;
     }
 
-    const hasValidUrl = Boolean(url) && (() => {
-      try {
-        new URL(normalizeLinkUrl(url));
-        return true;
-      } catch {
-        return false;
-      }
-    })();
+    const hasValidUrl = Boolean(url) && hasLinkDomain(url);
     const isInvalid = !name || !hasValidUrl;
 
     field.classList.toggle("is-invalid", isInvalid);
@@ -1203,7 +1251,7 @@ function validateCreativeLinks() {
 
   if (firstInvalidInput) {
     firstInvalidInput.focus();
-    importStatus.textContent = "Add both a creative link name and a valid URL before reviewing emails.";
+    importStatus.textContent = "Add both a creative link name and a URL with a domain before reviewing emails.";
     return false;
   }
 

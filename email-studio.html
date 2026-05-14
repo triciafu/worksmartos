@@ -137,22 +137,36 @@
             </div>
             <p class="import-status" data-import-status aria-live="polite"></p>
           </div>
-          <div class="recipient-card-list" data-recipient-body>
+          <div class="recipient-sheet">
+            <div class="recipient-sheet-header" aria-hidden="true">
+              <span>Email</span>
+              <span>Recipients</span>
+              <span>Company name</span>
+              <span>First name</span>
+              <span>Campaign</span>
+              <span>Deadline</span>
+              <span>Creative link name</span>
+              <span>Creative link URL</span>
+              <span>Actions</span>
+            </div>
+            <div class="recipient-card-list" data-recipient-body>
             <article class="recipient-card">
               <div class="recipient-card-top">
                 <strong>Email 1</strong>
                 <button class="table-button" type="button" data-remove-row>Remove</button>
               </div>
-              <div class="recipient-address-row type-to">
-                <div class="address-field-static">
-                  <input type="hidden" name="recipient_type" value="To" />
-                </div>
-                <label>
-                  <span>Email address(es)</span>
-                  <div class="email-chip-input" data-email-chip-input>
-                    <input name="recipient_email_0" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+              <div class="recipient-address-stack" data-address-stack>
+                <div class="recipient-address-row type-to">
+                  <div class="address-field-static">
+                    <input type="hidden" name="recipient_type" value="To" />
                   </div>
-                </label>
+                  <label>
+                    <span>Email address(es)</span>
+                    <div class="email-chip-input" data-email-chip-input>
+                      <input name="recipient_email_0" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    </div>
+                  </label>
+                </div>
               </div>
               <div class="address-field-actions">
                 <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
@@ -176,16 +190,18 @@
                 <strong>Email 2</strong>
                 <button class="table-button" type="button" data-remove-row>Remove</button>
               </div>
-              <div class="recipient-address-row type-to">
-                <div class="address-field-static">
-                  <input type="hidden" name="recipient_type" value="To" />
-                </div>
-                <label>
-                  <span>Email address(es)</span>
-                  <div class="email-chip-input" data-email-chip-input>
-                    <input name="recipient_email_1" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+              <div class="recipient-address-stack" data-address-stack>
+                <div class="recipient-address-row type-to">
+                  <div class="address-field-static">
+                    <input type="hidden" name="recipient_type" value="To" />
                   </div>
-                </label>
+                  <label>
+                    <span>Email address(es)</span>
+                    <div class="email-chip-input" data-email-chip-input>
+                      <input name="recipient_email_1" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    </div>
+                  </label>
+                </div>
               </div>
               <div class="address-field-actions">
                 <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
@@ -204,6 +220,7 @@
                 </div>
               </div>
             </article>
+            </div>
           </div>
           <div class="add-email-row">
             <button class="add-placeholder add-email-link" type="button" data-add-row><span>+</span>Add another email</button>
