@@ -1145,8 +1145,9 @@ addRowButton.addEventListener("click", () => {
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  generateEmails();
-  goToStep(2);
+  if (generateEmails()) {
+    goToStep(2);
+  }
 });
 
 exportButton.addEventListener("click", exportCsv);
@@ -1299,18 +1300,6 @@ generateStepButton.addEventListener("click", () => {
   }
 });
 
-function hasRecipientContent(card) {
-  return Boolean(card) && Array.from(card.querySelectorAll("input")).some((input) => {
-    if (input.name === "recipient_type") {
-      return false;
-    }
-    if (input.matches(emailInputSelector())) {
-      return Boolean(input.value.trim()) || Boolean(input.closest("[data-email-chip-input]")?.querySelector(".email-address-chip"));
-    }
-    return Boolean(input.value.trim());
-  });
-}
-
 function setInputValidity(input, isInvalid) {
   if (!input) {
     return;
@@ -1333,10 +1322,6 @@ function validateRecipientRows() {
   recipientBody.querySelectorAll(".recipient-card").forEach((card) => {
     card.querySelectorAll("[aria-invalid]").forEach((input) => input.removeAttribute("aria-invalid"));
     card.querySelectorAll(".is-invalid").forEach((field) => field.classList.remove("is-invalid"));
-
-    if (!hasRecipientContent(card)) {
-      return;
-    }
 
     const emailInput = card.querySelector(".recipient-address-row.type-to [data-recipient-email-input]");
     const emailChipContainer = emailInput?.closest("[data-email-chip-input]");
