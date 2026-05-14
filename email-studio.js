@@ -827,7 +827,7 @@ function restoreEditorHistory(index) {
 function renderEmails(emails) {
   output.innerHTML = "";
   generatedEmails = emails;
-  outputCount.textContent = "Review and copy each email";
+  outputCount.textContent = "Review and open emails to send";
   exportButton.disabled = emails.length === 0;
 
   if (!emails.length) {
