@@ -418,6 +418,38 @@ function commitEmailChips(input) {
   });
   input.value = "";
   updateEmailChipState(container);
+  clearResolvedRecipientError(input);
+}
+
+function clearResolvedRecipientError(input) {
+  if (!input?.hasAttribute("aria-invalid")) {
+    return;
+  }
+
+  if (input.matches(emailInputSelector())) {
+    const container = input.closest("[data-email-chip-input]");
+    if (getEmailChipValues(container).length) {
+      setInputValidity(input, false);
+    }
+    return;
+  }
+
+  if (input.name === "approval_link_url") {
+    setInputValidity(input, !input.value.trim() || !hasLinkDomain(input.value));
+    input.closest("[data-creative-link-field]")?.classList.toggle(
+      "is-invalid",
+      Boolean(input.closest("[data-creative-link-field]")?.querySelector("[aria-invalid]")),
+    );
+    return;
+  }
+
+  if (input.value.trim()) {
+    setInputValidity(input, false);
+    input.closest("[data-creative-link-field]")?.classList.toggle(
+      "is-invalid",
+      Boolean(input.closest("[data-creative-link-field]")?.querySelector("[aria-invalid]")),
+    );
+  }
 }
 
 function fieldHeader(field) {
@@ -1077,19 +1109,24 @@ recipientBody.addEventListener("keydown", (event) => {
 });
 
 recipientBody.addEventListener("input", (event) => {
-  if (!event.target.matches(emailInputSelector())) {
+  if (!event.target.matches("input")) {
     return;
   }
 
-  updateEmailChipState(event.target.closest("[data-email-chip-input]"));
-  if (shouldCommitEmailInput(event.target.value)) {
-    commitEmailChips(event.target);
+  if (event.target.matches(emailInputSelector())) {
+    updateEmailChipState(event.target.closest("[data-email-chip-input]"));
+    if (shouldCommitEmailInput(event.target.value)) {
+      commitEmailChips(event.target);
+    }
   }
+
+  clearResolvedRecipientError(event.target);
 });
 
 recipientBody.addEventListener("focusout", (event) => {
   if (event.target.matches(emailInputSelector())) {
     commitEmailChips(event.target);
+    clearResolvedRecipientError(event.target);
     const container = event.target.closest("[data-email-chip-input]");
     window.requestAnimationFrame(() => {
       if (!container?.contains(document.activeElement)) {
@@ -1351,7 +1388,7 @@ function validateRecipientRows() {
 
   if (firstInvalidInput) {
     firstInvalidInput.focus();
-    setImportStatus(Array.from(messages).join(" "), "error");
+    setImportStatus("Please check the highlighted fields below and fill in any missing information before reviewing emails.", "error");
     return false;
   }
 
