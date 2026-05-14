@@ -1378,8 +1378,14 @@ addPlaceholderButton.addEventListener("click", () => {
 
 stepLabels.forEach((button, index) => {
   button.addEventListener("click", () => {
-    if (index === 2 && !generateEmails()) {
-      return;
+    if (index === 2) {
+      if (currentStep !== 1) {
+        goToStep(1, { skipAutosave: true });
+      }
+      if (!generateEmails()) {
+        scheduleAutosave();
+        return;
+      }
     }
     goToStep(index);
   });
@@ -1532,7 +1538,9 @@ function goToStep(step, options = {}) {
     label.classList.toggle("is-active", index === currentStep);
   });
 
-  scheduleAutosave();
+  if (!options.skipAutosave) {
+    scheduleAutosave();
+  }
 }
 
 function renumberRecipients() {
