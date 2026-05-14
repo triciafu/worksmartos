@@ -49,8 +49,12 @@ let isRestoringHistory = false;
 let activeTemplateEditor = bodyTemplateEditor;
 let savedTemplateRange = null;
 let emailInputCounter = 1;
+let autosaveTimer = null;
+let isRestoringAutosave = false;
 
 let generatedEmails = [];
+
+const autosaveKey = "worksmartos-email-studio-draft-v1";
 
 if (templateSaveToggle && templateSavePanel) {
   templateSaveToggle.addEventListener("click", () => {
@@ -142,6 +146,20 @@ function recipientValuesFromCard(card) {
   values.approval_link_name = card.querySelector('[name="approval_link_name"]')?.value || "";
   values.approval_link_url = card.querySelector('[name="approval_link_url"]')?.value || values.approval_link || "";
   return values;
+}
+
+function recipientDraftFromCard(card) {
+  return {
+    ...recipientValuesFromCard(card),
+    addresses: Array.from(card.querySelectorAll(".recipient-address-row")).map((addressRow) => ({
+      type: addressRow.querySelector('[name="recipient_type"]')?.value || "To",
+      email: getEmailChipValues(addressRow.querySelector("[data-email-chip-input]")).join(", "),
+    })),
+  };
+}
+
+function recipientDrafts() {
+  return Array.from(recipientBody.querySelectorAll(".recipient-card")).map(recipientDraftFromCard);
 }
 
 function recipientFieldColumnTemplates(values = {}) {
@@ -570,6 +588,7 @@ function importCsv(text) {
   document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
   updateAllEmailChipStates();
   setImportStatus(`${cards.length} ${cards.length === 1 ? "email" : "emails"} imported from CSV.`, "success");
+  scheduleAutosave();
 }
 
 function getRecipients() {
@@ -726,6 +745,68 @@ function getTemplateState() {
   };
 }
 
+function getAutosaveState() {
+  return {
+    savedAt: Date.now(),
+    currentStep,
+    template: getTemplateState(),
+    recipients: recipientDrafts(),
+  };
+}
+
+function saveAutosaveDraft() {
+  if (isRestoringAutosave) {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(autosaveKey, JSON.stringify(getAutosaveState()));
+  } catch {
+    // Autosave is best-effort; the form should keep working even if storage is blocked.
+  }
+}
+
+function scheduleAutosave() {
+  if (isRestoringAutosave) {
+    return;
+  }
+
+  window.clearTimeout(autosaveTimer);
+  autosaveTimer = window.setTimeout(saveAutosaveDraft, 250);
+}
+
+function restoreAutosaveDraft() {
+  let draft = null;
+
+  try {
+    draft = JSON.parse(window.localStorage.getItem(autosaveKey) || "null");
+  } catch {
+    return null;
+  }
+
+  if (!draft || typeof draft !== "object") {
+    return null;
+  }
+
+  isRestoringAutosave = true;
+
+  if (draft.template) {
+    loadTemplateState(draft.template);
+  }
+
+  if (Array.isArray(draft.recipients) && draft.recipients.length) {
+    recipientBody.replaceChildren(...draft.recipients.map((recipient) => rowTemplate(recipient)));
+  }
+
+  renumberRecipients();
+  document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
+  updateAllEmailChipStates();
+  setImportStatus("");
+  isRestoringAutosave = false;
+
+  return draft;
+}
+
 function resetTemplateFields(template) {
   const paletteFields = Array.isArray(template.paletteFields) && template.paletteFields.length
     ? template.paletteFields
@@ -766,11 +847,11 @@ function resetTemplateFields(template) {
 }
 
 function loadTemplateState(template = {}) {
-  if (template.subjectHtml) {
+  if (typeof template.subjectHtml === "string") {
     subjectTemplateEditor.innerHTML = template.subjectHtml;
   }
 
-  if (template.bodyHtml) {
+  if (typeof template.bodyHtml === "string") {
     bodyTemplateEditor.innerHTML = template.bodyHtml;
   }
 
@@ -780,6 +861,7 @@ function loadTemplateState(template = {}) {
 
   resetTemplateFields(template);
   saveEditorHistory();
+  scheduleAutosave();
 }
 
 function tokenFormatWrapper(token, textNode) {
@@ -869,6 +951,7 @@ function insertTokenIntoEditor(editor, token, label) {
   selection.addRange(range);
   savedTemplateRange = range.cloneRange();
   saveEditorHistory();
+  scheduleAutosave();
 }
 
 function insertToken(target, token, label) {
@@ -1029,6 +1112,7 @@ recipientBody.addEventListener("click", (event) => {
     if (rows.length > 1) {
       event.target.closest(".recipient-card").remove();
       renumberRecipients();
+      scheduleAutosave();
     }
   }
 
@@ -1042,6 +1126,7 @@ recipientBody.addEventListener("click", (event) => {
       stack?.insertAdjacentHTML("beforeend", addressRowTemplate({}, type, true));
     }
     updateAddressRemoveButtons(card);
+    scheduleAutosave();
   }
 
   if (event.target.closest("[data-remove-address-row]")) {
@@ -1050,6 +1135,7 @@ recipientBody.addEventListener("click", (event) => {
     if (rows.length > 1) {
       rows[rows.length - 1].remove();
       updateAddressRemoveButtons(card);
+      scheduleAutosave();
     }
   }
 
@@ -1066,6 +1152,7 @@ recipientBody.addEventListener("click", (event) => {
     event.target.closest(".email-address-chip")?.remove();
     updateEmailChipState(container);
     container?.querySelector(emailInputSelector())?.focus();
+    scheduleAutosave();
     return;
   }
 
@@ -1105,6 +1192,7 @@ recipientBody.addEventListener("keydown", (event) => {
   if (event.key === "Enter" || event.key === "," || event.key === " ") {
     event.preventDefault();
     commitEmailChips(event.target);
+    scheduleAutosave();
   }
 });
 
@@ -1121,12 +1209,14 @@ recipientBody.addEventListener("input", (event) => {
   }
 
   clearResolvedRecipientError(event.target);
+  scheduleAutosave();
 });
 
 recipientBody.addEventListener("focusout", (event) => {
   if (event.target.matches(emailInputSelector())) {
     commitEmailChips(event.target);
     clearResolvedRecipientError(event.target);
+    scheduleAutosave();
     const container = event.target.closest("[data-email-chip-input]");
     window.requestAnimationFrame(() => {
       if (!container?.contains(document.activeElement)) {
@@ -1141,6 +1231,7 @@ addRowButton.addEventListener("click", () => {
   renumberRecipients();
   document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
   updateAllEmailChipStates();
+  scheduleAutosave();
 });
 
 form.addEventListener("submit", (event) => {
@@ -1149,6 +1240,8 @@ form.addEventListener("submit", (event) => {
     goToStep(2);
   }
 });
+
+form.addEventListener("input", scheduleAutosave);
 
 exportButton.addEventListener("click", exportCsv);
 downloadTemplateButton.addEventListener("click", downloadCsvTemplate);
@@ -1174,11 +1267,13 @@ formatButtons.forEach((button) => {
 
     if (command === "undo") {
       restoreEditorHistory(editorHistoryIndex - 1);
+      scheduleAutosave();
       return;
     }
 
     if (command === "redo") {
       restoreEditorHistory(editorHistoryIndex + 1);
+      scheduleAutosave();
       return;
     }
 
@@ -1201,11 +1296,18 @@ formatButtons.forEach((button) => {
 
     rememberTemplateRange(activeTemplateEditor);
     saveEditorHistory();
+    scheduleAutosave();
   });
 });
 
-subjectTemplateEditor.addEventListener("input", saveEditorHistory);
-bodyTemplateEditor.addEventListener("input", saveEditorHistory);
+subjectTemplateEditor.addEventListener("input", () => {
+  saveEditorHistory();
+  scheduleAutosave();
+});
+bodyTemplateEditor.addEventListener("input", () => {
+  saveEditorHistory();
+  scheduleAutosave();
+});
 
 [subjectTemplateEditor, bodyTemplateEditor].forEach((editor) => {
   editor.addEventListener("focus", () => {
@@ -1239,6 +1341,7 @@ tokenList.querySelectorAll("[data-token]").forEach(bindTokenControl);
 tokenList.addEventListener("click", (event) => {
   if (event.target.matches("[data-remove-placeholder]")) {
     event.target.closest("[data-token]").remove();
+    scheduleAutosave();
   }
 });
 
@@ -1247,6 +1350,7 @@ tokenList.addEventListener("click", (event) => {
     if (event.target.matches("[data-remove-token]")) {
       event.target.closest(".merge-token").remove();
       saveEditorHistory();
+      scheduleAutosave();
     }
   });
 });
@@ -1268,6 +1372,7 @@ addPlaceholderButton.addEventListener("click", () => {
   const token = createPaletteToken(`{{${field}}}`, cleanLabel);
   tokenList.appendChild(token);
   bindTokenControl(token);
+  scheduleAutosave();
 });
 
 
@@ -1426,6 +1531,8 @@ function goToStep(step, options = {}) {
   stepLabels.forEach((label, index) => {
     label.classList.toggle("is-active", index === currentStep);
   });
+
+  scheduleAutosave();
 }
 
 function renumberRecipients() {
@@ -1437,11 +1544,16 @@ function renumberRecipients() {
   });
 }
 
-renumberRecipients();
-document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
-updateAllEmailChipStates();
+const restoredDraft = restoreAutosaveDraft();
+if (!restoredDraft) {
+  renumberRecipients();
+  document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
+  updateAllEmailChipStates();
+}
 saveEditorHistory();
-goToStep(0, { initial: true });
+goToStep(restoredDraft?.currentStep === 1 ? 1 : 0, { initial: true });
+window.addEventListener("beforeunload", saveAutosaveDraft);
+window.addEventListener("pagehide", saveAutosaveDraft);
 
 window.WorkSmartEmailStudio = {
   getTemplateState,
