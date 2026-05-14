@@ -1593,7 +1593,9 @@ iframe[style*="position: fixed"] {
   min-height: 44px;
   padding: 0 20px;
   border-radius: 999px;
-  font-size: 15px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
   font-weight: 500;
 }
 
