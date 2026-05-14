@@ -871,6 +871,13 @@ function renderEmails(emails) {
       });
     });
 
+    card.querySelectorAll("[data-body-input] a[href]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        window.open(link.href, "_blank", "noopener,noreferrer");
+      });
+    });
 
     output.appendChild(card);
   });
