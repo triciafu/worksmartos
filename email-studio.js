@@ -1023,8 +1023,9 @@ recipientBody.addEventListener("click", (event) => {
 
   if (event.target.matches("[data-remove-email-chip]")) {
     const container = event.target.closest("[data-email-chip-input]");
-    if (!container?.classList.contains("is-expanded")) {
+    if (!container?.classList.contains("is-expanded") || container?.dataset.skipChipRemove === "true") {
       event.preventDefault();
+      delete container.dataset.skipChipRemove;
       container?.classList.add("is-expanded");
       container?.querySelector(emailInputSelector())?.focus();
       return;
@@ -1042,6 +1043,20 @@ recipientBody.addEventListener("click", (event) => {
     emailChipContainer.querySelector(emailInputSelector())?.focus();
   }
 });
+
+recipientBody.addEventListener("pointerdown", (event) => {
+  const emailChipContainer = event.target.closest("[data-email-chip-input]");
+  if (!emailChipContainer || emailChipContainer.classList.contains("is-expanded")) {
+    return;
+  }
+
+  emailChipContainer.dataset.skipChipRemove = "true";
+  emailChipContainer.classList.add("is-expanded");
+  emailChipContainer.querySelector(emailInputSelector())?.focus();
+  window.setTimeout(() => {
+    delete emailChipContainer.dataset.skipChipRemove;
+  }, 350);
+}, true);
 
 recipientBody.addEventListener("focusin", (event) => {
   const emailChipContainer = event.target.closest("[data-email-chip-input]");
