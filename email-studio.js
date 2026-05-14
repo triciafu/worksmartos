@@ -1373,7 +1373,7 @@ function validateRecipientRows() {
 
   if (firstInvalidInput) {
     firstInvalidInput.focus();
-    setImportStatus("Please check the fields below and fill in missing information before reviewing emails.", "error");
+    setImportStatus("Please check below and fill in blank fields or incomplete domains before reviewing emails.", "error");
     return false;
   }
 
