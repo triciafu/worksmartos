@@ -1632,7 +1632,7 @@ iframe[style*="position: fixed"] {
 .recipient-sheet-header,
 .recipient-card {
   display: grid;
-  grid-template-columns: var(--recipient-sheet-columns, 92px minmax(260px, 1.45fr) minmax(160px, 1fr) minmax(150px, 0.95fr) minmax(160px, 1fr) minmax(140px, 0.85fr) minmax(170px, 1fr) minmax(220px, 1.2fr) 74px);
+  grid-template-columns: var(--recipient-sheet-columns, 92px 132px minmax(260px, 1.45fr) minmax(160px, 1fr) minmax(150px, 0.95fr) minmax(160px, 1fr) minmax(140px, 0.85fr) minmax(170px, 1fr) minmax(220px, 1.2fr));
   min-width: var(--recipient-sheet-min-width, 1490px);
 }
 
@@ -1692,13 +1692,17 @@ iframe[style*="position: fixed"] {
   grid-row: 1;
 }
 
+.recipient-card-top .table-button {
+  margin-top: 8px;
+}
+
 .recipient-address-stack {
-  grid-column: 2;
+  grid-column: 3;
   grid-row: 1;
 }
 
 .address-field-actions {
-  grid-column: 9;
+  grid-column: 2;
   grid-row: 1;
 }
 
@@ -1756,6 +1760,10 @@ iframe[style*="position: fixed"] {
 .recipient-address-row.type-to .address-field-static,
 .recipient-address-row.type-cc .address-field-static,
 .recipient-address-row.type-bcc .address-field-static {
+  display: none;
+}
+
+.recipient-address-stack .recipient-address-row.type-to label > span {
   display: none;
 }
 
@@ -1841,10 +1849,10 @@ iframe[style*="position: fixed"] {
 }
 
 .recipient-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
+  display: grid;
+  align-content: start;
+  justify-content: start;
+  gap: 8px;
 }
 
 .recipient-card-top strong {

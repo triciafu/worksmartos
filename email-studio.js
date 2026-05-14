@@ -145,7 +145,7 @@ function recipientValuesFromCard(card) {
 }
 
 function recipientFieldColumnTemplates(values = {}) {
-  let sheetColumn = 3;
+  let sheetColumn = 4;
   return getRecipientFieldOrder().map((field) => {
     const template = recipientFieldTemplate(field, values, sheetColumn);
     sheetColumn += field === "approval_link" ? 2 : 1;
@@ -170,7 +170,7 @@ function recipientSheetColumnWidths() {
     return ["minmax(160px, 1fr)"];
   });
 
-  return ["92px", "minmax(260px, 1.45fr)", ...fieldColumns, "74px"].join(" ");
+  return ["92px", "132px", "minmax(260px, 1.45fr)", ...fieldColumns].join(" ");
 }
 
 function syncRecipientSheetHeader() {
@@ -178,7 +178,7 @@ function syncRecipientSheetHeader() {
     return;
   }
 
-  const headers = ["Email", "Recipients", ...getRecipientFieldOrder().flatMap(fieldHeader), "Actions"];
+  const headers = ["Email No.:", "Actions", "Email address(es)", ...getRecipientFieldOrder().flatMap(fieldHeader)];
   recipientSheet.style.setProperty("--recipient-sheet-columns", recipientSheetColumnWidths());
   recipientSheet.style.setProperty("--recipient-sheet-min-width", `${headers.length === 9 ? 1490 : Math.max(980, 352 + ((headers.length - 3) * 170))}px`);
   recipientSheetHeader.innerHTML = headers.map((header) => `<span>${escapeHtml(header)}</span>`).join("");
@@ -1310,7 +1310,7 @@ function renumberRecipients() {
   recipientBody.querySelectorAll(".recipient-card").forEach((card, index) => {
     const label = card.querySelector(".recipient-card-top strong");
     if (label) {
-      label.textContent = `Email ${index + 1}`;
+      label.textContent = `${index + 1}`;
     }
   });
 }
