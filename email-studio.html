@@ -89,7 +89,7 @@
             <div class="studio-panel-heading">
               <span>Step 1</span>
               <h2>Write your email template</h2>
-              <p>Click a placeholder to insert it wherever your cursor is in the subject or email.</p>
+              <p>Click a placeholder to insert it wherever your cursor is in the subject or email. Creative Link uses the link name and URL entered for each recipient.</p>
             </div>
             <div class="token-row" aria-label="Available merge fields" data-token-list>
               <span data-token="{{client_name}}" data-label="Company Name">Company Name<button type="button" data-remove-placeholder aria-label="Remove Company Name">×</button></span>
@@ -150,7 +150,7 @@
                 <label>
                   <span>Email address(es)</span>
                   <div class="email-chip-input" data-email-chip-input>
-                    <input name="recipient_email_0" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    <input name="recipient_email_0" data-recipient-email-input type="text" value="" placeholder="trish@glaminc.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
                   </div>
                 </label>
               </div>
@@ -160,14 +160,14 @@
                 <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
               </div>
               <div class="recipient-detail-grid">
-                <label><span>Company name</span><input name="client_name" value="" /></label>
-                <label><span>Recipient first name</span><input name="contact_firstname" value="" /></label>
-                <label><span>Campaign</span><input name="campaign_name" value="" /></label>
-                <label><span>Deadline</span><input name="deadline" value="" /></label>
+                <label><span>Company name</span><input name="client_name" value="" placeholder="GLAM INC" /></label>
+                <label><span>Recipient first name</span><input name="contact_firstname" value="" placeholder="Trish" /></label>
+                <label><span>Campaign</span><input name="campaign_name" value="" placeholder="Spring creative review" /></label>
+                <label><span>Deadline</span><input name="deadline" value="" placeholder="May 15" /></label>
                 <div class="creative-link-fields wide" data-creative-link-field>
                   <span>Creative link</span>
-                  <label><span>Link name</span><input name="approval_link_name" value="" required /></label>
-                  <label><span>URL</span><input name="approval_link_url" value="" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
+                  <label><span>Link name</span><input name="approval_link_name" value="" placeholder="GLAM INC" required /></label>
+                  <label><span>URL</span><input name="approval_link_url" value="" placeholder="https://glaminc.com" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
                 </div>
               </div>
             </article>
@@ -183,7 +183,7 @@
                 <label>
                   <span>Email address(es)</span>
                   <div class="email-chip-input" data-email-chip-input>
-                    <input name="recipient_email_1" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    <input name="recipient_email_1" data-recipient-email-input type="text" value="" placeholder="lauren@glaminc.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
                   </div>
                 </label>
               </div>
@@ -193,14 +193,14 @@
                 <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
               </div>
               <div class="recipient-detail-grid">
-                <label><span>Company name</span><input name="client_name" value="" /></label>
-                <label><span>Recipient first name</span><input name="contact_firstname" value="" /></label>
-                <label><span>Campaign</span><input name="campaign_name" value="" /></label>
-                <label><span>Deadline</span><input name="deadline" value="" /></label>
+                <label><span>Company name</span><input name="client_name" value="" placeholder="GLAM INC" /></label>
+                <label><span>Recipient first name</span><input name="contact_firstname" value="" placeholder="Trish" /></label>
+                <label><span>Campaign</span><input name="campaign_name" value="" placeholder="Spring creative review" /></label>
+                <label><span>Deadline</span><input name="deadline" value="" placeholder="May 15" /></label>
                 <div class="creative-link-fields wide" data-creative-link-field>
                   <span>Creative link</span>
-                  <label><span>Link name</span><input name="approval_link_name" value="" required /></label>
-                  <label><span>URL</span><input name="approval_link_url" value="" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
+                  <label><span>Link name</span><input name="approval_link_name" value="" placeholder="GLAM INC" required /></label>
+                  <label><span>URL</span><input name="approval_link_url" value="" placeholder="https://glaminc.com" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
                 </div>
               </div>
             </article>
@@ -219,7 +219,7 @@
           <div class="studio-panel-heading">
             <span>Step 3</span>
             <h2 data-output-count>Review and open emails to send</h2>
-            <p class="studio-output-note">Open each draft in your preferred email client, then review and send.</p>
+            <p class="studio-output-note">Open a draft in your preferred email client; link URLs are included so you can review and send with confidence.</p>
           </div>
           <div class="studio-actions compact">
             <button class="button secondary" type="button" data-prev-step>Back</button>

@@ -86,12 +86,18 @@ function recipientFieldTemplate(field, values = {}) {
     return `
       <div class="creative-link-fields wide" data-creative-link-field>
         <span>${escapeHtml(fieldLabels[field] || field)}</span>
-        <label><span>Link name</span><input name="approval_link_name" value="${escapeAttribute(values.approval_link_name || "")}" required /></label>
-        <label><span>URL</span><input name="approval_link_url" value="${escapeAttribute(values.approval_link_url || "")}" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
+        <label><span>Link name</span><input name="approval_link_name" value="${escapeAttribute(values.approval_link_name || "")}" placeholder="GLAM INC" required /></label>
+        <label><span>URL</span><input name="approval_link_url" value="${escapeAttribute(values.approval_link_url || "")}" placeholder="https://glaminc.com" inputmode="url" autocapitalize="none" spellcheck="false" required /></label>
       </div>
     `;
   }
-  return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" /></label>`;
+  const placeholders = {
+    client_name: "GLAM INC",
+    contact_firstname: "Trish",
+    campaign_name: "Spring creative review",
+    deadline: "May 15",
+  };
+  return `<label${wideClass}><span>${escapeHtml(fieldLabels[field] || field)}</span><input name="${field}" value="${escapeAttribute(values[field] || "")}" placeholder="${escapeAttribute(placeholders[field] || "")}" /></label>`;
 }
 
 function fieldFromToken(token) {
@@ -167,7 +173,7 @@ function emailChipsTemplate(value = "") {
   return `
     <div class="email-chip-input" data-email-chip-input>
       ${emails.map((email) => `<span class="email-address-chip">${escapeHtml(email)}<button type="button" data-remove-email-chip aria-label="Remove ${escapeAttribute(email)}">×</button></span>`).join("")}
-      <input name="${emailInputName()}" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+      <input name="${emailInputName()}" data-recipient-email-input type="text" value="" placeholder="trish@glaminc.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
     </div>
   `;
 }
@@ -297,9 +303,9 @@ function draftLinksHtml(email) {
 
   return `
     <div class="draft-actions" aria-label="Draft actions">
-      <a class="draft-link" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">+</span> Open Gmail draft</a>
-      <a class="draft-link" href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">+</span> Open Outlook</a>
-      <a class="draft-link" href="${escapeAttribute(mailtoHref)}"><span aria-hidden="true">+</span> Open Default email</a>
+      <a class="draft-link draft-link-primary" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer">Open in Gmail</a>
+      <a class="draft-link" href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer">Open in Outlook</a>
+      <a class="draft-link" href="${escapeAttribute(mailtoHref)}">Default email app</a>
     </div>
   `;
 }

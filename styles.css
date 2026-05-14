@@ -2024,31 +2024,47 @@ iframe[style*="position: fixed"] {
 }
 
 .draft-actions {
-  display: grid;
-  justify-items: start;
-  gap: 6px;
-  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .draft-link {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  width: fit-content;
-  color: var(--accent);
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
   font-size: 13px;
   line-height: 1.35;
-  font-weight: 400;
+  font-weight: 500;
   text-decoration: none;
 }
 
-.draft-link span {
-  font-size: 18px;
-  line-height: 1;
+.draft-link-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
 }
 
 .draft-link:hover {
-  text-decoration: underline;
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.draft-link-primary:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
 }
 
 @media (max-width: 720px) {
