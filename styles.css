@@ -2223,9 +2223,16 @@ body[data-studio-theme="dark"] .email-preview-card,
 body[data-studio-theme="dark"] .empty-state,
 body[data-studio-theme="dark"] .recipient-sheet,
 body[data-studio-theme="dark"] .spreadsheet-tools,
-body[data-studio-theme="dark"] .studio-theme-control {
+body[data-studio-theme="dark"] .studio-theme-control,
+body[data-studio-theme="dark"] .template-save-panel {
   border-color: #34363d;
   background: #151516;
+}
+
+body[data-studio-theme="dark"] .studio-panel-heading h2,
+body[data-studio-theme="dark"] .studio-output-heading h2,
+body[data-studio-theme="dark"] .empty-state h3 {
+  color: #f5f5f7;
 }
 
 body[data-studio-theme="dark"] .studio-theme-control button.is-active {
@@ -2247,6 +2254,8 @@ body[data-studio-theme="dark"] .recipient-card select,
 body[data-studio-theme="dark"] .email-chip-input,
 body[data-studio-theme="dark"] .add-row-count,
 body[data-studio-theme="dark"] .template-guide input,
+body[data-studio-theme="dark"] .template-save-panel input,
+body[data-studio-theme="dark"] .template-save-tools select,
 body[data-studio-theme="dark"] .draft-link {
   border-color: #34363d;
   background: #070707;
@@ -2296,7 +2305,8 @@ body[data-studio-theme="dark"] .recipient-card .email-chip-input input:-webkit-a
 }
 
 body[data-studio-theme="dark"] .button.secondary,
-body[data-studio-theme="dark"] .spreadsheet-actions .button.secondary {
+body[data-studio-theme="dark"] .spreadsheet-actions .button.secondary,
+body[data-studio-theme="dark"] .template-save-submit {
   border-color: #34363d;
   background: #151516;
   color: var(--ink);
@@ -2304,6 +2314,7 @@ body[data-studio-theme="dark"] .spreadsheet-actions .button.secondary {
 
 body[data-studio-theme="dark"] .button.secondary:hover,
 body[data-studio-theme="dark"] .spreadsheet-actions .button.secondary:hover,
+body[data-studio-theme="dark"] .template-save-submit:hover,
 body[data-studio-theme="dark"] .draft-link:hover {
   border-color: #f5f5f7;
   background: #f5f5f7;
@@ -2324,6 +2335,14 @@ body[data-studio-theme="dark"] .draft-link-primary:hover {
 
 body[data-studio-theme="dark"] .site-footer {
   border-top-color: #2f3033;
+}
+
+body[data-studio-theme="dark"] .template-save-status[data-tone="success"] {
+  color: #6fd59a;
+}
+
+body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
+  color: #ff7b72;
 }
 
 @media (max-width: 720px) {
