@@ -1669,7 +1669,7 @@ iframe[style*="position: fixed"] {
 
 .recipient-card {
   align-items: stretch;
-  min-height: 86px;
+  min-height: 64px;
   border-bottom: 1px solid #dfe2e8;
   background: #ffffff;
 }
@@ -1691,7 +1691,7 @@ iframe[style*="position: fixed"] {
   align-content: start;
   gap: 7px;
   min-width: 0;
-  padding: 10px;
+  padding: 8px 10px;
   border-right: 1px solid #dfe2e8;
 }
 
