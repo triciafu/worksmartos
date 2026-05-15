@@ -358,8 +358,8 @@ function draftLinksHtml(email) {
 
   return `
     <div class="draft-actions" aria-label="Draft actions">
-      <a class="draft-link draft-link-primary" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer">Open in Gmail</a>
-      <a class="draft-link" href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer">Open in Outlook</a>
+      <a class="draft-link draft-link-primary" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer">Send in Gmail</a>
+      <a class="draft-link" href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer">Send in Outlook</a>
       <a class="draft-link" href="${escapeAttribute(mailtoHref)}">Default email app</a>
     </div>
   `;
@@ -999,7 +999,7 @@ function restoreEditorHistory(index) {
 function renderEmails(emails) {
   output.innerHTML = "";
   generatedEmails = emails;
-  outputCount.textContent = "Review and open emails to send";
+  outputCount.textContent = "Review and send emails";
   exportButton.disabled = emails.length === 0;
 
   if (!emails.length) {
