@@ -671,9 +671,11 @@ function mergeTemplate(template, data, options = {}) {
 function normalizeDraftText(value) {
   return String(value)
     .replace(/\u00a0/g, " ")
+    .replace(/\r\n?/g, "\n")
     .split("\n")
-    .map((line) => line.replace(/^\s+/, ""))
+    .map((line) => line.trim())
     .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
 
@@ -818,11 +820,8 @@ function restoreAutosaveDraft() {
 
 function resetTemplateFields(template) {
   const paletteFields = Array.isArray(template.paletteFields) && template.paletteFields.length
-    ? template.paletteFields
-    : [
-        ...defaultFields.map((field) => ({ field, token: `{{${field}}}`, label: fieldLabels[field] || field })),
-        { field: "sender_name", token: "{{sender_name}}", label: "Sender Name" },
-      ];
+    ? template.paletteFields.filter((item) => item.field !== "sender_name")
+    : defaultFields.map((field) => ({ field, token: `{{${field}}}`, label: fieldLabels[field] || field }));
   const recipientFields = Array.isArray(template.recipientFields) && template.recipientFields.length
     ? template.recipientFields
     : paletteFields.filter((item) => item.field !== "sender_name");
@@ -863,6 +862,7 @@ function loadTemplateState(template = {}) {
   if (typeof template.bodyHtml === "string") {
     bodyTemplateEditor.innerHTML = template.bodyHtml;
   }
+  removeSenderNameTokens(bodyTemplateEditor);
 
   if (typeof template.senderName === "string" && form.elements.sender_name) {
     form.elements.sender_name.value = template.senderName;
@@ -911,6 +911,7 @@ function replaceTokenChips(container, preserveFormatting = false) {
 function templateHtmlToMergeHtml(html) {
   const temp = document.createElement("div");
   temp.innerHTML = html;
+  removeSenderNameTokens(temp);
   replaceTokenChips(temp, true);
   return temp.innerHTML;
 }
@@ -918,8 +919,36 @@ function templateHtmlToMergeHtml(html) {
 function templateHtmlToMergeText(html) {
   const temp = document.createElement("div");
   temp.innerHTML = html;
+  removeSenderNameTokens(temp);
   replaceTokenChips(temp);
   return temp.innerText.trim();
+}
+
+function removeSenderNameTokens(container) {
+  container.querySelectorAll('[data-token="{{sender_name}}"]').forEach((token) => {
+    const parentParagraph = token.closest("p");
+    const tokenLabel = token.dataset.label || token.textContent || "";
+
+    if (parentParagraph && parentParagraph.textContent.trim() === tokenLabel.trim()) {
+      const previousParagraph = parentParagraph.previousElementSibling;
+      if (previousParagraph?.matches("p") && !previousParagraph.textContent.trim()) {
+        previousParagraph.remove();
+      }
+      parentParagraph.remove();
+      return;
+    }
+
+    token.remove();
+  });
+}
+
+function appendSenderNameToBody(bodyHtml, senderName) {
+  const name = String(senderName || "").trim();
+  if (!name) {
+    return bodyHtml;
+  }
+
+  return `${bodyHtml}<p>${escapeHtml(name)}</p>`;
 }
 
 function rememberTemplateRange(editor) {
@@ -1535,10 +1564,11 @@ function generateEmails() {
 
   const emails = getRecipients().map((recipient) => {
     const data = { ...recipient, sender_name: senderName };
+    const body = mergeTemplate(bodyTemplate, data, { html: true });
     return {
       ...recipient,
       subject: mergeTemplate(subjectTemplate, data),
-      body: mergeTemplate(bodyTemplate, data, { html: true }),
+      body: appendSenderNameToBody(body, senderName),
     };
   });
 
