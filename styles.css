@@ -1216,26 +1216,6 @@ iframe[style*="position: fixed"] {
   resize: vertical;
 }
 
-.format-toolbar {
-  display: flex;
-  gap: 8px;
-}
-
-.format-toolbar button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #ffffff;
-  color: var(--ink);
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-}
-
 .rich-editor,
 .email-body-preview {
   min-height: 260px;
@@ -2499,32 +2479,6 @@ iframe[style*="position: fixed"] {
   min-height: 34px;
   border-radius: 8px;
   white-space: nowrap;
-}
-
-.format-toolbar {
-  flex-wrap: wrap;
-}
-
-.format-toolbar button[aria-label="Undo"],
-.format-toolbar button[aria-label="Redo"] {
-  width: auto;
-  padding: 0 12px;
-}
-
-.format-toolbar svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.format-toolbar button:disabled {
-  color: #a1a1a6;
-  cursor: default;
-  opacity: 0.55;
 }
 
 .stepper-track .studio-step.template-step {

@@ -968,6 +968,10 @@ function insertToken(target, token, label) {
 }
 
 function updateHistoryButtons() {
+  if (!undoButton || !redoButton) {
+    return;
+  }
+
   undoButton.disabled = editorHistoryIndex <= 0;
   redoButton.disabled = editorHistoryIndex >= editorHistory.length - 1;
 }
