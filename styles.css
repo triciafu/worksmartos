@@ -562,6 +562,7 @@ h1 {
 .feature-card {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   min-height: 390px;
   padding: 54px 32px;
 }
@@ -602,18 +603,18 @@ h1 {
 
 .feature-link {
   display: inline-block;
-  margin-top: auto;
   color: var(--accent);
   font-size: 15px;
   font-weight: 400;
 }
 
-.feature-link + .feature-link {
-  margin-top: 10px;
-}
-
-.feature-link-secondary {
-  color: var(--muted);
+.feature-links {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 10px;
+  min-height: 48px;
+  margin-top: auto;
 }
 
 .feature-link:hover {
