@@ -1897,7 +1897,7 @@ iframe[style*="position: fixed"] {
   background: #ffffff;
   color: var(--ink);
   font: inherit;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 300;
   font-variation-settings: "wght" 300;
 }
@@ -1996,8 +1996,8 @@ iframe[style*="position: fixed"] {
   background: #FAFAFA;
   color: var(--muted);
   font-size: 12px;
-  font-weight: 300;
-  font-variation-settings: "wght" 300;
+  font-weight: 400;
+  font-variation-settings: "wght" 400;
   line-height: 1;
   overflow: hidden;
   text-overflow: ellipsis;
