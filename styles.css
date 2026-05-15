@@ -608,6 +608,14 @@ h1 {
   font-weight: 400;
 }
 
+.feature-link + .feature-link {
+  margin-top: 10px;
+}
+
+.feature-link-secondary {
+  color: var(--muted);
+}
+
 .feature-link:hover {
   color: var(--accent-dark);
 }

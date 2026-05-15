@@ -81,7 +81,9 @@ let isRestoringAutosave = false;
 
 let generatedEmails = [];
 
-const autosaveKey = "worksmartos-email-studio-draft-v1";
+const studioVariant = document.body.dataset.studioVariant || "creative-approval";
+const isBlankSlateStudio = studioVariant === "blank";
+const autosaveKey = `worksmartos-email-studio-draft-${studioVariant}-v1`;
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
 
@@ -132,7 +134,7 @@ if (templateSaveToggle && templateSavePanel) {
   });
 }
 
-const defaultFields = [
+const defaultFields = isBlankSlateStudio ? [] : [
   "client_name",
   "contact_firstname",
   "campaign_name",
