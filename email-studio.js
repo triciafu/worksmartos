@@ -262,7 +262,7 @@ function syncRecipientSheetHeader() {
     return;
   }
 
-  const headers = ["Email No.", "Actions", "Email address(es)", ...getRecipientFieldOrder().flatMap(fieldHeader)];
+  const headers = ["Email no.", "Actions", "Email address(es)", ...getRecipientFieldOrder().flatMap(fieldHeader)];
   recipientSheet.style.setProperty("--recipient-sheet-columns", recipientSheetColumnWidths());
   recipientSheet.style.setProperty("--recipient-sheet-min-width", `${headers.length === 9 ? 1490 : Math.max(980, 352 + ((headers.length - 3) * 170))}px`);
   recipientSheetHeader.innerHTML = headers.map((header) => `<span>${escapeHtml(header)}</span>`).join("");
@@ -349,6 +349,15 @@ function escapeAttribute(value) {
 
 function escapeHtml(value) {
   return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
+function sentenceCaseLabel(value) {
+  const label = String(value || "").trim().replace(/\s+/g, " ");
+  if (!label) {
+    return "";
+  }
+
+  return label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
 }
 
 function splitEmailList(value) {
@@ -538,7 +547,7 @@ function clearResolvedRecipientError(input) {
 
 function fieldHeader(field) {
   if (field === "approval_link") {
-    return ["Creative link name", "Creative link URL"];
+    return ["Creative link name", "Creative link url"];
   }
   return fieldLabels[field] || field.replaceAll("_", " ");
 }
@@ -765,17 +774,18 @@ function htmlToText(html) {
 }
 
 function createTokenElement(token, label, removeAttribute = "data-remove-token") {
+  const cleanLabel = sentenceCaseLabel(label);
   const chip = document.createElement("span");
   chip.className = "merge-token";
   chip.contentEditable = "false";
   chip.dataset.token = token;
-  chip.dataset.label = label;
-  chip.textContent = label;
+  chip.dataset.label = cleanLabel;
+  chip.textContent = cleanLabel;
 
   const removeButton = document.createElement("button");
   removeButton.type = "button";
   removeButton.setAttribute(removeAttribute, "");
-  removeButton.setAttribute("aria-label", `Remove ${label}`);
+  removeButton.setAttribute("aria-label", `Remove ${cleanLabel}`);
   removeButton.textContent = "×";
   chip.appendChild(removeButton);
 
@@ -783,11 +793,11 @@ function createTokenElement(token, label, removeAttribute = "data-remove-token")
 }
 
 function createPaletteToken(token, label) {
-  return createTokenElement(token, label, "data-remove-placeholder");
+  return createTokenElement(token, sentenceCaseLabel(label), "data-remove-placeholder");
 }
 
 function labelFromTokenElement(element) {
-  return element.dataset.label || element.textContent.replace("×", "").trim();
+  return sentenceCaseLabel(element.dataset.label || element.textContent.replace("×", "").trim());
 }
 
 function addRecipientField(field, label) {
@@ -796,7 +806,7 @@ function addRecipientField(field, label) {
   }
 
   fields.push(field);
-  fieldLabels[field] = label;
+  fieldLabels[field] = sentenceCaseLabel(label);
 
   syncRecipientDetailFieldOrder();
 }
@@ -1488,7 +1498,7 @@ tokenList.addEventListener("click", (event) => {
 });
 
 addPlaceholderButton.addEventListener("click", () => {
-  const label = window.prompt("Placeholder name", "New Placeholder");
+  const label = window.prompt("Placeholder name", "New placeholder");
   if (!label) {
     return;
   }
@@ -1498,7 +1508,7 @@ addPlaceholderButton.addEventListener("click", () => {
     return;
   }
 
-  const cleanLabel = label.trim();
+  const cleanLabel = sentenceCaseLabel(label);
   addRecipientField(field, cleanLabel);
 
   const token = createPaletteToken(`{{${field}}}`, cleanLabel);
