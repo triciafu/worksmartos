@@ -2113,6 +2113,10 @@ iframe[style*="position: fixed"] {
   font-size: 24px;
 }
 
+.recipient-panel > .studio-actions {
+  margin-top: 24px;
+}
+
 .add-email-row {
   display: flex;
   align-items: center;

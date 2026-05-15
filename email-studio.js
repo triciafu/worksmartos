@@ -83,7 +83,7 @@ let generatedEmails = [];
 
 const studioVariant = document.body.dataset.studioVariant || "creative-approval";
 const isBlankSlateStudio = studioVariant === "blank";
-const autosaveKey = `worksmartos-email-studio-draft-${studioVariant}-v1`;
+const autosaveKey = `worksmartos-email-studio-draft-${studioVariant}-${isBlankSlateStudio ? "v2" : "v1"}`;
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
 
@@ -134,7 +134,7 @@ if (templateSaveToggle && templateSavePanel) {
   });
 }
 
-const defaultFields = isBlankSlateStudio ? [] : [
+const defaultFields = isBlankSlateStudio ? ["contact_firstname"] : [
   "client_name",
   "contact_firstname",
   "campaign_name",
