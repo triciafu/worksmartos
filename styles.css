@@ -2032,7 +2032,7 @@ iframe[style*="position: fixed"] {
 .add-email-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   justify-content: flex-end;
   width: 100%;
   margin: -2px auto 0;
@@ -2046,20 +2046,31 @@ iframe[style*="position: fixed"] {
 }
 
 .add-row-count {
-  width: 64px;
-  height: 36px;
-  padding: 0 8px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #ffffff;
-  color: var(--ink);
+  width: 34px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+  color: var(--accent);
   font: inherit;
+  font-weight: inherit;
   text-align: center;
 }
 
 .add-row-count:focus {
-  border-color: var(--accent);
   outline: none;
+}
+
+.add-row-count::placeholder {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.add-row-count::-webkit-outer-spin-button,
+.add-row-count::-webkit-inner-spin-button {
+  margin: 0;
 }
 
 .add-address-link {
