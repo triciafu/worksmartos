@@ -1688,7 +1688,7 @@ iframe[style*="position: fixed"] {
 .recipient-detail-grid > label,
 .recipient-detail-grid > .creative-link-fields > label {
   display: grid;
-  align-content: start;
+  align-content: center;
   gap: 7px;
   min-width: 0;
   padding: 8px 10px;
@@ -1859,7 +1859,7 @@ iframe[style*="position: fixed"] {
 
 .recipient-card-top {
   display: grid;
-  align-content: start;
+  align-content: center;
   justify-content: start;
   justify-items: start;
   gap: 8px;
