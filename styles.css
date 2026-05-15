@@ -1898,8 +1898,8 @@ iframe[style*="position: fixed"] {
   color: var(--ink);
   font: inherit;
   font-size: 15px;
-  font-weight: 400;
-  font-variation-settings: "wght" 400;
+  font-weight: 300;
+  font-variation-settings: "wght" 300;
 }
 
 .recipient-card select {
@@ -1996,8 +1996,8 @@ iframe[style*="position: fixed"] {
   background: #FAFAFA;
   color: var(--muted);
   font-size: 12px;
-  font-weight: 400;
-  font-variation-settings: "wght" 400;
+  font-weight: 300;
+  font-variation-settings: "wght" 300;
   line-height: 1;
   overflow: hidden;
   text-overflow: ellipsis;
