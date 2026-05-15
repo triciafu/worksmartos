@@ -2224,7 +2224,8 @@ body[data-studio-theme="dark"] .empty-state,
 body[data-studio-theme="dark"] .recipient-sheet,
 body[data-studio-theme="dark"] .spreadsheet-tools,
 body[data-studio-theme="dark"] .studio-theme-control,
-body[data-studio-theme="dark"] .template-save-panel {
+body[data-studio-theme="dark"] .template-save-panel,
+body[data-studio-theme="dark"] .stepper-track .studio-output {
   border-color: #34363d;
   background: #151516;
 }
@@ -2438,6 +2439,7 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 .stepper-shell {
   display: block;
   overflow: hidden;
+  overflow: clip;
 }
 
 .stepper-track {
@@ -2449,6 +2451,7 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 .studio-step {
   width: calc(100% / 3);
   flex: 0 0 calc(100% / 3);
+  overflow: hidden;
 }
 
 .studio-step.is-entering {
