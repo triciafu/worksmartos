@@ -61,7 +61,7 @@ const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
 
 function applyStudioTheme(theme) {
-  const nextTheme = studioThemes.has(theme) ? theme : "light";
+  const nextTheme = studioThemes.has(theme) ? theme : "white";
   document.body.dataset.studioTheme = nextTheme;
   themeButtons.forEach((button) => {
     const isActive = button.dataset.studioTheme === nextTheme;
@@ -80,11 +80,11 @@ function saveStudioTheme(theme) {
 }
 
 function restoreStudioTheme() {
-  let theme = "light";
+  let theme = "white";
   try {
-    theme = window.localStorage.getItem(studioThemeKey) || "light";
+    theme = window.localStorage.getItem(studioThemeKey) || "white";
   } catch {
-    theme = "light";
+    theme = "white";
   }
   applyStudioTheme(theme);
 }
