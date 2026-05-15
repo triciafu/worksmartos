@@ -676,6 +676,7 @@ function normalizeDraftText(value) {
     .map((line) => line.trim())
     .join("\n")
     .replace(/\n{3,}/g, "\n\n")
+    .replace(/\b(Thanks,|Thank you,)\n{2,}/gi, "$1\n")
     .trim();
 }
 
@@ -948,7 +949,14 @@ function appendSenderNameToBody(bodyHtml, senderName) {
     return bodyHtml;
   }
 
-  return `${bodyHtml}<p>${escapeHtml(name)}</p>`;
+  const temp = document.createElement("div");
+  temp.innerHTML = bodyHtml;
+
+  while (temp.lastElementChild && !temp.lastElementChild.textContent.trim()) {
+    temp.lastElementChild.remove();
+  }
+
+  return `${temp.innerHTML}<p>${escapeHtml(name)}</p>`;
 }
 
 function rememberTemplateRange(editor) {

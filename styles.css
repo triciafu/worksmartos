@@ -1110,6 +1110,10 @@ iframe[style*="position: fixed"] {
   padding-bottom: 24px;
 }
 
+.studio-hero .eyebrow {
+  font-weight: 700;
+}
+
 .studio-hero h1 {
   max-width: 760px;
   margin-bottom: 22px;
