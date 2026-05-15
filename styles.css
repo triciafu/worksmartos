@@ -1549,9 +1549,9 @@ iframe[style*="position: fixed"] {
 }
 
 .studio-steps button {
+  position: relative;
   padding: 12px 18px 14px;
   border: 0;
-  border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--muted);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
@@ -1562,9 +1562,23 @@ iframe[style*="position: fixed"] {
   cursor: pointer;
 }
 
+.studio-steps button span {
+  position: relative;
+  display: inline-flex;
+}
+
 .studio-steps .is-active {
   color: var(--ink);
-  border-bottom-color: var(--accent);
+}
+
+.studio-steps .is-active span::after {
+  position: absolute;
+  right: 0;
+  bottom: -15px;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  content: "";
 }
 
 .studio-panel-heading p {
@@ -2215,6 +2229,10 @@ body[data-studio-theme="dark"] .stepper-track .studio-output {
 
 body[data-studio-theme="dark"] .studio-steps {
   border-bottom-color: #2f3033;
+}
+
+body[data-studio-theme="dark"] .studio-steps .is-active span::after {
+  background: #f5f5f7;
 }
 
 body[data-studio-theme="dark"] .studio-panel,
