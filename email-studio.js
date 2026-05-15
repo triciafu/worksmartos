@@ -83,6 +83,11 @@ let generatedEmails = [];
 
 const studioVariant = document.body.dataset.studioVariant || "creative-approval";
 const isBlankSlateStudio = studioVariant === "blank";
+const defaultFieldSets = {
+  blank: ["contact_firstname"],
+  "sales-outreach": ["contact_firstname", "client_name", "recipient_role", "pain_point", "offer", "scheduling_link"],
+  "creative-approval": ["client_name", "contact_firstname", "campaign_name", "deadline", "approval_link"],
+};
 const autosaveKey = `worksmartos-email-studio-draft-${studioVariant}-${isBlankSlateStudio ? "v2" : "v1"}`;
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
@@ -134,13 +139,7 @@ if (templateSaveToggle && templateSavePanel) {
   });
 }
 
-const defaultFields = isBlankSlateStudio ? ["contact_firstname"] : [
-  "client_name",
-  "contact_firstname",
-  "campaign_name",
-  "deadline",
-  "approval_link",
-];
+const defaultFields = defaultFieldSets[studioVariant] || defaultFieldSets["creative-approval"];
 
 const fieldLabels = {
   client_name: "Company name",
@@ -148,6 +147,10 @@ const fieldLabels = {
   campaign_name: "Campaign",
   deadline: "Deadline",
   approval_link: "Creative link",
+  recipient_role: "Role",
+  pain_point: "Pain point",
+  offer: "Offer",
+  scheduling_link: "Scheduling link",
 };
 
 const fields = [...defaultFields];
@@ -172,7 +175,17 @@ function fieldFromToken(token) {
 }
 
 function getRecipientFieldOrder() {
-  const naturalOrder = ["client_name", "contact_firstname", "campaign_name", "deadline", "approval_link"];
+  const naturalOrder = [
+    "client_name",
+    "contact_firstname",
+    "recipient_role",
+    "pain_point",
+    "offer",
+    "scheduling_link",
+    "campaign_name",
+    "deadline",
+    "approval_link",
+  ];
   const ordered = [];
   const seen = new Set();
 
@@ -689,7 +702,12 @@ function getRecipients() {
       data.recipient_email = addresses.map((address) => address.email).join("; ");
       return data;
     })
-    .filter((row) => row.client_name || row.contact_firstname || row.campaign_name || row.approval_link_name || row.approval_link_url);
+    .filter((row) => fields.some((field) => {
+      if (field === "approval_link") {
+        return row.approval_link_name || row.approval_link_url;
+      }
+      return row[field];
+    }));
 }
 
 function linkifyCreativeLink(data) {
