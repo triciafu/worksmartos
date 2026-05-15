@@ -12,7 +12,7 @@ function updateActiveNavLinks() {
   nav.querySelectorAll("a:not(.nav-cta)").forEach((link) => {
     const url = new URL(link.href, window.location.href);
     const linkPath = url.pathname.split("/").pop() || "index.html";
-    const isActive = linkPath === currentPath && Boolean(url.hash) && url.hash === currentHash;
+    const isActive = linkPath === currentPath && (!url.hash || url.hash === currentHash);
 
     link.classList.toggle("is-active", isActive);
     if (isActive) {
@@ -41,7 +41,7 @@ updateActiveNavLinks();
 window.addEventListener("hashchange", updateActiveNavLinks);
 
 const motionTargets = document.querySelectorAll(
-  ".hero .eyebrow, .hero h1, .hero-text, .hero-actions, .section-heading, .feature-card, .security-copy, .security-list article, .split-section > div, .workflow-list article, .pricing-copy, .price-card"
+  ".hero .eyebrow, .hero h1, .hero-text, .hero-actions, .section-heading, .feature-card, .security-copy, .security-list article, .split-section > div, .workflow-list article, .pricing-copy, .price-card, .suite-hero-copy, .suite-hero-visual, .suite-intro, .suite-section-heading, .suite-studio-grid article, .suite-flow-grid article, .suite-cta"
 );
 
 motionTargets.forEach((target, index) => {
