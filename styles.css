@@ -1200,6 +1200,7 @@ iframe[style*="position: fixed"] {
   font: inherit;
   font-size: 14px;
   font-weight: 400;
+  line-height: 1.25;
 }
 
 .studio-controls input,
@@ -1850,6 +1851,7 @@ iframe[style*="position: fixed"] {
   color: var(--ink);
   font: inherit;
   font-size: 14px;
+  line-height: 1.25;
 }
 
 .email-address-preview input:focus {
@@ -1900,6 +1902,7 @@ iframe[style*="position: fixed"] {
   font-size: 14px;
   font-weight: 300;
   font-variation-settings: "wght" 300;
+  line-height: 1.25;
 }
 
 .recipient-card select {
@@ -2058,6 +2061,7 @@ iframe[style*="position: fixed"] {
   font: inherit;
   font-size: 13px;
   font-weight: 500;
+  line-height: 1.25;
   text-align: center;
 }
 
@@ -2479,6 +2483,7 @@ iframe[style*="position: fixed"] {
   font: inherit;
   font-size: 14px;
   font-weight: 400;
+  line-height: 1.25;
 }
 
 .template-guide .token-row {

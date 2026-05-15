@@ -685,7 +685,15 @@ function htmlToText(html) {
     link.replaceWith(document.createTextNode(link.href));
   });
 
-  return normalizeDraftText(temp.innerText);
+  temp.querySelectorAll("br").forEach((breakNode) => {
+    breakNode.replaceWith(document.createTextNode("\n"));
+  });
+
+  temp.querySelectorAll("p, div, li").forEach((block) => {
+    block.appendChild(document.createTextNode("\n"));
+  });
+
+  return normalizeDraftText(temp.textContent || "");
 }
 
 function createTokenElement(token, label, removeAttribute = "data-remove-token") {
