@@ -1,6 +1,28 @@
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.querySelector("[data-nav]");
 
+function updateActiveNavLinks() {
+  if (!nav) {
+    return;
+  }
+
+  const currentPath = window.location.pathname.split("/").pop() || "index.html";
+  const currentHash = window.location.hash;
+
+  nav.querySelectorAll("a:not(.nav-cta)").forEach((link) => {
+    const url = new URL(link.href, window.location.href);
+    const linkPath = url.pathname.split("/").pop() || "index.html";
+    const isActive = linkPath === currentPath && Boolean(url.hash) && url.hash === currentHash;
+
+    link.classList.toggle("is-active", isActive);
+    if (isActive) {
+      link.setAttribute("aria-current", "true");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+}
+
 if (navToggle && nav) {
   navToggle.addEventListener("click", () => {
     const isOpen = nav.classList.toggle("is-open");
@@ -14,6 +36,9 @@ if (navToggle && nav) {
     }
   });
 }
+
+updateActiveNavLinks();
+window.addEventListener("hashchange", updateActiveNavLinks);
 
 const motionTargets = document.querySelectorAll(
   ".hero .eyebrow, .hero h1, .hero-text, .hero-actions, .section-heading, .feature-card, .security-copy, .security-list article, .split-section > div, .workflow-list article, .pricing-copy, .price-card"

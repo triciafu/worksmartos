@@ -103,10 +103,12 @@ a {
 
 .nav-links a:not(.nav-cta):hover,
 .nav-links a:not(.nav-cta):focus-visible,
+.nav-links a:not(.nav-cta).is-active,
 .nav-links a:not(.nav-cta)[aria-current="page"],
 .nav-links a:not(.nav-cta)[aria-current="true"],
 .auth-nav-link:hover,
 .auth-nav-link:focus-visible,
+.auth-nav-link.is-active,
 .auth-nav-link[aria-current="page"],
 .auth-nav-link[aria-current="true"] {
   color: var(--ink);
@@ -114,10 +116,12 @@ a {
 
 .nav-links a:not(.nav-cta):hover::after,
 .nav-links a:not(.nav-cta):focus-visible::after,
+.nav-links a:not(.nav-cta).is-active::after,
 .nav-links a:not(.nav-cta)[aria-current="page"]::after,
 .nav-links a:not(.nav-cta)[aria-current="true"]::after,
 .auth-nav-link:hover::after,
 .auth-nav-link:focus-visible::after,
+.auth-nav-link.is-active::after,
 .auth-nav-link[aria-current="page"]::after,
 .auth-nav-link[aria-current="true"]::after {
   opacity: 1;
