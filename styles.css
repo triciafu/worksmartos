@@ -2187,7 +2187,7 @@ body[data-studio-theme="white"] .studio-theme-control {
 }
 
 body[data-studio-theme="dark"] {
-  --ink: #f5f5f7;
+  --ink: #d2d2d7;
   --muted: #b6b8bf;
   --line: #34363d;
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
