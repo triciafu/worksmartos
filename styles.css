@@ -1101,6 +1101,10 @@ iframe[style*="position: fixed"] {
 }
 
 .studio-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
   max-width: 1180px;
   margin: 0 auto;
   padding: 72px 24px 34px;
@@ -1111,7 +1115,37 @@ iframe[style*="position: fixed"] {
 }
 
 .studio-hero .eyebrow {
+  margin-bottom: 0;
   font-weight: 600;
+}
+
+.studio-theme-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.studio-theme-control button {
+  min-width: 54px;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.studio-theme-control button.is-active {
+  background: var(--accent);
+  color: #ffffff;
 }
 
 .studio-hero h1 {
@@ -2133,6 +2167,163 @@ iframe[style*="position: fixed"] {
 .draft-link-primary:hover {
   border-color: var(--accent-dark);
   background: var(--accent-dark);
+}
+
+body[data-studio-theme="white"] .studio-page,
+body[data-studio-theme="white"] .recipient-panel,
+body[data-studio-theme="white"] .stepper-track .studio-output {
+  background: #ffffff;
+}
+
+body[data-studio-theme="white"] .studio-panel,
+body[data-studio-theme="white"] .template-card,
+body[data-studio-theme="white"] .email-preview-card,
+body[data-studio-theme="white"] .empty-state,
+body[data-studio-theme="white"] .recipient-sheet,
+body[data-studio-theme="white"] .recipient-card,
+body[data-studio-theme="white"] .spreadsheet-tools,
+body[data-studio-theme="white"] .studio-theme-control {
+  background: #ffffff;
+}
+
+body[data-studio-theme="dark"] {
+  --ink: #f5f5f7;
+  --muted: #b6b8bf;
+  --line: #34363d;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
+  color: var(--ink);
+  background: #000000;
+}
+
+body[data-studio-theme="dark"] .site-header {
+  border-bottom-color: #2f3033;
+  background: rgba(22, 22, 23, 0.86);
+}
+
+body[data-studio-theme="dark"] .brand,
+body[data-studio-theme="dark"] .nav-links,
+body[data-studio-theme="dark"] .auth-nav-link,
+body[data-studio-theme="dark"] .site-footer {
+  color: var(--ink);
+}
+
+body[data-studio-theme="dark"] .studio-page,
+body[data-studio-theme="dark"] .recipient-panel,
+body[data-studio-theme="dark"] .stepper-track .studio-output {
+  background: #000000;
+}
+
+body[data-studio-theme="dark"] .studio-steps {
+  border-bottom-color: #2f3033;
+}
+
+body[data-studio-theme="dark"] .studio-panel,
+body[data-studio-theme="dark"] .template-card,
+body[data-studio-theme="dark"] .email-preview-card,
+body[data-studio-theme="dark"] .empty-state,
+body[data-studio-theme="dark"] .recipient-sheet,
+body[data-studio-theme="dark"] .spreadsheet-tools,
+body[data-studio-theme="dark"] .studio-theme-control {
+  border-color: #34363d;
+  background: #151516;
+}
+
+body[data-studio-theme="dark"] .studio-theme-control button.is-active {
+  background: #f5f5f7;
+  color: #111114;
+}
+
+body[data-studio-theme="dark"] .studio-controls input,
+body[data-studio-theme="dark"] .studio-controls textarea,
+body[data-studio-theme="dark"] .recipient-table input,
+body[data-studio-theme="dark"] .email-preview-card input,
+body[data-studio-theme="dark"] .email-preview-card textarea,
+body[data-studio-theme="dark"] .rich-editor,
+body[data-studio-theme="dark"] .token-editor,
+body[data-studio-theme="dark"] .email-body-preview,
+body[data-studio-theme="dark"] .email-address-preview input,
+body[data-studio-theme="dark"] .recipient-card input,
+body[data-studio-theme="dark"] .recipient-card select,
+body[data-studio-theme="dark"] .email-chip-input,
+body[data-studio-theme="dark"] .add-row-count,
+body[data-studio-theme="dark"] .template-guide input,
+body[data-studio-theme="dark"] .draft-link {
+  border-color: #34363d;
+  background: #070707;
+  color: var(--ink);
+}
+
+body[data-studio-theme="dark"] .token-row span,
+body[data-studio-theme="dark"] .merge-token,
+body[data-studio-theme="dark"] .email-address-chip {
+  border-color: #34363d;
+  background: #202124;
+  color: var(--muted);
+}
+
+body[data-studio-theme="dark"] .recipient-sheet-header {
+  border-bottom-color: #34363d;
+  background: #111113;
+}
+
+body[data-studio-theme="dark"] .recipient-sheet-header span,
+body[data-studio-theme="dark"] .recipient-card,
+body[data-studio-theme="dark"] .recipient-card-top,
+body[data-studio-theme="dark"] .recipient-address-stack,
+body[data-studio-theme="dark"] .address-field-actions,
+body[data-studio-theme="dark"] .recipient-detail-grid > label,
+body[data-studio-theme="dark"] .recipient-detail-grid > .creative-link-fields > label {
+  border-color: #34363d;
+}
+
+body[data-studio-theme="dark"] .recipient-card {
+  background: #151516;
+}
+
+body[data-studio-theme="dark"] .recipient-card .email-chip-input input {
+  background: #070707 !important;
+  box-shadow: inset 0 0 0 1000px #070707;
+  -webkit-text-fill-color: var(--ink);
+  caret-color: var(--ink);
+}
+
+body[data-studio-theme="dark"] .recipient-card .email-chip-input input:-webkit-autofill,
+body[data-studio-theme="dark"] .recipient-card .email-chip-input input:-webkit-autofill:hover,
+body[data-studio-theme="dark"] .recipient-card .email-chip-input input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #070707 inset;
+  -webkit-text-fill-color: var(--ink);
+  caret-color: var(--ink);
+}
+
+body[data-studio-theme="dark"] .button.secondary,
+body[data-studio-theme="dark"] .spreadsheet-actions .button.secondary {
+  border-color: #34363d;
+  background: #151516;
+  color: var(--ink);
+}
+
+body[data-studio-theme="dark"] .button.secondary:hover,
+body[data-studio-theme="dark"] .spreadsheet-actions .button.secondary:hover,
+body[data-studio-theme="dark"] .draft-link:hover {
+  border-color: #f5f5f7;
+  background: #f5f5f7;
+  color: #111114;
+}
+
+body[data-studio-theme="dark"] .draft-link-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+body[data-studio-theme="dark"] .draft-link-primary:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
+  color: #ffffff;
+}
+
+body[data-studio-theme="dark"] .site-footer {
+  border-top-color: #2f3033;
 }
 
 @media (max-width: 720px) {

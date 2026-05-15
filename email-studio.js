@@ -26,6 +26,7 @@ const addRowButton = document.querySelector("[data-add-row]");
 const addRowCountInput = document.querySelector("[data-add-row-count]");
 const stepperTrack = document.querySelector("[data-stepper-track]");
 const stepLabels = document.querySelectorAll(".studio-steps button");
+const themeButtons = document.querySelectorAll("[data-studio-theme]");
 const nextStepButtons = document.querySelectorAll("[data-next-step]");
 const prevStepButtons = document.querySelectorAll("[data-prev-step]");
 const generateStepButton = document.querySelector("[data-generate-step]");
@@ -56,6 +57,43 @@ let isRestoringAutosave = false;
 let generatedEmails = [];
 
 const autosaveKey = "worksmartos-email-studio-draft-v1";
+const studioThemeKey = "worksmartos-email-studio-theme";
+const studioThemes = new Set(["light", "white", "dark"]);
+
+function applyStudioTheme(theme) {
+  const nextTheme = studioThemes.has(theme) ? theme : "light";
+  document.body.dataset.studioTheme = nextTheme;
+  themeButtons.forEach((button) => {
+    const isActive = button.dataset.studioTheme === nextTheme;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function saveStudioTheme(theme) {
+  applyStudioTheme(theme);
+  try {
+    window.localStorage.setItem(studioThemeKey, document.body.dataset.studioTheme);
+  } catch {
+    // Theme preference is optional; the studio should still work if storage is blocked.
+  }
+}
+
+function restoreStudioTheme() {
+  let theme = "light";
+  try {
+    theme = window.localStorage.getItem(studioThemeKey) || "light";
+  } catch {
+    theme = "light";
+  }
+  applyStudioTheme(theme);
+}
+
+themeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    saveStudioTheme(button.dataset.studioTheme);
+  });
+});
 
 if (templateSaveToggle && templateSavePanel) {
   templateSaveToggle.addEventListener("click", () => {
@@ -1628,6 +1666,7 @@ function renumberRecipients() {
   });
 }
 
+restoreStudioTheme();
 const restoredDraft = restoreAutosaveDraft();
 if (!restoredDraft) {
   renumberRecipients();
