@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Find the strongest shared meeting time across a team by comparing candidate times and participant availability."
+    />
+    <title>Find a Team Time | WorkSmartOS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="WorkSmartOS home">
+          <span>WorkSmartOS</span>
+          <span class="brand-beta">Beta</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-links" data-nav>
+          <a href="index.html#tools">Explore tools</a>
+          <a href="index.html#enterprise">Enterprise Solutions</a>
+          <a href="email-studio.html">Login</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="studio-page availability-page">
+      <section class="studio-hero compact">
+        <p class="eyebrow">Find a Team Time</p>
+      </section>
+
+      <nav class="studio-steps" aria-label="Find a Team Time steps">
+        <button class="is-active" type="button" data-availability-step-button="0"><span>1. Add options</span></button>
+        <button type="button" data-availability-step-button="1"><span>2. Add availability</span></button>
+        <button type="button" data-availability-step-button="2"><span>3. Pick a time</span></button>
+      </nav>
+
+      <section class="availability-shell" aria-label="Team availability tool">
+        <section class="availability-step studio-panel is-active" data-availability-step="0">
+          <div class="availability-intro">
+            <div class="studio-panel-heading">
+              <span>Step 1</span>
+              <h2>Add the meeting details and time options</h2>
+              <p>Enter the candidate times you want the team to choose from. Each line becomes a column in the availability grid.</p>
+            </div>
+          </div>
+
+          <form class="availability-card" data-availability-details>
+            <label>
+              <span>Meeting name</span>
+              <input name="meeting_name" value="Team planning meeting" />
+            </label>
+            <label>
+              <span>Duration</span>
+              <input name="duration" value="30 minutes" />
+            </label>
+            <label>
+              <span>Time zone</span>
+              <input name="timezone" value="Eastern time" />
+            </label>
+            <label>
+              <span>Organizer email</span>
+              <input name="organizer_email" type="email" value="contact@worksmartos.com" />
+            </label>
+            <label class="availability-full">
+              <span>Candidate times</span>
+              <textarea name="candidate_times">Tuesday, May 19 at 10:00 AM
+Tuesday, May 19 at 2:00 PM
+Wednesday, May 20 at 11:00 AM
+Thursday, May 21 at 1:30 PM</textarea>
+            </label>
+            <label class="availability-full">
+              <span>Context</span>
+              <textarea name="context">Please choose every time that works for you so we can lock the best shared option.</textarea>
+            </label>
+            <div class="studio-actions compact">
+              <span class="availability-status" data-availability-status aria-live="polite"></span>
+              <button class="button primary" type="button" data-build-availability-grid>Build availability grid</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="availability-step studio-panel" data-availability-step="1">
+          <div class="studio-panel-heading">
+            <span>Step 2</span>
+            <h2>Add each team member's availability</h2>
+            <p>Check every time that works for each person. The tool will rank the strongest shared options.</p>
+          </div>
+
+          <div class="availability-table-wrap">
+            <table class="availability-table">
+              <thead data-availability-head></thead>
+              <tbody data-availability-body></tbody>
+            </table>
+          </div>
+
+          <div class="availability-row-tools">
+            <button class="add-placeholder" type="button" data-add-availability-row><span>+</span>Add</button>
+            <input class="add-row-count" type="number" min="1" max="20" step="1" inputmode="numeric" aria-label="Number of team members to add" data-add-availability-count />
+            <span>rows</span>
+          </div>
+
+          <div class="availability-actions">
+            <button class="button secondary" type="button" data-availability-back>Back</button>
+            <button class="button primary" type="button" data-find-team-time>Find available time</button>
+          </div>
+        </section>
+
+        <section class="availability-step studio-panel" data-availability-step="2">
+          <div class="studio-output-heading">
+            <div>
+              <span>Step 3</span>
+              <h2>Pick the best shared time</h2>
+              <p class="studio-output-note">Times are ranked by how many team members are available.</p>
+            </div>
+            <button class="button secondary" type="button" data-availability-edit>Edit availability</button>
+          </div>
+
+          <div class="availability-results" data-availability-results></div>
+
+          <div class="availability-message-panel">
+            <label>
+              <span>Suggested message</span>
+              <textarea readonly data-availability-message></textarea>
+            </label>
+            <button class="button secondary" type="button" data-copy-availability-message>Copy message</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>WorkSmartOS</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:contact@worksmartos.com">contact@worksmartos.com</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="team-availability-tool.js"></script>
+  </body>
+</html>

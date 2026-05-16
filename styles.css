@@ -1159,6 +1159,235 @@ h1 {
   border-top: 1px solid #e1e4ea;
 }
 
+.availability-page {
+  min-height: calc(100vh - 64px);
+  padding-bottom: 96px;
+}
+
+.availability-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+}
+
+.availability-step {
+  display: none;
+  padding: 34px;
+}
+
+.availability-step.is-active {
+  display: grid;
+  gap: 28px;
+}
+
+.availability-step > .studio-panel-heading {
+  max-width: 760px;
+}
+
+.availability-card {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.availability-card label,
+.availability-message-panel label {
+  display: grid;
+  gap: 10px;
+}
+
+.availability-card label span,
+.availability-message-panel label span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.availability-card input,
+.availability-card textarea,
+.availability-table input,
+.availability-message-panel textarea,
+.availability-row-tools input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.availability-card input,
+.availability-table input,
+.availability-row-tools input {
+  height: 42px;
+  padding: 0 12px;
+}
+
+.availability-card textarea {
+  min-height: 118px;
+  padding: 12px;
+  resize: vertical;
+}
+
+.availability-full,
+.availability-card .studio-actions {
+  grid-column: 1 / -1;
+}
+
+.availability-status {
+  color: #e30000;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.availability-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e1e4ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.availability-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+}
+
+.availability-table th {
+  padding: 15px 12px;
+  border-bottom: 1px solid #e1e4ea;
+  border-left: 1px solid #e1e4ea;
+  background: #fafafa;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  vertical-align: top;
+}
+
+.availability-table th:first-child,
+.availability-table td:first-child {
+  border-left: 0;
+}
+
+.availability-table td {
+  padding: 12px;
+  border-top: 1px solid #e1e4ea;
+  border-left: 1px solid #e1e4ea;
+  vertical-align: middle;
+}
+
+.availability-table tbody tr:first-child td {
+  border-top: 0;
+}
+
+.availability-check-cell {
+  min-width: 150px;
+}
+
+.availability-check-cell label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid #e1e4ea;
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.availability-check-cell input {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  accent-color: var(--accent);
+}
+
+.availability-row-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.availability-row-tools .add-row-count {
+  width: 70px;
+  text-align: center;
+}
+
+.availability-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 28px;
+}
+
+.availability-results {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.availability-result-card {
+  display: grid;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #e1e4ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.availability-result-card.is-best {
+  border-color: rgba(0, 113, 227, 0.45);
+  background: rgba(0, 113, 227, 0.045);
+}
+
+.availability-result-card span {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.availability-result-card h3 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.12;
+  font-weight: 500;
+}
+
+.availability-result-card strong {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.availability-result-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.availability-message-panel {
+  display: grid;
+  gap: 14px;
+  max-width: 720px;
+}
+
+.availability-message-panel textarea {
+  min-height: 220px;
+  padding: 12px;
+  resize: vertical;
+}
+
 @media (max-width: 1100px) {
   .meeting-studio-shell {
     grid-template-columns: 1fr;
@@ -1180,14 +1409,26 @@ h1 {
 
   .meeting-mode-panel,
   .meeting-form-grid,
-  .meeting-options {
+  .meeting-options,
+  .availability-card,
+  .availability-results {
     grid-template-columns: 1fr;
   }
 
   .meeting-builder,
   .meeting-output,
-  .booking-card {
+  .booking-card,
+  .availability-step {
     padding: 22px;
+  }
+
+  .availability-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .availability-actions .button {
+    width: 100%;
   }
 }
 
