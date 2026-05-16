@@ -3967,6 +3967,13 @@ body[data-studio-theme="dark"] .availability-check-cell label {
   color: var(--muted);
 }
 
+body[data-studio-theme="dark"] .template-help summary,
+body[data-studio-theme="dark"] .template-help p {
+  border-color: #34363d;
+  background: #202124;
+  color: var(--muted);
+}
+
 body[data-studio-theme="dark"] .send-center-heading h3,
 body[data-studio-theme="dark"] .send-center-grid article strong,
 body[data-studio-theme="dark"] .email-quality-check strong {
@@ -4394,11 +4401,79 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 }
 
 .template-guide .studio-panel-heading h2 {
+  margin: 0;
   font-size: 24px;
 }
 
 .template-guide .studio-panel-heading p {
   max-width: 320px;
+}
+
+.template-title-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.template-help {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.template-help summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  list-style: none;
+}
+
+.template-help summary::-webkit-details-marker {
+  display: none;
+}
+
+.template-help p {
+  position: absolute;
+  z-index: 5;
+  top: 28px;
+  left: 50%;
+  display: none;
+  width: 260px;
+  max-width: 260px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--muted);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.12);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  transform: translateX(-50%);
+}
+
+.template-help[open] p,
+.template-help:hover p,
+.template-help:focus-within p {
+  display: block;
+}
+
+.template-guide .template-guide-summary {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
 }
 
 .template-guide label {
