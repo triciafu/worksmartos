@@ -85,7 +85,7 @@ const studioVariant = document.body.dataset.studioVariant || "creative-approval"
 const isBlankSlateStudio = studioVariant === "blank";
 const autosaveVersions = {
   blank: "v2",
-  "event-invite": "v3",
+  "event-invite": "v4",
 };
 const studioFileSlugs = {
   blank: "custom-email-template",
