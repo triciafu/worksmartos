@@ -1411,6 +1411,10 @@ h1 {
   gap: 16px;
 }
 
+.suite-studio-grid {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
 .suite-studio-grid article,
 .suite-flow-grid article {
   display: grid;

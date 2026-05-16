@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Create personalized event invitation emails for multiple guests from one template."
+    />
+    <title>Event Invite Email Studio | WorkSmartOS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-studio-variant="event-invite">
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="WorkSmartOS home">
+          <span>WorkSmartOS</span>
+          <span class="brand-beta">Beta</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-links" data-nav>
+          <a href="index.html#tools">Explore tools</a>
+          <a href="index.html#enterprise">Enterprise Solutions</a>
+          <button class="auth-nav-link" type="button" data-auth-open>Login</button>
+          <button class="auth-nav-link is-hidden" type="button" data-auth-signout>Sign out</button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="studio-page">
+      <section class="studio-hero compact">
+        <p class="eyebrow">Event Invite Email Studio</p>
+        <div class="studio-theme-control" role="group" aria-label="Studio theme">
+          <button type="button" data-studio-theme="light">Light</button>
+          <button class="is-active" type="button" data-studio-theme="white">White</button>
+          <button type="button" data-studio-theme="dark">Dark</button>
+        </div>
+      </section>
+
+      <nav class="studio-steps" aria-label="Event Invite Email Studio steps">
+        <button class="is-active" type="button" data-step-button="0"><span>1. Write template</span></button>
+        <button type="button" data-step-button="1"><span>2. Add recipients</span></button>
+        <button type="button" data-step-button="2"><span>3. Review emails</span></button>
+      </nav>
+
+      <section class="studio-shell stepper-shell" aria-label="Event invite email generator" data-stepper>
+        <div class="stepper-track" data-stepper-track>
+        <form class="studio-controls studio-step template-step" data-email-studio-form data-step-panel="0">
+          <div class="template-card studio-panel">
+            <div class="template-field">
+              <span>Subject</span>
+              <div class="token-editor subject-editor" contenteditable="true" data-subject-template role="textbox" aria-label="Subject">You're invited: <span class="merge-token" contenteditable="false" data-token="{{event_name}}" data-label="Event name">Event name<button type="button" data-remove-token aria-label="Remove Event name">×</button></span></div>
+            </div>
+            <div class="rich-field">
+              <span>Email</span>
+              <div class="rich-editor" contenteditable="true" data-body-template role="textbox" aria-multiline="true">
+                <p>Hi <span class="merge-token" contenteditable="false" data-token="{{contact_firstname}}" data-label="Recipient first name">Recipient first name<button type="button" data-remove-token aria-label="Remove Recipient first name">×</button></span>,</p>
+                <p><br /></p>
+                <p><br /></p>
+                <p>We'd love to invite you to <span class="merge-token" contenteditable="false" data-token="{{event_name}}" data-label="Event name">Event name<button type="button" data-remove-token aria-label="Remove Event name">×</button></span>.</p>
+                <p><br /></p>
+                <p>Date: <span class="merge-token" contenteditable="false" data-token="{{event_date}}" data-label="Event date">Event date<button type="button" data-remove-token aria-label="Remove Event date">×</button></span></p>
+                <p>Time: <span class="merge-token" contenteditable="false" data-token="{{event_time}}" data-label="Event time">Event time<button type="button" data-remove-token aria-label="Remove Event time">×</button></span></p>
+                <p>Location: <span class="merge-token" contenteditable="false" data-token="{{event_location}}" data-label="Event location">Event location<button type="button" data-remove-token aria-label="Remove Event location">×</button></span></p>
+                <p><br /></p>
+                <p>Please RSVP here:</p>
+                <p><span class="merge-token" contenteditable="false" data-token="{{rsvp_link}}" data-label="RSVP link">RSVP link<button type="button" data-remove-token aria-label="Remove RSVP link">×</button></span></p>
+                <p><br /></p>
+                <p>Thank you,</p>
+              </div>
+            </div>
+            <label class="sender-name-field">
+              <span>Sender name</span>
+              <input type="text" name="sender_name" value="" />
+            </label>
+          </div>
+
+          <aside class="template-guide" aria-label="Template instructions and placeholders">
+            <div class="studio-panel-heading">
+              <span>Step 1</span>
+              <h2>Create your event invitation template</h2>
+              <p>Personalize each invitation with guest-specific details like event name, date, time, location, and RSVP link.</p>
+            </div>
+            <div class="token-row" aria-label="Available merge fields" data-token-list>
+              <span data-token="{{contact_firstname}}" data-label="Recipient first name">Recipient first name<button type="button" data-remove-placeholder aria-label="Remove Recipient first name">×</button></span>
+              <span data-token="{{event_name}}" data-label="Event name">Event name<button type="button" data-remove-placeholder aria-label="Remove Event name">×</button></span>
+              <span data-token="{{event_date}}" data-label="Event date">Event date<button type="button" data-remove-placeholder aria-label="Remove Event date">×</button></span>
+              <span data-token="{{event_time}}" data-label="Event time">Event time<button type="button" data-remove-placeholder aria-label="Remove Event time">×</button></span>
+              <span data-token="{{event_location}}" data-label="Event location">Event location<button type="button" data-remove-placeholder aria-label="Remove Event location">×</button></span>
+              <span data-token="{{rsvp_link}}" data-label="RSVP link">RSVP link<button type="button" data-remove-placeholder aria-label="Remove RSVP link">×</button></span>
+            </div>
+            <button class="add-placeholder" type="button" data-add-placeholder><span>+</span>Add a new placeholder</button>
+          </aside>
+
+          <div class="studio-actions template-next-action">
+            <button class="button primary" type="button" data-next-step>Add recipients</button>
+            <div class="template-save-tools" aria-label="Save template">
+              <button class="add-placeholder template-save-toggle" type="button" data-template-save-toggle aria-expanded="false" aria-controls="template-save-panel"><span>+</span>Save template</button>
+              <div class="template-save-panel is-hidden" id="template-save-panel" data-template-save-panel>
+                <input type="text" data-template-name placeholder="Name this template" aria-label="Template name" />
+                <button class="button secondary template-save-submit" type="button" data-save-template>Save</button>
+                <select class="is-hidden" data-template-select aria-hidden="true" tabindex="-1">
+                  <option value="">No saved templates</option>
+                </select>
+                <p class="template-save-status" data-template-status aria-live="polite"></p>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <section class="studio-panel recipient-panel studio-step" data-step-panel="1">
+          <div class="studio-panel-heading">
+            <span>Step 2</span>
+            <h2>Add recipients and details for each email</h2>
+          </div>
+          <div class="spreadsheet-tools" aria-label="Spreadsheet recipient import options">
+            <div>
+              <strong>Import data or enter details manually below</strong>
+              <p>Download a template based on your fields, fill out as many rows as you need, then upload.</p>
+            </div>
+            <div class="spreadsheet-actions">
+              <button class="button secondary" type="button" data-download-template>Download template</button>
+              <label class="button secondary upload-button">
+                Upload template
+                <input type="file" accept=".csv,text/csv" data-upload-csv />
+              </label>
+            </div>
+            <p class="import-status" data-import-status aria-live="polite"></p>
+          </div>
+          <div class="recipient-sheet">
+            <div class="recipient-sheet-header" aria-hidden="true">
+              <span>Email no.</span>
+              <span>Actions</span>
+              <span>Email address(es)</span>
+              <span>Recipient first name</span>
+              <span>Event name</span>
+              <span>Event date</span>
+              <span>Event time</span>
+              <span>Event location</span>
+              <span>RSVP link</span>
+            </div>
+            <div class="recipient-card-list" data-recipient-body>
+            <article class="recipient-card">
+              <div class="recipient-card-top">
+                <strong>1</strong>
+                <button class="table-button" type="button" data-remove-row>Remove</button>
+              </div>
+              <div class="recipient-address-stack" data-address-stack>
+                <div class="recipient-address-row type-to">
+                  <div class="address-field-static">
+                    <input type="hidden" name="recipient_type" value="To" />
+                  </div>
+                  <label>
+                    <span>Email address(es)</span>
+                    <div class="email-chip-input" data-email-chip-input>
+                      <input name="recipient_email_0" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <div class="address-field-actions">
+                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
+                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Bcc"><span>+</span>Add bcc:</button>
+                <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
+              </div>
+              <div class="recipient-detail-grid">
+                <label><span>Recipient first name</span><input name="contact_firstname" value="" /></label>
+                <label><span>Event name</span><input name="event_name" value="" /></label>
+                <label><span>Event date</span><input name="event_date" value="" /></label>
+                <label><span>Event time</span><input name="event_time" value="" /></label>
+                <label><span>Event location</span><input name="event_location" value="" /></label>
+                <label><span>RSVP link</span><input name="rsvp_link" value="" /></label>
+              </div>
+            </article>
+            <article class="recipient-card">
+              <div class="recipient-card-top">
+                <strong>2</strong>
+                <button class="table-button" type="button" data-remove-row>Remove</button>
+              </div>
+              <div class="recipient-address-stack" data-address-stack>
+                <div class="recipient-address-row type-to">
+                  <div class="address-field-static">
+                    <input type="hidden" name="recipient_type" value="To" />
+                  </div>
+                  <label>
+                    <span>Email address(es)</span>
+                    <div class="email-chip-input" data-email-chip-input>
+                      <input name="recipient_email_1" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <div class="address-field-actions">
+                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
+                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Bcc"><span>+</span>Add bcc:</button>
+                <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
+              </div>
+              <div class="recipient-detail-grid">
+                <label><span>Recipient first name</span><input name="contact_firstname" value="" /></label>
+                <label><span>Event name</span><input name="event_name" value="" /></label>
+                <label><span>Event date</span><input name="event_date" value="" /></label>
+                <label><span>Event time</span><input name="event_time" value="" /></label>
+                <label><span>Event location</span><input name="event_location" value="" /></label>
+                <label><span>RSVP link</span><input name="rsvp_link" value="" /></label>
+              </div>
+            </article>
+            </div>
+          </div>
+          <div class="add-email-row">
+            <button class="add-placeholder add-email-link" type="button" data-add-row><span>+</span>Add</button>
+            <input class="add-row-count" type="number" min="1" max="50" step="1" inputmode="numeric" aria-label="Number of rows to add" data-add-row-count />
+            <span>rows</span>
+          </div>
+          <div class="studio-actions">
+            <button class="button secondary" type="button" data-prev-step>Back</button>
+            <button class="button primary" type="button" data-generate-step>Review emails</button>
+          </div>
+        </section>
+
+        <section class="studio-output studio-step" aria-live="polite" data-step-panel="2">
+        <div class="studio-output-heading">
+          <div class="studio-panel-heading">
+            <span>Step 3</span>
+            <h2 data-output-count>Review and send emails</h2>
+            <p class="studio-output-note">Open a draft in your preferred email client to send.</p>
+          </div>
+          <div class="studio-actions compact">
+            <button class="button secondary" type="button" data-prev-step>Back</button>
+            <button class="button secondary" type="button" data-export-csv disabled>Export CSV</button>
+          </div>
+        </div>
+        <div class="email-preview-grid" data-email-output>
+          <article class="empty-state">
+            <h3>Add at least one recipient to generate an email.</h3>
+          </article>
+        </div>
+        </section>
+        </div>
+      </section>
+    </main>
+
+    <div class="auth-modal is-hidden" data-auth-modal aria-hidden="true">
+      <div class="auth-modal-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+        <button class="auth-modal-close" type="button" data-auth-close aria-label="Close sign in">×</button>
+        <p class="eyebrow">Saved templates</p>
+        <h2 id="auth-title">Sign in to save templates</h2>
+        <p>Use your work account to save email templates and come back to them later.</p>
+        <div class="auth-provider-list">
+          <button class="button secondary" type="button" data-auth-provider="google">Continue with Google</button>
+          <button class="button secondary" type="button" data-auth-provider="microsoft">Continue with Microsoft</button>
+          <button class="button secondary" type="button" data-auth-provider="apple">Continue with Apple</button>
+        </div>
+        <form class="email-link-form" data-auth-email-form>
+          <label>
+            <span>Email link</span>
+            <input type="email" data-auth-email placeholder="you@company.com" autocomplete="email" />
+          </label>
+          <button class="button secondary" type="submit">Send sign-in link</button>
+        </form>
+        <p class="auth-message" data-auth-message aria-live="polite"></p>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <span>WorkSmartOS</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:contact@worksmartos.com">contact@worksmartos.com</a>
+      </div>
+    </footer>
+
+    <script src="email-studio.js"></script>
+    <script type="module" src="firebase-worksmartos.js"></script>
+  </body>
+</html>

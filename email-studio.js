@@ -83,8 +83,15 @@ let generatedEmails = [];
 
 const studioVariant = document.body.dataset.studioVariant || "creative-approval";
 const isBlankSlateStudio = studioVariant === "blank";
+const studioFileSlugs = {
+  blank: "custom-email-template",
+  "event-invite": "event-invite-email-template",
+  "sales-outreach": "sales-outreach-email-template",
+  "creative-approval": "creative-approval-email-template",
+};
 const defaultFieldSets = {
   blank: ["contact_firstname"],
+  "event-invite": ["contact_firstname", "event_name", "event_date", "event_time", "event_location", "rsvp_link"],
   "sales-outreach": ["contact_firstname", "client_name", "recipient_role", "pain_point", "offer", "scheduling_link"],
   "creative-approval": ["client_name", "contact_firstname", "campaign_name", "deadline", "approval_link"],
 };
@@ -140,6 +147,7 @@ if (templateSaveToggle && templateSavePanel) {
 }
 
 const defaultFields = defaultFieldSets[studioVariant] || defaultFieldSets["creative-approval"];
+const urlFields = new Set(["rsvp_link", "scheduling_link"]);
 
 const fieldLabels = {
   client_name: "Company name",
@@ -147,6 +155,11 @@ const fieldLabels = {
   campaign_name: "Campaign",
   deadline: "Deadline",
   approval_link: "Creative link",
+  event_name: "Event name",
+  event_date: "Event date",
+  event_time: "Event time",
+  event_location: "Event location",
+  rsvp_link: "RSVP link",
   recipient_role: "Role",
   pain_point: "Pain point",
   offer: "Offer",
@@ -182,6 +195,11 @@ function getRecipientFieldOrder() {
     "pain_point",
     "offer",
     "scheduling_link",
+    "event_name",
+    "event_date",
+    "event_time",
+    "event_location",
+    "rsvp_link",
     "campaign_name",
     "deadline",
     "approval_link",
@@ -549,6 +567,11 @@ function clearResolvedRecipientError(input) {
     return;
   }
 
+  if (urlFields.has(input.name)) {
+    setInputValidity(input, Boolean(input.value.trim()) && !hasLinkDomain(input.value));
+    return;
+  }
+
   if (input.value.trim()) {
     setInputValidity(input, false);
     input.closest("[data-creative-link-field]")?.classList.toggle(
@@ -634,7 +657,7 @@ function downloadCsvTemplate() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "worksmartos-approval-email-template.csv";
+  link.download = `worksmartos-${studioFileSlugs[studioVariant] || "email-template"}.csv`;
   link.click();
   URL.revokeObjectURL(url);
 }
@@ -1156,10 +1179,11 @@ function renderEmails(emails) {
   emails.forEach((email, index) => {
     const card = document.createElement("article");
     card.className = "email-preview-card";
+    const recipientTitle = email.client_name || email.event_name || email.contact_firstname || "Untitled recipient";
     card.innerHTML = `
       <div class="email-preview-top">
         <span>${String(index + 1).padStart(2, "0")}</span>
-        <strong>${escapeHtml(email.client_name || "Untitled recipient")}</strong>
+        <strong>${escapeHtml(recipientTitle)}</strong>
       </div>
       <div class="email-address-preview">
         ${addressPreviewHtml(email.addresses)}
@@ -1244,7 +1268,7 @@ function exportCsv() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "approval-emails.csv";
+  link.download = `${studioFileSlugs[studioVariant] || "batch-emails"}.csv`;
   link.click();
   URL.revokeObjectURL(url);
 }
@@ -1634,10 +1658,16 @@ function validateRecipientRows() {
       }
 
       const input = card.querySelector(`[name="${field}"]`);
-      const isInvalid = !input?.value.trim();
+      const value = input?.value.trim() || "";
+      const isUrlInvalid = Boolean(value) && urlFields.has(field) && !hasLinkDomain(value);
+      const isInvalid = !value || isUrlInvalid;
       setInputValidity(input, isInvalid);
       if (isInvalid) {
-        messages.add(`${fieldLabels[field] || field.replaceAll("_", " ")} is required.`);
+        if (isUrlInvalid) {
+          messages.add(`${fieldLabels[field] || field.replaceAll("_", " ")} must include a domain.`);
+        } else {
+          messages.add(`${fieldLabels[field] || field.replaceAll("_", " ")} is required.`);
+        }
         firstInvalidInput = firstInvalidInput || input;
       }
     });
