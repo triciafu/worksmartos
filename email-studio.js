@@ -913,6 +913,140 @@ function importCsv(text) {
   scheduleAutosave();
 }
 
+function parsePastedRows(text) {
+  const raw = String(text || "").replace(/\r\n?/g, "\n").trimEnd();
+  if (!raw.trim()) {
+    return [];
+  }
+
+  if (raw.includes("\t")) {
+    return raw
+      .split("\n")
+      .map((row) => row.split("\t").map((cell) => cell.trim()))
+      .filter((row) => row.some(Boolean));
+  }
+
+  return parseCsv(raw);
+}
+
+function pasteColumns() {
+  return [
+    { type: "email" },
+    ...getRecipientFieldOrder().flatMap((field) => {
+      if (field === "approval_link") {
+        return [{ name: "approval_link_name" }, { name: "approval_link_url" }];
+      }
+
+      return [{ name: field }];
+    }),
+  ];
+}
+
+function pasteColumnIndexFromTarget(target) {
+  if (target.matches(emailInputSelector()) || target.closest("[data-email-chip-input]")) {
+    return 0;
+  }
+
+  const name = target.name;
+  if (!name) {
+    return -1;
+  }
+
+  return pasteColumns().findIndex((column) => column.name === name);
+}
+
+function ensureRecipientRowCount(count) {
+  const currentCount = recipientBody.querySelectorAll(".recipient-card").length;
+  if (currentCount >= count) {
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  for (let index = currentCount; index < count; index += 1) {
+    fragment.appendChild(rowTemplate());
+  }
+  recipientBody.appendChild(fragment);
+}
+
+function setEmailChipValues(container, value) {
+  if (!container) {
+    return;
+  }
+
+  const input = container.querySelector(emailInputSelector());
+  container.querySelectorAll(".email-address-chip").forEach((chip) => chip.remove());
+  splitEmailList(value).forEach((email) => {
+    container.insertBefore(createEmailChip(email), input);
+  });
+
+  if (input) {
+    input.value = "";
+    clearResolvedRecipientError(input);
+  }
+  updateEmailChipState(container);
+}
+
+function setRecipientCellValue(card, column, value) {
+  if (!card || !column) {
+    return;
+  }
+
+  if (column.type === "email") {
+    setEmailChipValues(card.querySelector(".recipient-address-row.type-to [data-email-chip-input]"), value);
+    return;
+  }
+
+  const input = card.querySelector(`[name="${column.name}"]`);
+  if (input) {
+    input.value = value;
+    clearResolvedRecipientError(input);
+  }
+}
+
+function pasteSpreadsheetRows(event) {
+  const target = event.target;
+  if (!(target instanceof HTMLElement) || !target.matches("input")) {
+    return false;
+  }
+
+  const text = event.clipboardData?.getData("text/plain") || "";
+  if (!text.includes("\t") && !text.includes("\n")) {
+    return false;
+  }
+
+  const rows = parsePastedRows(text);
+  const startColumnIndex = pasteColumnIndexFromTarget(target);
+  const startCard = target.closest(".recipient-card");
+  const cards = Array.from(recipientBody.querySelectorAll(".recipient-card"));
+  const startRowIndex = cards.indexOf(startCard);
+  const columns = pasteColumns();
+
+  if (!rows.length || startColumnIndex < 0 || startRowIndex < 0) {
+    return false;
+  }
+
+  event.preventDefault();
+  ensureRecipientRowCount(startRowIndex + rows.length);
+
+  const updatedCards = Array.from(recipientBody.querySelectorAll(".recipient-card"));
+  rows.forEach((row, rowOffset) => {
+    const card = updatedCards[startRowIndex + rowOffset];
+    row.forEach((value, columnOffset) => {
+      const column = columns[startColumnIndex + columnOffset];
+      if (column) {
+        setRecipientCellValue(card, column, value);
+      }
+    });
+  });
+
+  renumberRecipients();
+  document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
+  updateAllEmailChipStates();
+  setImportStatus(`${rows.length} ${rows.length === 1 ? "row" : "rows"} pasted into Step 2.`, "success");
+  scheduleAutosave();
+  return true;
+}
+
 function getRecipients() {
   return Array.from(recipientBody.querySelectorAll(".recipient-card"))
     .map((row) => {
@@ -1735,6 +1869,10 @@ recipientBody.addEventListener("focusin", (event) => {
   if (emailChipContainer) {
     emailChipContainer.classList.add("is-expanded");
   }
+});
+
+recipientBody.addEventListener("paste", (event) => {
+  pasteSpreadsheetRows(event);
 });
 
 recipientBody.addEventListener("keydown", (event) => {
