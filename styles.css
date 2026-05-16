@@ -4488,7 +4488,6 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 .template-generate-button {
   justify-self: start;
   min-height: 38px;
-  margin-right: 18px;
   padding: 0 18px;
   font-size: 13px;
 }
@@ -4497,7 +4496,8 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
+  column-gap: 32px;
+  row-gap: 32px;
 }
 
 .template-blank-button {
