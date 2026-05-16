@@ -820,6 +820,15 @@ function getEmailChipValues(container) {
   return [...chips, ...splitEmailList(inputValue)].filter(Boolean);
 }
 
+function getInvalidEmailValues(container) {
+  return getEmailChipValues(container).filter((email) => !looksCompleteEmail(email));
+}
+
+function hasOnlyCompleteEmails(container) {
+  const values = getEmailChipValues(container);
+  return values.length > 0 && values.every(looksCompleteEmail);
+}
+
 function createEmailChip(email) {
   const chip = document.createElement("span");
   chip.className = "email-address-chip";
@@ -837,8 +846,10 @@ function createEmailChip(email) {
 
 function commitEmailChips(input) {
   const container = input.closest("[data-email-chip-input]");
-  const emails = splitEmailList(input.value);
-  if (!container || !emails.length) {
+  const values = splitEmailList(input.value);
+  const emails = values.filter(looksCompleteEmail);
+  const incomplete = values.filter((email) => !looksCompleteEmail(email));
+  if (!container || !values.length) {
     updateEmailChipState(container);
     return;
   }
@@ -850,9 +861,11 @@ function commitEmailChips(input) {
       existing.add(email);
     }
   });
-  input.value = "";
+  input.value = incomplete.join(", ");
   updateEmailChipState(container);
-  clearResolvedRecipientError(input);
+  if (!incomplete.length) {
+    clearResolvedRecipientError(input);
+  }
 }
 
 function clearResolvedRecipientError(input) {
@@ -862,7 +875,7 @@ function clearResolvedRecipientError(input) {
 
   if (input.matches(emailInputSelector())) {
     const container = input.closest("[data-email-chip-input]");
-    if (getEmailChipValues(container).length) {
+    if (hasOnlyCompleteEmails(container)) {
       setInputValidity(input, false);
     }
     return;
@@ -2393,11 +2406,27 @@ function validateRecipientRows() {
     const emailInput = card.querySelector(".recipient-address-row.type-to [data-recipient-email-input]");
     const emailChipContainer = emailInput?.closest("[data-email-chip-input]");
     const hasEmail = Boolean(emailChipContainer) && getEmailChipValues(emailChipContainer).length > 0;
-    setInputValidity(emailInput, !hasEmail);
+    const toInvalidEmails = getInvalidEmailValues(emailChipContainer);
+    setInputValidity(emailInput, !hasEmail || toInvalidEmails.length > 0);
     if (!hasEmail) {
       messages.add("Email address(es) is required.");
       firstInvalidInput = firstInvalidInput || emailInput;
     }
+    if (toInvalidEmails.length > 0) {
+      messages.add("Email address(es) must include @ and a domain.");
+      firstInvalidInput = firstInvalidInput || emailInput;
+    }
+
+    card.querySelectorAll(".recipient-address-row.is-extra").forEach((addressRow) => {
+      const input = addressRow.querySelector(emailInputSelector());
+      const container = addressRow.querySelector("[data-email-chip-input]");
+      const invalidEmails = getInvalidEmailValues(container);
+      setInputValidity(input, invalidEmails.length > 0);
+      if (invalidEmails.length > 0) {
+        messages.add("Cc and Bcc email address(es) must include @ and a domain.");
+        firstInvalidInput = firstInvalidInput || input;
+      }
+    });
 
     getRecipientFieldOrder().forEach((field) => {
       if (field === "approval_link") {
