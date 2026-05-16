@@ -4540,7 +4540,7 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: 8px;
+  column-gap: 16px;
   row-gap: 8px;
 }
 
