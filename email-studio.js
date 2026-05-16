@@ -1138,7 +1138,7 @@ function inferTemplatePreset(prompt) {
 
 function presetStatusLabel(preset) {
   const labels = {
-    blank: "Blank template ready.",
+    blank: "",
     "sales-outreach": "Sales outreach template created.",
     "creative-approval": "Creative approval template created.",
     "event-invite": "Event invitation template created.",
@@ -1151,7 +1151,8 @@ function applyTemplatePreset(preset, options = {}) {
   activeTemplatePreset = nextPreset;
   loadTemplateState(templateStateFromPreset(nextPreset));
   if (templateStartStatus) {
-    templateStartStatus.textContent = `${presetStatusLabel(nextPreset)} Edit anything before adding recipients.`;
+    const statusLabel = presetStatusLabel(nextPreset);
+    templateStartStatus.textContent = statusLabel ? `${statusLabel} Edit anything before adding recipients.` : "";
   }
   if (options.focusBody) {
     window.requestAnimationFrame(() => bodyTemplateEditor.focus());
