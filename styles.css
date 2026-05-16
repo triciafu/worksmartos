@@ -3267,6 +3267,24 @@ iframe[style*="position: fixed"] {
   justify-content: flex-end;
 }
 
+.recipient-history-actions {
+  display: inline-flex;
+  gap: 8px;
+  margin-right: 4px;
+}
+
+.recipient-history-actions .button.secondary {
+  min-width: 72px;
+  height: 38px;
+  padding: 0 16px;
+  font-size: 13px;
+}
+
+.recipient-history-actions .button.secondary:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
 .spreadsheet-actions .button.secondary {
   min-height: 44px;
   padding: 0 20px;
@@ -4431,6 +4449,7 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
   margin-top: 3px;
   border: 1px solid var(--line);
   border-radius: 50%;
+  background: #FAFAFA;
   color: var(--muted);
   font-size: 12px;
   font-weight: 500;

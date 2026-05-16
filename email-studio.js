@@ -65,6 +65,7 @@ const subjectTemplateEditor = document.querySelector("[data-subject-template]");
 const downloadTemplateButton = document.querySelector("[data-download-template]");
 const uploadCsvInput = document.querySelector("[data-upload-csv]");
 const importStatus = document.querySelector("[data-import-status]");
+const spreadsheetActions = document.querySelector(".spreadsheet-actions");
 const templateSaveToggle = document.querySelector("[data-template-save-toggle]");
 const templateSavePanel = document.querySelector("[data-template-save-panel]");
 const templateNameInput = document.querySelector("[data-template-name]");
@@ -82,6 +83,11 @@ let savedTemplateRange = null;
 let emailInputCounter = 1;
 let autosaveTimer = null;
 let isRestoringAutosave = false;
+let isRestoringRecipientHistory = false;
+let recipientHistory = [];
+let recipientHistoryIndex = -1;
+let recipientUndoButton = null;
+let recipientRedoButton = null;
 
 let generatedEmails = [];
 let emailWorkflowState = [];
@@ -305,6 +311,98 @@ function recipientDrafts() {
   return Array.from(recipientBody.querySelectorAll(".recipient-card")).map(recipientDraftFromCard);
 }
 
+function recipientSnapshot() {
+  return JSON.stringify(recipientDrafts());
+}
+
+function updateRecipientHistoryButtons() {
+  if (recipientUndoButton) {
+    recipientUndoButton.disabled = recipientHistoryIndex <= 0;
+  }
+  if (recipientRedoButton) {
+    recipientRedoButton.disabled = recipientHistoryIndex >= recipientHistory.length - 1;
+  }
+}
+
+function recordRecipientHistory() {
+  if (isRestoringRecipientHistory) {
+    return;
+  }
+
+  const snapshot = recipientSnapshot();
+  if (recipientHistory[recipientHistoryIndex] === snapshot) {
+    updateRecipientHistoryButtons();
+    return;
+  }
+
+  recipientHistory = recipientHistory.slice(0, recipientHistoryIndex + 1);
+  recipientHistory.push(snapshot);
+  if (recipientHistory.length > 40) {
+    recipientHistory.shift();
+  }
+  recipientHistoryIndex = recipientHistory.length - 1;
+  updateRecipientHistoryButtons();
+}
+
+function applyRecipientSnapshot(snapshot) {
+  let drafts = [];
+  try {
+    drafts = JSON.parse(snapshot || "[]");
+  } catch {
+    return;
+  }
+
+  isRestoringRecipientHistory = true;
+  recipientBody.replaceChildren(...drafts.map((recipient) => rowTemplate(recipient)));
+  renumberRecipients();
+  document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
+  updateAllEmailChipStates();
+  setImportStatus("");
+  isRestoringRecipientHistory = false;
+  scheduleAutosave();
+}
+
+function undoRecipientChange() {
+  if (recipientHistoryIndex <= 0) {
+    return;
+  }
+
+  recipientHistoryIndex -= 1;
+  applyRecipientSnapshot(recipientHistory[recipientHistoryIndex]);
+  updateRecipientHistoryButtons();
+}
+
+function redoRecipientChange() {
+  if (recipientHistoryIndex >= recipientHistory.length - 1) {
+    return;
+  }
+
+  recipientHistoryIndex += 1;
+  applyRecipientSnapshot(recipientHistory[recipientHistoryIndex]);
+  updateRecipientHistoryButtons();
+}
+
+function setupRecipientHistoryControls() {
+  if (!spreadsheetActions || recipientUndoButton || recipientRedoButton) {
+    return;
+  }
+
+  const controls = document.createElement("div");
+  controls.className = "recipient-history-actions";
+  controls.setAttribute("aria-label", "Step 2 undo and redo");
+  controls.innerHTML = `
+    <button class="button secondary" type="button" data-recipient-undo disabled>Undo</button>
+    <button class="button secondary" type="button" data-recipient-redo disabled>Redo</button>
+  `;
+  spreadsheetActions.prepend(controls);
+
+  recipientUndoButton = controls.querySelector("[data-recipient-undo]");
+  recipientRedoButton = controls.querySelector("[data-recipient-redo]");
+  recipientUndoButton.addEventListener("click", undoRecipientChange);
+  recipientRedoButton.addEventListener("click", redoRecipientChange);
+  updateRecipientHistoryButtons();
+}
+
 function recipientFieldColumnTemplates(values = {}) {
   let sheetColumn = 4;
   return getRecipientFieldOrder().map((field) => {
@@ -376,6 +474,7 @@ function syncRecipientDetailFieldOrder() {
     const values = recipientValuesFromCard(card);
     grid.innerHTML = recipientFieldColumnTemplates(values);
   });
+  recordRecipientHistory();
 }
 
 function emailInputName() {
@@ -903,6 +1002,7 @@ function importCsv(text) {
     return;
   }
 
+  recordRecipientHistory();
   const [headers, ...dataRows] = rows;
   const cards = dataRows.map((row) => rowTemplate(valuesFromCsvRow(headers, row)));
   recipientBody.replaceChildren(...cards);
@@ -911,6 +1011,7 @@ function importCsv(text) {
   updateAllEmailChipStates();
   setImportStatus(`${cards.length} ${cards.length === 1 ? "email" : "emails"} imported from CSV.`, "success");
   scheduleAutosave();
+  recordRecipientHistory();
 }
 
 function parsePastedRows(text) {
@@ -929,30 +1030,35 @@ function parsePastedRows(text) {
   return parseCsv(raw);
 }
 
-function pasteColumns() {
-  return [
-    { type: "email" },
-    ...getRecipientFieldOrder().flatMap((field) => {
+function addressTypeFromTarget(target) {
+  const row = target.closest(".recipient-address-row");
+  return row?.querySelector('[name="recipient_type"]')?.value || "To";
+}
+
+function emailColumnForType(type) {
+  return { type: "email", addressType: type };
+}
+
+function detailPasteColumns() {
+  return getRecipientFieldOrder().flatMap((field) => {
       if (field === "approval_link") {
         return [{ name: "approval_link_name" }, { name: "approval_link_url" }];
       }
 
       return [{ name: field }];
-    }),
-  ];
+    });
 }
 
-function pasteColumnIndexFromTarget(target) {
-  if (target.matches(emailInputSelector()) || target.closest("[data-email-chip-input]")) {
-    return 0;
+function pasteColumns(startType = "To") {
+  if (startType === "Cc") {
+    return [emailColumnForType("Cc"), emailColumnForType("Bcc"), ...detailPasteColumns()];
   }
 
-  const name = target.name;
-  if (!name) {
-    return -1;
+  if (startType === "Bcc") {
+    return [emailColumnForType("Bcc"), ...detailPasteColumns()];
   }
 
-  return pasteColumns().findIndex((column) => column.name === name);
+  return [emailColumnForType("To"), ...detailPasteColumns()];
 }
 
 function ensureRecipientRowCount(count) {
@@ -986,13 +1092,34 @@ function setEmailChipValues(container, value) {
   updateEmailChipState(container);
 }
 
+function ensureAddressRow(card, type) {
+  const existing = Array.from(card.querySelectorAll(".recipient-address-row")).find((row) => (
+    row.querySelector('[name="recipient_type"]')?.value === type
+  ));
+  if (existing) {
+    return existing;
+  }
+
+  const stack = card.querySelector("[data-address-stack]");
+  if (!stack) {
+    return null;
+  }
+
+  stack.insertAdjacentHTML("beforeend", addressRowTemplate({}, type, true));
+  updateAddressRemoveButtons(card);
+  return Array.from(card.querySelectorAll(".recipient-address-row")).find((row) => (
+    row.querySelector('[name="recipient_type"]')?.value === type
+  ));
+}
+
 function setRecipientCellValue(card, column, value) {
   if (!card || !column) {
     return;
   }
 
   if (column.type === "email") {
-    setEmailChipValues(card.querySelector(".recipient-address-row.type-to [data-email-chip-input]"), value);
+    const addressRow = ensureAddressRow(card, column.addressType || "To");
+    setEmailChipValues(addressRow?.querySelector("[data-email-chip-input]"), value);
     return;
   }
 
@@ -1001,6 +1128,36 @@ function setRecipientCellValue(card, column, value) {
     input.value = value;
     clearResolvedRecipientError(input);
   }
+}
+
+function pasteColumnFromHeader(header) {
+  const normalized = normalizeHeader(header);
+  if (["to", "email", "email_address", "email_addresses", "recipient_email"].includes(normalized)) {
+    return emailColumnForType("To");
+  }
+  if (["cc", "copy"].includes(normalized)) {
+    return emailColumnForType("Cc");
+  }
+  if (["bcc", "blind_copy"].includes(normalized)) {
+    return emailColumnForType("Bcc");
+  }
+  if (["creative_link_name", "approval_link_name"].includes(normalized)) {
+    return { name: "approval_link_name" };
+  }
+  if (["creative_link_url", "approval_link_url", "creative_link", "approval_link"].includes(normalized)) {
+    return { name: "approval_link_url" };
+  }
+
+  const field = getRecipientFieldOrder().find((item) => (
+    normalized === normalizeHeader(item) || normalized === normalizeHeader(fieldHeader(item))
+  ));
+  return field ? { name: field } : null;
+}
+
+function columnsFromPastedHeaders(row) {
+  const columns = row.map(pasteColumnFromHeader);
+  const recognized = columns.filter(Boolean).length;
+  return recognized >= 2 ? columns : null;
 }
 
 function pasteSpreadsheetRows(event) {
@@ -1015,17 +1172,27 @@ function pasteSpreadsheetRows(event) {
   }
 
   const rows = parsePastedRows(text);
-  const startColumnIndex = pasteColumnIndexFromTarget(target);
+  let columns = pasteColumns(addressTypeFromTarget(target));
+  if (rows.length > 1) {
+    const headerColumns = columnsFromPastedHeaders(rows[0]);
+    if (headerColumns) {
+      columns = headerColumns;
+      rows.shift();
+    }
+  }
+  const startColumnIndex = target.matches(emailInputSelector()) || target.closest("[data-email-chip-input]")
+    ? 0
+    : columns.findIndex((column) => column.name === target.name);
   const startCard = target.closest(".recipient-card");
   const cards = Array.from(recipientBody.querySelectorAll(".recipient-card"));
   const startRowIndex = cards.indexOf(startCard);
-  const columns = pasteColumns();
 
   if (!rows.length || startColumnIndex < 0 || startRowIndex < 0) {
     return false;
   }
 
   event.preventDefault();
+  recordRecipientHistory();
   ensureRecipientRowCount(startRowIndex + rows.length);
 
   const updatedCards = Array.from(recipientBody.querySelectorAll(".recipient-card"));
@@ -1044,6 +1211,7 @@ function pasteSpreadsheetRows(event) {
   updateAllEmailChipStates();
   setImportStatus(`${rows.length} ${rows.length === 1 ? "row" : "rows"} pasted into Step 2.`, "success");
   scheduleAutosave();
+  recordRecipientHistory();
   return true;
 }
 
@@ -1797,9 +1965,11 @@ recipientBody.addEventListener("click", (event) => {
   if (event.target.matches("[data-remove-row]")) {
     const rows = recipientBody.querySelectorAll(".recipient-card");
     if (rows.length > 1) {
+      recordRecipientHistory();
       event.target.closest(".recipient-card").remove();
       renumberRecipients();
       scheduleAutosave();
+      recordRecipientHistory();
     }
   }
 
@@ -1809,20 +1979,24 @@ recipientBody.addEventListener("click", (event) => {
     const type = addAddressButton.dataset.addAddressRow || "Cc";
     const alreadyExists = Array.from(card.querySelectorAll('[name="recipient_type"]')).some((input) => input.value === type);
     if (!alreadyExists) {
+      recordRecipientHistory();
       const stack = card.querySelector("[data-address-stack]");
       stack?.insertAdjacentHTML("beforeend", addressRowTemplate({}, type, true));
     }
     updateAddressRemoveButtons(card);
     scheduleAutosave();
+    recordRecipientHistory();
   }
 
   if (event.target.closest("[data-remove-address-row]")) {
     const card = event.target.closest(".recipient-card");
     const rows = card.querySelectorAll(".recipient-address-row");
     if (rows.length > 1) {
+      recordRecipientHistory();
       rows[rows.length - 1].remove();
       updateAddressRemoveButtons(card);
       scheduleAutosave();
+      recordRecipientHistory();
     }
   }
 
@@ -1836,10 +2010,12 @@ recipientBody.addEventListener("click", (event) => {
       return;
     }
 
+    recordRecipientHistory();
     event.target.closest(".email-address-chip")?.remove();
     updateEmailChipState(container);
     container?.querySelector(emailInputSelector())?.focus();
     scheduleAutosave();
+    recordRecipientHistory();
     return;
   }
 
@@ -1865,6 +2041,10 @@ recipientBody.addEventListener("pointerdown", (event) => {
 }, true);
 
 recipientBody.addEventListener("focusin", (event) => {
+  if (event.target.matches("input")) {
+    recordRecipientHistory();
+  }
+
   const emailChipContainer = event.target.closest("[data-email-chip-input]");
   if (emailChipContainer) {
     emailChipContainer.classList.add("is-expanded");
@@ -1915,9 +2095,14 @@ recipientBody.addEventListener("focusout", (event) => {
       }
     });
   }
+
+  if (event.target.matches("input")) {
+    recordRecipientHistory();
+  }
 });
 
 function addRecipientRows(count = 1) {
+  recordRecipientHistory();
   const rowCount = Math.min(Math.max(Number.parseInt(count, 10) || 1, 1), 50);
   const fragment = document.createDocumentFragment();
   for (let index = 0; index < rowCount; index += 1) {
@@ -1929,6 +2114,7 @@ function addRecipientRows(count = 1) {
   document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
   updateAllEmailChipStates();
   scheduleAutosave();
+  recordRecipientHistory();
 }
 
 addRowButton.addEventListener("click", () => {
@@ -2337,12 +2523,14 @@ function renumberRecipients() {
 }
 
 restoreStudioTheme();
+setupRecipientHistoryControls();
 const restoredDraft = restoreAutosaveDraft();
 if (!restoredDraft) {
   renumberRecipients();
   document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
   updateAllEmailChipStates();
 }
+recordRecipientHistory();
 saveEditorHistory();
 goToStep(restoredDraft?.currentStep === 1 ? 1 : 0, { initial: true });
 window.addEventListener("beforeunload", saveAutosaveDraft);
