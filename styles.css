@@ -4165,15 +4165,10 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 }
 
 .studio-step {
-  display: none;
   box-sizing: border-box;
   width: 100%;
   padding: 0 12px;
   overflow: visible;
-}
-
-.studio-step.is-active-step {
-  display: block;
 }
 
 .studio-step.is-entering {
