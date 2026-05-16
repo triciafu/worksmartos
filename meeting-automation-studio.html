@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Plan meeting automation workflows for scheduling, group coordination, rescheduling, time protection, and meeting prep."
+    />
+    <title>Meeting Automation Studio | WorkSmartOS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="WorkSmartOS home">
+          <span>WorkSmartOS</span>
+          <span class="brand-beta">Beta</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-links" data-nav>
+          <a href="index.html#tools">Explore tools</a>
+          <a href="index.html#enterprise">Enterprise Solutions</a>
+          <a href="email-studio.html">Login</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="meeting-studio-page">
+      <section class="meeting-studio-hero">
+        <p class="eyebrow">Meeting Automation Studio</p>
+        <h1>Turn scheduling back-and-forth into a guided workflow.</h1>
+        <p>
+          Choose the meeting problem, add the details, and generate the routing,
+          reminders, prep notes, and follow-up message needed to move it forward.
+        </p>
+      </section>
+
+      <section class="meeting-studio-shell" aria-label="Meeting automation builder">
+        <aside class="meeting-mode-panel" aria-label="Meeting automation modes">
+          <button class="is-active" type="button" data-meeting-mode="schedule">
+            <span>01</span>
+            Schedule a meeting
+          </button>
+          <button type="button" data-meeting-mode="group">
+            <span>02</span>
+            Coordinate with a group
+          </button>
+          <button type="button" data-meeting-mode="follow-up">
+            <span>03</span>
+            Reschedule or follow up
+          </button>
+          <button type="button" data-meeting-mode="protect">
+            <span>04</span>
+            Protect time
+          </button>
+          <button type="button" data-meeting-mode="prep">
+            <span>05</span>
+            Meeting prep
+          </button>
+        </aside>
+
+        <form class="meeting-builder" data-meeting-form>
+          <div class="meeting-panel-heading">
+            <span data-mode-kicker>Schedule a meeting</span>
+            <h2 data-mode-title>Find the best time and send the invite.</h2>
+            <p data-mode-description>
+              Use this for one-on-one or small-group meetings where the goal is to
+              collect availability, select a time, and create the invite.
+            </p>
+          </div>
+
+          <div class="meeting-form-grid">
+            <label>
+              <span>Meeting goal</span>
+              <input name="goal" value="Intro call" />
+            </label>
+            <label>
+              <span>Guests</span>
+              <input name="guests" value="Client contact, internal owner" />
+            </label>
+            <label>
+              <span>Date range</span>
+              <input name="date_range" value="Next week" />
+            </label>
+            <label>
+              <span>Duration</span>
+              <input name="duration" value="30 minutes" />
+            </label>
+            <label>
+              <span>Location or meeting link</span>
+              <input name="location" value="Google Meet" />
+            </label>
+            <label>
+              <span>Time zone</span>
+              <input name="timezone" value="Recipient local time" />
+            </label>
+            <label class="meeting-form-full">
+              <span>Scheduling rules</span>
+              <textarea name="rules">Avoid Fridays, protect focus blocks, and offer three options.</textarea>
+            </label>
+            <label class="meeting-form-full">
+              <span>Context to include</span>
+              <textarea name="context">Share the purpose of the meeting and ask guests to send any questions ahead of time.</textarea>
+            </label>
+          </div>
+
+          <div class="meeting-options" aria-label="Automation options">
+            <label><input type="checkbox" name="options" value="Add a video link automatically" checked /> Add video link</label>
+            <label><input type="checkbox" name="options" value="Send a reminder before the meeting" checked /> Send reminder</label>
+            <label><input type="checkbox" name="options" value="Collect prep notes before the meeting" /> Collect prep notes</label>
+            <label><input type="checkbox" name="options" value="Follow up with guests who do not respond" checked /> Follow up on no response</label>
+          </div>
+
+          <button class="button primary meeting-generate-button" type="submit">Generate workflow</button>
+        </form>
+
+        <section class="meeting-output" aria-live="polite">
+          <div>
+            <span>Automation plan</span>
+            <ol data-meeting-plan></ol>
+          </div>
+          <div>
+            <span>Suggested message</span>
+            <textarea readonly data-meeting-message></textarea>
+            <button class="button secondary" type="button" data-copy-meeting-message>Copy message</button>
+          </div>
+          <div>
+            <span>Invite checklist</span>
+            <ul data-meeting-checklist></ul>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>WorkSmartOS</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:contact@worksmartos.com">contact@worksmartos.com</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="meeting-studio.js"></script>
+  </body>
+</html>

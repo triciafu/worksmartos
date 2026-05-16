@@ -41,7 +41,7 @@ updateActiveNavLinks();
 window.addEventListener("hashchange", updateActiveNavLinks);
 
 const motionTargets = document.querySelectorAll(
-  ".hero .eyebrow, .hero h1, .hero-text, .hero-actions, .section-heading, .feature-card, .security-copy, .security-list article, .split-section > div, .workflow-list article, .pricing-copy, .price-card, .suite-hero-copy, .suite-hero-visual, .suite-intro, .suite-section-heading, .suite-studio-grid article, .suite-flow-grid article, .suite-cta"
+  ".hero .eyebrow, .hero h1, .hero-text, .hero-actions, .section-heading, .feature-card, .security-copy, .security-list article, .split-section > div, .workflow-list article, .pricing-copy, .price-card, .suite-hero-copy, .suite-hero-visual, .suite-intro, .suite-section-heading, .suite-studio-grid article, .suite-flow-grid article, .suite-cta, .meeting-studio-hero, .meeting-mode-panel, .meeting-builder, .meeting-output"
 );
 
 motionTargets.forEach((target, index) => {
