@@ -10,7 +10,7 @@
     <title>Find a Team Time | WorkSmartOS</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-studio-theme="white">
     <header class="site-header">
       <nav class="nav-shell" aria-label="Primary navigation">
         <a class="brand" href="index.html" aria-label="WorkSmartOS home">
@@ -32,6 +32,11 @@
     <main class="studio-page availability-page">
       <section class="studio-hero compact">
         <p class="eyebrow">Find a Team Time</p>
+        <div class="studio-theme-control" role="group" aria-label="Studio theme">
+          <button type="button" data-studio-theme="light">Light</button>
+          <button class="is-active" type="button" data-studio-theme="white">White</button>
+          <button type="button" data-studio-theme="dark">Dark</button>
+        </div>
       </section>
 
       <nav class="studio-steps" aria-label="Find a Team Time steps">
@@ -45,12 +50,38 @@
           <div class="availability-intro">
             <div class="studio-panel-heading">
               <span>Step 1</span>
-              <h2>Add the meeting details and time options</h2>
-              <p>Enter the candidate times you want the team to choose from. Each line becomes a column in the availability grid.</p>
+              <h2>Choose how you want to find a time</h2>
+              <p>Start manually with candidate times, or connect calendars when the team is ready to check availability automatically.</p>
             </div>
           </div>
 
           <form class="availability-card" data-availability-details>
+            <div class="availability-methods availability-full" aria-label="Availability method">
+              <label class="availability-method-card is-active">
+                <input type="radio" name="availability_method" value="manual" checked data-availability-method />
+                <span>Find a time manually</span>
+                <p>Enter candidate times first, then check who is available in a shared grid.</p>
+              </label>
+              <label class="availability-method-card">
+                <input type="radio" name="availability_method" value="calendar" data-availability-method />
+                <span>Connect calendars</span>
+                <p>Invitees can connect calendars so the tool can compare availability automatically.</p>
+              </label>
+            </div>
+
+            <div class="availability-calendar-panel availability-full is-hidden" data-calendar-panel>
+              <div>
+                <strong>Connect calendars</strong>
+                <p>Use this path when guests are comfortable connecting their calendars. The tool can support Google Calendar, Outlook, and Microsoft 365 once calendar authorization is connected.</p>
+              </div>
+              <div class="availability-provider-actions" aria-label="Calendar providers">
+                <button class="button secondary" type="button" data-calendar-provider="Google Calendar">Google Calendar</button>
+                <button class="button secondary" type="button" data-calendar-provider="Outlook">Outlook</button>
+                <button class="button secondary" type="button" data-calendar-provider="Microsoft 365">Microsoft 365</button>
+              </div>
+              <p class="availability-calendar-status" data-calendar-status aria-live="polite">Calendar connection is ready for a future integration. For now, use the manual path below to compare team availability.</p>
+            </div>
+
             <label>
               <span>Meeting name</span>
               <input name="meeting_name" value="Team planning meeting" />
@@ -73,6 +104,7 @@
 Tuesday, May 19 at 2:00 PM
 Wednesday, May 20 at 11:00 AM
 Thursday, May 21 at 1:30 PM</textarea>
+              <small data-candidate-help>Each line becomes a column in the manual availability grid.</small>
             </label>
             <label class="availability-full">
               <span>Context</span>

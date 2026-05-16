@@ -1232,8 +1232,94 @@ h1 {
   resize: vertical;
 }
 
+.availability-card small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .availability-full,
 .availability-card .studio-actions {
+  grid-column: 1 / -1;
+}
+
+.availability-methods {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.availability-method-card {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  min-height: 132px;
+  padding: 20px;
+  border: 1px solid #e1e4ea;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.availability-method-card input {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  accent-color: var(--accent);
+}
+
+.availability-method-card span {
+  padding-right: 26px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.availability-method-card p,
+.availability-calendar-panel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.availability-method-card.is-active {
+  border-color: rgba(0, 113, 227, 0.55);
+  background: rgba(0, 113, 227, 0.045);
+}
+
+.availability-calendar-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px 18px;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid #e1e4ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.availability-calendar-panel strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.availability-provider-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.availability-calendar-status {
   grid-column: 1 / -1;
 }
 
@@ -1410,9 +1496,18 @@ h1 {
   .meeting-mode-panel,
   .meeting-form-grid,
   .meeting-options,
+  .availability-methods,
   .availability-card,
   .availability-results {
     grid-template-columns: 1fr;
+  }
+
+  .availability-calendar-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .availability-provider-actions {
+    justify-content: flex-start;
   }
 
   .meeting-builder,
@@ -3485,6 +3580,10 @@ body[data-studio-theme="white"] .empty-state,
 body[data-studio-theme="white"] .recipient-sheet,
 body[data-studio-theme="white"] .recipient-card,
 body[data-studio-theme="white"] .spreadsheet-tools,
+body[data-studio-theme="white"] .availability-table-wrap,
+body[data-studio-theme="white"] .availability-method-card,
+body[data-studio-theme="white"] .availability-calendar-panel,
+body[data-studio-theme="white"] .availability-result-card,
 body[data-studio-theme="white"] .studio-theme-control {
   background: #ffffff;
 }
@@ -3530,6 +3629,10 @@ body[data-studio-theme="dark"] .email-preview-card,
 body[data-studio-theme="dark"] .empty-state,
 body[data-studio-theme="dark"] .recipient-sheet,
 body[data-studio-theme="dark"] .spreadsheet-tools,
+body[data-studio-theme="dark"] .availability-table-wrap,
+body[data-studio-theme="dark"] .availability-method-card,
+body[data-studio-theme="dark"] .availability-calendar-panel,
+body[data-studio-theme="dark"] .availability-result-card,
 body[data-studio-theme="dark"] .studio-theme-control,
 body[data-studio-theme="dark"] .template-save-panel,
 body[data-studio-theme="dark"] .stepper-track .studio-output {
@@ -3551,6 +3654,11 @@ body[data-studio-theme="dark"] .studio-theme-control button.is-active {
 body[data-studio-theme="dark"] .studio-controls input,
 body[data-studio-theme="dark"] .studio-controls textarea,
 body[data-studio-theme="dark"] .recipient-table input,
+body[data-studio-theme="dark"] .availability-card input,
+body[data-studio-theme="dark"] .availability-card textarea,
+body[data-studio-theme="dark"] .availability-table input,
+body[data-studio-theme="dark"] .availability-message-panel textarea,
+body[data-studio-theme="dark"] .availability-row-tools input,
 body[data-studio-theme="dark"] .email-preview-card input,
 body[data-studio-theme="dark"] .email-preview-card textarea,
 body[data-studio-theme="dark"] .rich-editor,
@@ -3572,10 +3680,34 @@ body[data-studio-theme="dark"] .draft-link {
 
 body[data-studio-theme="dark"] .token-row span,
 body[data-studio-theme="dark"] .merge-token,
-body[data-studio-theme="dark"] .email-address-chip {
+body[data-studio-theme="dark"] .email-address-chip,
+body[data-studio-theme="dark"] .availability-table th,
+body[data-studio-theme="dark"] .availability-check-cell label {
   border-color: #34363d;
   background: #202124;
   color: var(--muted);
+}
+
+body[data-studio-theme="dark"] .availability-table td,
+body[data-studio-theme="dark"] .availability-table th {
+  border-color: #34363d;
+}
+
+body[data-studio-theme="dark"] .availability-result-card.is-best {
+  border-color: rgba(0, 113, 227, 0.7);
+  background: rgba(0, 113, 227, 0.12);
+}
+
+body[data-studio-theme="dark"] .availability-result-card h3,
+body[data-studio-theme="dark"] .availability-result-card strong,
+body[data-studio-theme="dark"] .availability-method-card span,
+body[data-studio-theme="dark"] .availability-calendar-panel strong {
+  color: #f5f5f7;
+}
+
+body[data-studio-theme="dark"] .availability-method-card.is-active {
+  border-color: rgba(0, 113, 227, 0.7);
+  background: rgba(0, 113, 227, 0.12);
 }
 
 body[data-studio-theme="dark"] .recipient-sheet-header {

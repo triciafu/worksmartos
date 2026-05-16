@@ -7,6 +7,13 @@ const tableBody = document.querySelector("[data-availability-body]");
 const resultsPanel = document.querySelector("[data-availability-results]");
 const messageOutput = document.querySelector("[data-availability-message]");
 const addCountInput = document.querySelector("[data-add-availability-count]");
+const themeButtons = document.querySelectorAll("[data-studio-theme]");
+const methodInputs = document.querySelectorAll("[data-availability-method]");
+const calendarPanel = document.querySelector("[data-calendar-panel]");
+const calendarStatus = document.querySelector("[data-calendar-status]");
+const candidateHelp = document.querySelector("[data-candidate-help]");
+const studioThemeKey = "worksmartos-email-studio-theme";
+const studioThemes = new Set(["light", "white", "dark"]);
 
 let candidateTimes = [];
 let participants = [
@@ -15,8 +22,55 @@ let participants = [
   { name: "Taylor", email: "taylor@example.com", available: [false, true, true, true], notes: "" },
 ];
 
+function applyStudioTheme(theme) {
+  const nextTheme = studioThemes.has(theme) ? theme : "white";
+  document.body.dataset.studioTheme = nextTheme;
+  themeButtons.forEach((button) => {
+    const isActive = button.dataset.studioTheme === nextTheme;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function saveStudioTheme(theme) {
+  applyStudioTheme(theme);
+  try {
+    window.localStorage.setItem(studioThemeKey, document.body.dataset.studioTheme);
+  } catch {
+    // Theme preference is optional.
+  }
+}
+
+function restoreStudioTheme() {
+  let theme = "white";
+  try {
+    theme = window.localStorage.getItem(studioThemeKey) || "white";
+  } catch {
+    theme = "white";
+  }
+  applyStudioTheme(theme);
+}
+
 function detailValue(name) {
   return detailsForm.elements[name]?.value.trim() || "";
+}
+
+function selectedMethod() {
+  return detailsForm.elements.availability_method?.value || "manual";
+}
+
+function updateAvailabilityMethod() {
+  const method = selectedMethod();
+  const isCalendar = method === "calendar";
+
+  calendarPanel?.classList.toggle("is-hidden", !isCalendar);
+  candidateHelp.textContent = isCalendar
+    ? "You can still add backup options while calendar connection is being prepared."
+    : "Each line becomes a column in the manual availability grid.";
+
+  methodInputs.forEach((input) => {
+    input.closest(".availability-method-card")?.classList.toggle("is-active", input.checked);
+  });
 }
 
 function parseCandidateTimes() {
@@ -198,8 +252,11 @@ function buildMessage(bestResult) {
   const timezone = detailValue("timezone") || "your local time";
   const context = detailValue("context");
   const bestTime = bestResult?.time || "the strongest shared time";
+  const methodIntro = selectedMethod() === "calendar"
+    ? "Calendar checks pointed to"
+    : "Based on everyone's availability, the best time for";
 
-  return `Hi team,\n\nBased on everyone's availability, the best time for ${meetingName} is ${bestTime} (${timezone}). I’ll keep it to ${duration}.\n\n${context}\n\nThank you,`;
+  return `Hi team,\n\n${methodIntro} ${meetingName} is ${bestTime} (${timezone}). I’ll keep it to ${duration}.\n\n${context}\n\nThank you,`;
 }
 
 async function copyMessage() {
@@ -223,6 +280,22 @@ document.querySelector("[data-find-team-time]")?.addEventListener("click", rende
 document.querySelector("[data-availability-back]")?.addEventListener("click", () => setStep(0));
 document.querySelector("[data-availability-edit]")?.addEventListener("click", () => setStep(1));
 document.querySelector("[data-copy-availability-message]")?.addEventListener("click", copyMessage);
+
+methodInputs.forEach((input) => {
+  input.addEventListener("change", updateAvailabilityMethod);
+});
+
+document.querySelectorAll("[data-calendar-provider]").forEach((button) => {
+  button.addEventListener("click", () => {
+    calendarStatus.textContent = `${button.dataset.calendarProvider} connection is not live yet. Use manual availability first, then this can become the calendar authorization step.`;
+  });
+});
+
+themeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    saveStudioTheme(button.dataset.studioTheme);
+  });
+});
 
 tableBody?.addEventListener("click", (event) => {
   const removeButton = event.target.closest("[data-remove-availability-row]");
@@ -252,3 +325,6 @@ stepButtons.forEach((button, index) => {
     setStep(index);
   });
 });
+
+restoreStudioTheme();
+updateAvailabilityMethod();
