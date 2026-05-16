@@ -614,7 +614,7 @@ h1 {
   justify-items: start;
   gap: 10px;
   min-height: 48px;
-  margin-top: auto;
+  margin-top: 22px;
 }
 
 .feature-link:hover {
@@ -3944,6 +3944,7 @@ body[data-studio-theme="dark"] .recipient-card select,
 body[data-studio-theme="dark"] .email-chip-input,
 body[data-studio-theme="dark"] .add-row-count,
 body[data-studio-theme="dark"] .template-guide input,
+body[data-studio-theme="dark"] .template-prompt textarea,
 body[data-studio-theme="dark"] .template-save-panel input,
 body[data-studio-theme="dark"] .template-save-tools select,
 body[data-studio-theme="dark"] .draft-link {
@@ -3958,6 +3959,7 @@ body[data-studio-theme="dark"] .email-address-chip,
 body[data-studio-theme="dark"] .email-status-pill,
 body[data-studio-theme="dark"] .send-center-grid article,
 body[data-studio-theme="dark"] .quick-draft-examples button,
+body[data-studio-theme="dark"] .template-start-options button,
 body[data-studio-theme="dark"] .availability-table th,
 body[data-studio-theme="dark"] .availability-check-cell label {
   border-color: #34363d;
@@ -4437,6 +4439,64 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
   min-height: 34px;
   border-radius: 8px;
   white-space: nowrap;
+}
+
+.template-start-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.template-start-options {
+  display: grid;
+  gap: 8px;
+}
+
+.template-start-options button {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+}
+
+.template-start-options button:hover,
+.template-start-options button:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.template-prompt textarea {
+  min-height: 104px;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.template-generate-button {
+  justify-self: start;
+  min-height: 38px;
+  padding: 0 18px;
+  font-size: 13px;
+}
+
+.template-start-status {
+  min-height: 18px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .stepper-track .studio-step.template-step {

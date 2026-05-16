@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Create personalized emails for multiple contacts from a blank template."
+      content="Create personalized batch emails from a blank template, a saved pattern, or a short description of what you need."
     />
-    <title>Custom Email Studio | WorkSmartOS</title>
+    <title>Batch Email Studio | WorkSmartOS</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body data-studio-variant="blank">
+  <body data-studio-variant="batch">
     <header class="site-header">
       <nav class="nav-shell" aria-label="Primary navigation">
         <a class="brand" href="index.html" aria-label="WorkSmartOS home">
@@ -32,7 +32,7 @@
 
     <main class="studio-page">
       <section class="studio-hero compact">
-        <p class="eyebrow">Custom Email Studio</p>
+        <p class="eyebrow">Batch Email Studio</p>
         <div class="studio-theme-control" role="group" aria-label="Studio theme">
           <button type="button" data-studio-theme="light">Light</button>
           <button class="is-active" type="button" data-studio-theme="white">White</button>
@@ -40,13 +40,13 @@
         </div>
       </section>
 
-      <nav class="studio-steps" aria-label="Custom Email Studio steps">
+      <nav class="studio-steps" aria-label="Batch Email Studio steps">
         <button class="is-active" type="button" data-step-button="0"><span>1. Write template</span></button>
         <button type="button" data-step-button="1"><span>2. Add recipients</span></button>
         <button type="button" data-step-button="2"><span>3. Review emails</span></button>
       </nav>
 
-      <section class="studio-shell stepper-shell" aria-label="Custom email generator" data-stepper>
+      <section class="studio-shell stepper-shell" aria-label="Batch email generator" data-stepper>
         <div class="stepper-track" data-stepper-track>
         <form class="studio-controls studio-step template-step" data-email-studio-form data-step-panel="0">
           <div class="template-card studio-panel">
@@ -71,8 +71,22 @@
           <aside class="template-guide" aria-label="Template instructions and placeholders">
             <div class="studio-panel-heading">
               <span>Step 1</span>
-              <h2>Create your email template</h2>
-              <p>Start with a blank subject and email. Add placeholders for any recipient-specific details you want to personalize.</p>
+              <h2>Create your batch email template</h2>
+              <p>Choose a starting point, describe what you need, or start blank. Add placeholders for any recipient-specific details you want to personalize.</p>
+            </div>
+            <div class="template-start-panel" aria-label="Template starting points">
+              <div class="template-start-options" role="group" aria-label="Template presets">
+                <button type="button" data-template-preset="blank">Start blank</button>
+                <button type="button" data-template-preset="sales-outreach">Sales outreach</button>
+                <button type="button" data-template-preset="creative-approval">Creative approval</button>
+                <button type="button" data-template-preset="event-invite">Event invitation</button>
+              </div>
+              <label class="template-prompt">
+                <span>Describe what you need</span>
+                <textarea data-template-prompt rows="4" placeholder="Example: Send prospects a warm intro and ask them to book a demo."></textarea>
+              </label>
+              <button class="button secondary template-generate-button" type="button" data-generate-template>Generate template</button>
+              <p class="template-start-status" data-template-start-status aria-live="polite"></p>
             </div>
             <div class="token-row" aria-label="Available merge fields" data-token-list>
               <span data-token="{{contact_firstname}}" data-label="Recipient first name">Recipient first name<button type="button" data-remove-placeholder aria-label="Remove Recipient first name">×</button></span>

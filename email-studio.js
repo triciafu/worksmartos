@@ -68,6 +68,10 @@ const importStatus = document.querySelector("[data-import-status]");
 const templateSaveToggle = document.querySelector("[data-template-save-toggle]");
 const templateSavePanel = document.querySelector("[data-template-save-panel]");
 const templateNameInput = document.querySelector("[data-template-name]");
+const templatePresetButtons = document.querySelectorAll("[data-template-preset]");
+const templatePromptInput = document.querySelector("[data-template-prompt]");
+const generateTemplateButton = document.querySelector("[data-generate-template]");
+const templateStartStatus = document.querySelector("[data-template-start-status]");
 
 let currentStep = 0;
 let editorHistory = [];
@@ -83,19 +87,23 @@ let generatedEmails = [];
 let emailWorkflowState = [];
 
 const studioVariant = document.body.dataset.studioVariant || "creative-approval";
-const isBlankSlateStudio = studioVariant === "blank";
+let activeTemplatePreset = studioVariant;
+const isBlankSlateStudio = studioVariant === "blank" || studioVariant === "batch";
 const autosaveVersions = {
   blank: "v2",
+  batch: "v1",
   "event-invite": "v5",
 };
 const studioFileSlugs = {
   blank: "custom-email-template",
+  batch: "batch-email-template",
   "event-invite": "event-invite-email-template",
   "sales-outreach": "sales-outreach-email-template",
   "creative-approval": "creative-approval-email-template",
 };
 const defaultFieldSets = {
   blank: ["contact_firstname"],
+  batch: ["contact_firstname"],
   "event-invite": ["contact_firstname", "event_name", "event_date", "event_time", "event_location", "rsvp_link"],
   "sales-outreach": ["contact_firstname", "client_name", "recipient_role", "pain_point", "offer", "scheduling_link"],
   "creative-approval": ["client_name", "contact_firstname", "campaign_name", "deadline", "approval_link"],
@@ -170,6 +178,7 @@ const fieldLabels = {
   offer: "Offer",
   scheduling_link: "Scheduling link",
 };
+const baseFieldLabels = { ...fieldLabels };
 
 const fields = [...defaultFields];
 
@@ -446,6 +455,10 @@ function sentenceCaseLabel(value) {
   }
 
   return label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+}
+
+function labelForField(field) {
+  return fieldLabels[field] || baseFieldLabels[field] || field;
 }
 
 function splitEmailList(value) {
@@ -991,7 +1004,7 @@ function normalizeDraftText(value) {
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 
-  if (studioVariant === "event-invite") {
+  if (activeTemplatePreset === "event-invite") {
     return normalized;
   }
 
@@ -1000,7 +1013,7 @@ function normalizeDraftText(value) {
 }
 
 function trimTrailingEmptyBlocks(container) {
-  if (studioVariant === "event-invite") {
+  if (activeTemplatePreset === "event-invite") {
     return;
   }
 
@@ -1051,6 +1064,100 @@ function createPaletteToken(token, label) {
   return createTokenElement(token, sentenceCaseLabel(label), "data-remove-placeholder");
 }
 
+function tokenHtml(field) {
+  const label = labelForField(field);
+  return `<span class="merge-token" contenteditable="false" data-token="{{${escapeAttribute(field)}}}" data-label="${escapeAttribute(label)}">${escapeHtml(label)}<button type="button" data-remove-token aria-label="Remove ${escapeAttribute(label)}">×</button></span>`;
+}
+
+function fieldsForPreset(preset) {
+  return (defaultFieldSets[preset] || defaultFieldSets.blank).map((field) => ({
+    field,
+    token: `{{${field}}}`,
+    label: labelForField(field),
+  }));
+}
+
+function templateStateFromPreset(preset) {
+  const normalizedPreset = preset === "batch" ? "blank" : preset;
+  const paletteFields = fieldsForPreset(normalizedPreset);
+  const base = {
+    preset: normalizedPreset,
+    senderName: "",
+    paletteFields,
+    recipientFields: paletteFields,
+  };
+
+  if (normalizedPreset === "sales-outreach") {
+    return {
+      ...base,
+      subjectHtml: `Quick idea for ${tokenHtml("client_name")}`,
+      bodyHtml: `<p>Hi ${tokenHtml("contact_firstname")},</p><p><br></p><p>I noticed ${tokenHtml("client_name")} may be working through ${tokenHtml("pain_point")}.</p><p><br></p><p>We help ${tokenHtml("recipient_role")} teams move faster with ${tokenHtml("offer")}.</p><p><br></p><p>Would you be open to finding a time here?</p><p>${tokenHtml("scheduling_link")}</p><p><br></p><p>Thanks,</p>`,
+    };
+  }
+
+  if (normalizedPreset === "creative-approval") {
+    return {
+      ...base,
+      subjectHtml: `Response needed by ${tokenHtml("deadline")}: ${tokenHtml("client_name")} Creative Assets`,
+      bodyHtml: `<p>Hi ${tokenHtml("contact_firstname")},</p><p><br></p><p>I hope you're doing well!</p><p><br></p><p>Attached are the latest creative assets for your review. Please take a look and send feedback by ${tokenHtml("deadline")}.</p><p><br></p><p>${tokenHtml("approval_link")}</p><p><br></p><p>Thank you,</p>`,
+    };
+  }
+
+  if (normalizedPreset === "event-invite") {
+    return {
+      ...base,
+      subjectHtml: `You're invited: ${tokenHtml("event_name")}`,
+      bodyHtml: `<p>Hi ${tokenHtml("contact_firstname")},</p><p><br></p><p>We'd love to invite you to ${tokenHtml("event_name")}.</p><p><br></p><p>Date: ${tokenHtml("event_date")}<br>Time: ${tokenHtml("event_time")}<br>Location: ${tokenHtml("event_location")}</p><p><br></p><p>Please register here:<br>${tokenHtml("rsvp_link")}</p><p><br></p><p><br></p><p>Thanks,</p>`,
+    };
+  }
+
+  return {
+    ...base,
+    subjectHtml: "",
+    bodyHtml: `<p>Hi ${tokenHtml("contact_firstname")},</p><p><br></p><p><br></p>`,
+  };
+}
+
+function inferTemplatePreset(prompt) {
+  const text = String(prompt || "").toLowerCase();
+
+  if (/\b(event|invite|invitation|webinar|registration|register|attend|rsvp|launch)\b/.test(text)) {
+    return "event-invite";
+  }
+
+  if (/\b(creative|approval|approve|asset|assets|campaign|feedback|deadline)\b/.test(text)) {
+    return "creative-approval";
+  }
+
+  if (/\b(sales|outreach|prospect|lead|demo|pitch|customer|book|meeting|intro)\b/.test(text)) {
+    return "sales-outreach";
+  }
+
+  return "blank";
+}
+
+function presetStatusLabel(preset) {
+  const labels = {
+    blank: "Blank template ready.",
+    "sales-outreach": "Sales outreach template created.",
+    "creative-approval": "Creative approval template created.",
+    "event-invite": "Event invitation template created.",
+  };
+  return labels[preset] || "Template created.";
+}
+
+function applyTemplatePreset(preset, options = {}) {
+  const nextPreset = preset === "batch" ? "blank" : preset;
+  activeTemplatePreset = nextPreset;
+  loadTemplateState(templateStateFromPreset(nextPreset));
+  if (templateStartStatus) {
+    templateStartStatus.textContent = `${presetStatusLabel(nextPreset)} Edit anything before adding recipients.`;
+  }
+  if (options.focusBody) {
+    window.requestAnimationFrame(() => bodyTemplateEditor.focus());
+  }
+}
+
 function labelFromTokenElement(element) {
   return sentenceCaseLabel(element.dataset.label || element.textContent.replace("×", "").trim());
 }
@@ -1073,6 +1180,7 @@ function paletteFieldsFromTemplate() {
 
 function getTemplateState() {
   return {
+    preset: activeTemplatePreset,
     subjectHtml: subjectTemplateEditor.innerHTML,
     bodyHtml: bodyTemplateEditor.innerHTML,
     senderName: form.elements.sender_name?.value || "",
@@ -1149,7 +1257,7 @@ function restoreAutosaveDraft() {
 function resetTemplateFields(template) {
   const paletteFields = Array.isArray(template.paletteFields) && template.paletteFields.length
     ? template.paletteFields.filter((item) => item.field !== "sender_name")
-    : defaultFields.map((field) => ({ field, token: `{{${field}}}`, label: fieldLabels[field] || field }));
+    : defaultFields.map((field) => ({ field, token: `{{${field}}}`, label: labelForField(field) }));
   const recipientFields = Array.isArray(template.recipientFields) && template.recipientFields.length
     ? template.recipientFields
     : paletteFields.filter((item) => item.field !== "sender_name");
@@ -1183,6 +1291,8 @@ function resetTemplateFields(template) {
 }
 
 function loadTemplateState(template = {}) {
+  activeTemplatePreset = template.preset || studioVariant;
+
   if (typeof template.subjectHtml === "string") {
     subjectTemplateEditor.innerHTML = template.subjectHtml;
   }
@@ -1885,6 +1995,16 @@ addPlaceholderButton.addEventListener("click", () => {
   scheduleAutosave();
 });
 
+templatePresetButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    applyTemplatePreset(button.dataset.templatePreset, { focusBody: true });
+  });
+});
+
+generateTemplateButton?.addEventListener("click", () => {
+  const preset = inferTemplatePreset(templatePromptInput?.value || "");
+  applyTemplatePreset(preset, { focusBody: true });
+});
 
 stepLabels.forEach((button, index) => {
   button.addEventListener("click", () => {
