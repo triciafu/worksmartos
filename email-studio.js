@@ -636,17 +636,14 @@ function queryString(params, aliases = {}) {
 
 function draftLinksHtml(email) {
   const params = encodedDraftParams(email);
-  const gmailQuery = queryString(params, { subject: "su" });
-  const outlookQuery = queryString(params);
   const mailtoRecipients = params.to.split(",").filter(Boolean).map(encodeURIComponent).join(",");
   const mailtoQuery = queryString({ cc: params.cc, bcc: params.bcc, subject: params.subject, body: params.body });
   const mailtoHref = `mailto:${mailtoRecipients}${mailtoQuery ? `?${mailtoQuery}` : ""}`;
 
   return `
     <div class="draft-actions" aria-label="Draft actions">
-      <a class="draft-link draft-link-primary" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer">Send in Gmail</a>
-      <a class="draft-link" href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer">Send in Outlook</a>
-      <a class="draft-link" href="${escapeAttribute(mailtoHref)}">Default email app</a>
+      <a class="draft-link draft-link-primary" href="${escapeAttribute(mailtoHref)}">Open in drafts</a>
+      <button class="button secondary" type="button" data-direct-send>Send now</button>
     </div>
   `;
 }
@@ -735,6 +732,9 @@ function sendCenterHtml(emails) {
         <h3>${emails.length} ${pluralEmails} prepared</h3>
         <p>${summary.ready} ready, ${summary.needsReview} need review, ${summary.issues} ${pluralIssues} found.</p>
       </div>
+      <div class="send-center-actions">
+        <button class="button primary" type="button" data-send-all>Send all</button>
+      </div>
       <div class="send-center-grid">
         <article>
           <span>Quality check</span>
@@ -779,15 +779,6 @@ function qualityListHtml(issues) {
     <div class="email-quality-check" data-quality-check>
       <strong>Needs review</strong>
       <ul>${issues.map((issue) => `<li>${escapeHtml(issue)}</li>`).join("")}</ul>
-    </div>
-  `;
-}
-
-function directSendActionsHtml() {
-  return `
-    <div class="direct-send-actions" aria-label="Connected send actions">
-      <button class="button secondary" type="button" data-direct-send="gmail">Send via connected Gmail</button>
-      <button class="button secondary" type="button" data-direct-send="outlook">Send via connected Outlook</button>
     </div>
   `;
 }
@@ -1857,7 +1848,6 @@ function renderEmails(emails) {
         <div class="email-body-preview" contenteditable="true" data-body-input role="textbox" aria-multiline="true">${email.body}</div>
       </div>
       ${qualityListHtml(workflow.issues)}
-      ${directSendActionsHtml()}
       ${draftLinksHtml(email)}
     `;
 
@@ -2186,8 +2176,16 @@ output.addEventListener("click", (event) => {
   const directSendButton = event.target.closest("[data-direct-send]");
   if (directSendButton) {
     const card = directSendButton.closest(".email-preview-card");
-    const provider = directSendButton.dataset.directSend === "gmail" ? "Gmail" : "Outlook";
-    updateEmailStatus(card, "Connection required", `${provider} direct sending is not connected yet. Open a draft manually for now.`);
+    updateEmailStatus(card, "Connection required", "Direct sending is not connected yet. Open a draft manually for now.");
+    return;
+  }
+
+  const sendAllButton = event.target.closest("[data-send-all]");
+  if (sendAllButton) {
+    const statusNode = output.querySelector("[data-send-center-status]");
+    if (statusNode) {
+      statusNode.textContent = "Direct batch sending is not connected yet. Open individual drafts for now.";
+    }
     return;
   }
 
@@ -2524,11 +2522,15 @@ function goToStep(step, options = {}) {
   if (options.immediate) {
     stepperTrack.style.transition = "none";
   }
-  stepperTrack.style.transform = `translateX(-${currentStep * (100 / 3)}%)`;
+  stepperTrack.style.transform = "none";
   if (options.immediate) {
     stepperTrack.getBoundingClientRect();
     stepperTrack.style.transition = "";
   }
+
+  document.querySelectorAll(".studio-step").forEach((panel) => {
+    panel.classList.toggle("is-active-step", panel.dataset.stepPanel === String(currentStep));
+  });
 
   document.querySelectorAll(".studio-step.is-entering").forEach((panel) => {
     panel.classList.remove("is-entering");
