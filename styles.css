@@ -4492,6 +4492,17 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
   font-size: 13px;
 }
 
+.template-start-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.template-blank-button {
+  min-height: 38px;
+}
+
 .template-start-status {
   min-height: 18px;
   color: var(--muted);

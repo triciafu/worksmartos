@@ -72,20 +72,17 @@
             <div class="studio-panel-heading">
               <span>Step 1</span>
               <h2>Create your batch email template</h2>
-              <p>Choose a starting point, describe what you need, or start blank. Add placeholders for any recipient-specific details you want to personalize.</p>
+              <p>Describe what you need, or start blank. Add placeholders for any detail you want to edit later for each recipient.</p>
             </div>
-            <div class="template-start-panel" aria-label="Template starting points">
-              <div class="template-start-options" role="group" aria-label="Template presets">
-                <button type="button" data-template-preset="blank">Start blank</button>
-                <button type="button" data-template-preset="sales-outreach">Sales outreach</button>
-                <button type="button" data-template-preset="creative-approval">Creative approval</button>
-                <button type="button" data-template-preset="event-invite">Event invitation</button>
-              </div>
+            <div class="template-start-panel" aria-label="Template starter">
               <label class="template-prompt">
                 <span>Describe what you need</span>
                 <textarea data-template-prompt rows="4" placeholder="Example: Send prospects a warm intro and ask them to book a demo."></textarea>
               </label>
-              <button class="button secondary template-generate-button" type="button" data-generate-template>Generate template</button>
+              <div class="template-start-actions">
+                <button class="button secondary template-generate-button" type="button" data-generate-template>Generate template</button>
+                <button class="add-placeholder template-blank-button" type="button" data-template-preset="blank">Start blank</button>
+              </div>
               <p class="template-start-status" data-template-start-status aria-live="polite"></p>
             </div>
             <div class="token-row" aria-label="Available merge fields" data-token-list>
