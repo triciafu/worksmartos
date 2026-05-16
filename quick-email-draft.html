@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Turn a plain-language request into a review-ready email draft."
+    />
+    <title>Quick Email Draft | WorkSmartOS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-studio-theme="white">
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="WorkSmartOS home">
+          <span>WorkSmartOS</span>
+          <span class="brand-beta">Beta</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-links" data-nav>
+          <a href="index.html#tools">Explore tools</a>
+          <a href="index.html#enterprise">Enterprise Solutions</a>
+          <a href="email-studio.html">Login</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="studio-page quick-draft-page">
+      <section class="studio-hero compact">
+        <p class="eyebrow">Quick Email Draft</p>
+        <div class="studio-theme-control" role="group" aria-label="Studio theme">
+          <button type="button" data-studio-theme="light">Light</button>
+          <button class="is-active" type="button" data-studio-theme="white">White</button>
+          <button type="button" data-studio-theme="dark">Dark</button>
+        </div>
+      </section>
+
+      <nav class="studio-steps" aria-label="Quick Email Draft steps">
+        <button class="is-active" type="button"><span>1. Make request</span></button>
+        <button class="is-active" type="button"><span>2. Review draft</span></button>
+        <button type="button"><span>3. Send</span></button>
+      </nav>
+
+      <section class="quick-draft-shell" aria-label="Natural language email draft tool">
+        <section class="quick-draft-command studio-panel">
+          <div class="studio-panel-heading">
+            <span>Step 1</span>
+            <h2>Tell WorkSmartOS what to write</h2>
+            <p>Type a plain-language request. This prototype drafts the email for review before sending.</p>
+          </div>
+
+          <form data-quick-draft-form>
+            <label>
+              <span>Email request</span>
+              <textarea name="request" data-request-input>Send an email to Murilo and let him know we're working on it.</textarea>
+            </label>
+
+            <div class="quick-draft-examples" aria-label="Example requests">
+              <button type="button" data-example-request="Send an email to Murilo and let him know we're working on it.">Working on it</button>
+              <button type="button" data-example-request="Email Lauren and ask if Thursday afternoon works for a quick check-in.">Schedule check-in</button>
+              <button type="button" data-example-request="Send an email to Jordan thanking them for the update and saying we'll follow up tomorrow.">Follow up tomorrow</button>
+            </div>
+
+            <div class="quick-draft-actions">
+              <button class="button secondary" type="button" data-voice-draft>Speak request</button>
+              <button class="button primary" type="submit">Create draft</button>
+            </div>
+
+            <p class="quick-draft-status" data-quick-draft-status aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="quick-draft-review studio-panel" aria-label="Draft review">
+          <div class="studio-output-heading">
+            <div>
+              <span>Step 2</span>
+              <h2>Review the draft</h2>
+              <p class="studio-output-note">Edit anything before opening it in your email client.</p>
+            </div>
+          </div>
+
+          <div class="quick-draft-card">
+            <label>
+              <span>To</span>
+              <input data-draft-to value="Murilo" />
+            </label>
+            <label>
+              <span>Subject</span>
+              <input data-draft-subject value="Quick update" />
+            </label>
+            <label>
+              <span>Body</span>
+              <textarea data-draft-body>Hi Murilo,
+
+Just wanted to let you know we're working on it and will keep you posted as things move forward.
+
+Thank you,</textarea>
+            </label>
+          </div>
+
+          <div class="quick-draft-send">
+            <a class="draft-link draft-link-primary" href="#" target="_blank" rel="noopener noreferrer" data-gmail-draft>Send in Gmail</a>
+            <a class="draft-link" href="#" target="_blank" rel="noopener noreferrer" data-outlook-draft>Send in Outlook</a>
+            <a class="draft-link" href="#" data-mailto-draft>Default email app</a>
+          </div>
+
+          <div class="email-quality-check is-ready" data-quick-draft-quality>
+            <strong>Ready</strong>
+            <p>Draft is ready for review.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>WorkSmartOS</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:contact@worksmartos.com">contact@worksmartos.com</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="quick-email-draft.js"></script>
+  </body>
+</html>

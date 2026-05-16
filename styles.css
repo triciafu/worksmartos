@@ -1474,6 +1474,118 @@ h1 {
   resize: vertical;
 }
 
+.quick-draft-page {
+  min-height: calc(100vh - 64px);
+  padding-bottom: 96px;
+}
+
+.quick-draft-shell {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.72fr) minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+}
+
+.quick-draft-command,
+.quick-draft-review {
+  display: grid;
+  align-content: start;
+  gap: 24px;
+  padding: 28px;
+}
+
+.quick-draft-command form,
+.quick-draft-card {
+  display: grid;
+  gap: 16px;
+}
+
+.quick-draft-command label,
+.quick-draft-card label {
+  display: grid;
+  gap: 10px;
+}
+
+.quick-draft-command label span,
+.quick-draft-card label span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.quick-draft-command textarea,
+.quick-draft-card input,
+.quick-draft-card textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.quick-draft-command textarea {
+  min-height: 148px;
+  padding: 14px;
+  resize: vertical;
+}
+
+.quick-draft-card input {
+  height: 42px;
+  padding: 0 12px;
+}
+
+.quick-draft-card textarea {
+  min-height: 260px;
+  padding: 14px;
+  resize: vertical;
+}
+
+.quick-draft-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-draft-examples button {
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #FAFAFA;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.quick-draft-examples button:hover {
+  border-color: rgba(0, 113, 227, 0.4);
+  color: var(--accent);
+}
+
+.quick-draft-actions,
+.quick-draft-send {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.quick-draft-status {
+  min-height: 20px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 @media (max-width: 1100px) {
   .meeting-studio-shell {
     grid-template-columns: 1fr;
@@ -1498,7 +1610,8 @@ h1 {
   .meeting-options,
   .availability-methods,
   .availability-card,
-  .availability-results {
+  .availability-results,
+  .quick-draft-shell {
     grid-template-columns: 1fr;
   }
 
@@ -3728,6 +3841,8 @@ body[data-studio-theme="white"] .stepper-track .studio-output {
 body[data-studio-theme="white"] .studio-panel,
 body[data-studio-theme="white"] .template-card,
 body[data-studio-theme="white"] .send-center,
+body[data-studio-theme="white"] .quick-draft-command,
+body[data-studio-theme="white"] .quick-draft-review,
 body[data-studio-theme="white"] .email-preview-card,
 body[data-studio-theme="white"] .empty-state,
 body[data-studio-theme="white"] .recipient-sheet,
@@ -3779,6 +3894,8 @@ body[data-studio-theme="dark"] .studio-steps .is-active span::after {
 body[data-studio-theme="dark"] .studio-panel,
 body[data-studio-theme="dark"] .template-card,
 body[data-studio-theme="dark"] .send-center,
+body[data-studio-theme="dark"] .quick-draft-command,
+body[data-studio-theme="dark"] .quick-draft-review,
 body[data-studio-theme="dark"] .email-preview-card,
 body[data-studio-theme="dark"] .empty-state,
 body[data-studio-theme="dark"] .recipient-sheet,
@@ -3810,6 +3927,9 @@ body[data-studio-theme="dark"] .studio-controls textarea,
 body[data-studio-theme="dark"] .recipient-table input,
 body[data-studio-theme="dark"] .availability-card input,
 body[data-studio-theme="dark"] .availability-card textarea,
+body[data-studio-theme="dark"] .quick-draft-command textarea,
+body[data-studio-theme="dark"] .quick-draft-card input,
+body[data-studio-theme="dark"] .quick-draft-card textarea,
 body[data-studio-theme="dark"] .availability-table input,
 body[data-studio-theme="dark"] .availability-message-panel textarea,
 body[data-studio-theme="dark"] .availability-row-tools input,
@@ -3837,6 +3957,7 @@ body[data-studio-theme="dark"] .merge-token,
 body[data-studio-theme="dark"] .email-address-chip,
 body[data-studio-theme="dark"] .email-status-pill,
 body[data-studio-theme="dark"] .send-center-grid article,
+body[data-studio-theme="dark"] .quick-draft-examples button,
 body[data-studio-theme="dark"] .availability-table th,
 body[data-studio-theme="dark"] .availability-check-cell label {
   border-color: #34363d;
