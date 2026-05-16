@@ -404,7 +404,7 @@ function setupRecipientHistoryControls() {
 }
 
 function recipientFieldColumnTemplates(values = {}) {
-  let sheetColumn = 4;
+  let sheetColumn = 6;
   return getRecipientFieldOrder().map((field) => {
     const template = recipientFieldTemplate(field, values, sheetColumn);
     sheetColumn += field === "approval_link" ? 2 : 1;
@@ -429,7 +429,7 @@ function recipientSheetColumnWidths() {
     return ["minmax(160px, 1fr)"];
   });
 
-  return ["92px", "132px", "minmax(260px, 1.45fr)", ...fieldColumns].join(" ");
+  return ["92px", "92px", "minmax(240px, 1.35fr)", "minmax(220px, 1.1fr)", "minmax(220px, 1.1fr)", ...fieldColumns].join(" ");
 }
 
 function recipientSheetMinWidth() {
@@ -449,7 +449,7 @@ function recipientSheetMinWidth() {
     return [160];
   });
 
-  return 92 + 132 + 260 + fieldWidths.reduce((total, width) => total + width, 0);
+  return 92 + 92 + 240 + 220 + 220 + fieldWidths.reduce((total, width) => total + width, 0);
 }
 
 function syncRecipientSheetHeader() {
@@ -457,7 +457,7 @@ function syncRecipientSheetHeader() {
     return;
   }
 
-  const headers = ["Email no.", "Actions", "Email address(es)", ...getRecipientFieldOrder().flatMap(fieldHeader)];
+  const headers = ["Email no.", "Actions", "To", "Cc", "Bcc", ...getRecipientFieldOrder().flatMap(fieldHeader)];
   recipientSheet.style.setProperty("--recipient-sheet-columns", recipientSheetColumnWidths());
   recipientSheet.style.setProperty("--recipient-sheet-min-width", `${recipientSheetMinWidth()}px`);
   recipientSheetHeader.innerHTML = headers.map((header) => `<span>${escapeHtml(header)}</span>`).join("");
@@ -499,7 +499,7 @@ function emailChipsTemplate(value = "") {
 function addressRowTemplate(values = {}, type = "To", isExtra = false) {
   const fieldType = values.recipient_type || type;
   const typeClass = `type-${fieldType.toLowerCase()}`;
-  const addressLabel = fieldType === "To" ? "Email address(es)" : `${fieldType}:`;
+  const addressLabel = fieldType === "To" ? "To" : `${fieldType}:`;
   return `
     <div class="recipient-address-row ${typeClass}${isExtra ? " is-extra" : ""}">
       <div class="address-field-static">
@@ -513,30 +513,42 @@ function addressRowTemplate(values = {}, type = "To", isExtra = false) {
   `;
 }
 
+function addressValueForType(values = {}, type = "To") {
+  const address = values.addresses?.find((item) => item.type === type);
+  if (address) {
+    return address.email || "";
+  }
+  return type === "To" ? values.recipient_email || "" : "";
+}
+
 function rowTemplate(values = {}) {
   const row = document.createElement("article");
   row.className = "recipient-card";
-  const addressRows = values.addresses?.length
-    ? values.addresses.map((address, index) => addressRowTemplate({ recipient_email: address.email, recipient_type: address.type }, address.type, index > 0)).join("")
-    : addressRowTemplate(values);
+  const addressRows = ["To", "Cc", "Bcc"].map((type) => (
+    addressRowTemplate({ recipient_email: addressValueForType(values, type), recipient_type: type }, type, type !== "To")
+  )).join("");
   row.innerHTML = `
     <div class="recipient-card-top">
       <strong>Email</strong>
+    </div>
+    <div class="recipient-row-actions">
       <button class="table-button" type="button" data-remove-row>Remove</button>
     </div>
     <div class="recipient-address-stack" data-address-stack>
       ${addressRows}
-    </div>
-    <div class="address-field-actions">
-      <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
-      <button class="add-placeholder add-address-link" type="button" data-add-address-row="Bcc"><span>+</span>Add bcc:</button>
-      <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
     </div>
     <div class="recipient-detail-grid">
       ${recipientFieldColumnTemplates(values)}
     </div>
   `;
   return row;
+}
+
+function normalizeExistingRecipientRows() {
+  const drafts = recipientDrafts();
+  if (drafts.length) {
+    recipientBody.replaceChildren(...drafts.map((recipient) => rowTemplate(recipient)));
+  }
 }
 
 function escapeAttribute(value) {
@@ -1063,15 +1075,12 @@ function detailPasteColumns() {
 }
 
 function pasteColumns(startType = "To") {
-  if (startType === "Cc") {
-    return [emailColumnForType("Cc"), emailColumnForType("Bcc"), ...detailPasteColumns()];
-  }
-
-  if (startType === "Bcc") {
-    return [emailColumnForType("Bcc"), ...detailPasteColumns()];
-  }
-
-  return [emailColumnForType("To"), ...detailPasteColumns()];
+  const addressTypes = ["To", "Cc", "Bcc"];
+  const startAddressIndex = addressTypes.indexOf(startType);
+  const addressColumns = startAddressIndex >= 0
+    ? addressTypes.slice(startAddressIndex).map(emailColumnForType)
+    : [emailColumnForType("To")];
+  return [...addressColumns, ...detailPasteColumns()];
 }
 
 function ensureRecipientRowCount(count) {
@@ -2555,6 +2564,7 @@ restoreStudioTheme();
 setupRecipientHistoryControls();
 const restoredDraft = restoreAutosaveDraft();
 if (!restoredDraft) {
+  normalizeExistingRecipientRows();
   renumberRecipients();
   document.querySelectorAll(".recipient-card").forEach(updateAddressRemoveButtons);
   updateAllEmailChipStates();

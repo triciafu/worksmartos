@@ -3336,8 +3336,8 @@ iframe[style*="position: fixed"] {
 .recipient-sheet-header,
 .recipient-card {
   display: grid;
-  grid-template-columns: var(--recipient-sheet-columns, 92px 132px minmax(260px, 1.45fr) minmax(160px, 1fr) minmax(150px, 0.95fr) minmax(160px, 1fr) minmax(140px, 0.85fr) minmax(170px, 1fr) minmax(220px, 1.2fr));
-  min-width: var(--recipient-sheet-min-width, 1490px);
+  grid-template-columns: var(--recipient-sheet-columns, 92px 92px minmax(240px, 1.35fr) minmax(220px, 1.1fr) minmax(220px, 1.1fr) minmax(160px, 1fr) minmax(150px, 0.95fr) minmax(160px, 1fr) minmax(140px, 0.85fr) minmax(170px, 1fr) minmax(220px, 1.2fr));
+  min-width: var(--recipient-sheet-min-width, 1690px);
 }
 
 .recipient-sheet-header {
@@ -3379,8 +3379,8 @@ iframe[style*="position: fixed"] {
 }
 
 .recipient-card-top,
-.recipient-address-stack,
-.address-field-actions,
+.recipient-row-actions,
+.recipient-address-row,
 .recipient-detail-grid > label,
 .recipient-detail-grid > .creative-link-fields > label {
   display: grid;
@@ -3396,19 +3396,17 @@ iframe[style*="position: fixed"] {
   grid-row: 1;
 }
 
-.recipient-card-top .table-button {
-  margin-top: 8px;
+.recipient-row-actions {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.recipient-row-actions .table-button {
   margin-left: 0;
 }
 
 .recipient-address-stack {
-  grid-column: 3;
-  grid-row: 1;
-}
-
-.address-field-actions {
-  grid-column: 2;
-  grid-row: 1;
+  display: contents;
 }
 
 .recipient-detail-grid > .creative-link-fields {
@@ -3450,73 +3448,26 @@ iframe[style*="position: fixed"] {
 }
 
 .recipient-address-row {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
-  gap: 8px;
+  grid-row: 1;
 }
 
-.recipient-address-row.type-to,
-.recipient-address-row.type-cc,
+.recipient-address-row.type-to {
+  grid-column: 3;
+}
+
+.recipient-address-row.type-cc {
+  grid-column: 4;
+}
+
 .recipient-address-row.type-bcc {
-  grid-template-columns: minmax(0, 1fr);
-  gap: 6px;
+  grid-column: 5;
 }
 
-.recipient-address-row.type-to .address-field-static,
-.recipient-address-row.type-cc .address-field-static,
-.recipient-address-row.type-bcc .address-field-static {
-  display: none;
-}
-
-.recipient-address-stack .recipient-address-row.type-to label > span {
+.recipient-address-row label > span {
   display: none;
 }
 
 .address-field-static {
-  display: flex;
-  align-items: center;
-  min-height: 42px;
-  padding-top: 18px;
-  color: var(--ink);
-  font-size: 13px;
-  font-weight: 400;
-}
-
-.recipient-address-row.is-extra .address-field-static {
-  padding-top: 0;
-}
-
-.address-field-actions {
-  display: grid;
-  align-items: center;
-  gap: 6px;
-  border-right: 0;
-}
-
-.address-field-actions .add-placeholder {
-  display: inline-flex;
-  align-items: center;
-  height: 22px;
-  white-space: nowrap;
-  line-height: 1;
-}
-
-.remove-address-link {
-  color: var(--muted);
-}
-
-.remove-address-link:disabled {
-  cursor: default;
-  opacity: 0.45;
-}
-
-.address-field-actions .add-address-link,
-.address-field-actions .remove-address-link {
-  margin-left: 0;
-}
-
-.add-address-link[hidden],
-.remove-address-link[hidden] {
   display: none;
 }
 
@@ -3562,7 +3513,7 @@ iframe[style*="position: fixed"] {
   gap: 8px;
 }
 
-.recipient-card-top .table-button {
+.recipient-row-actions .table-button {
   margin-left: 0;
   padding: 0;
   text-align: left;
@@ -3777,10 +3728,6 @@ iframe[style*="position: fixed"] {
 .add-row-count::-webkit-outer-spin-button,
 .add-row-count::-webkit-inner-spin-button {
   margin: 0;
-}
-
-.add-address-link {
-  margin-top: 0;
 }
 
 .template-guide input:focus,
@@ -4047,8 +3994,8 @@ body[data-studio-theme="dark"] .recipient-sheet-header {
 body[data-studio-theme="dark"] .recipient-sheet-header span,
 body[data-studio-theme="dark"] .recipient-card,
 body[data-studio-theme="dark"] .recipient-card-top,
-body[data-studio-theme="dark"] .recipient-address-stack,
-body[data-studio-theme="dark"] .address-field-actions,
+body[data-studio-theme="dark"] .recipient-row-actions,
+body[data-studio-theme="dark"] .recipient-address-row,
 body[data-studio-theme="dark"] .recipient-detail-grid > label,
 body[data-studio-theme="dark"] .recipient-detail-grid > .creative-link-fields > label {
   border-color: #34363d;
@@ -4159,8 +4106,8 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
   }
 
   .recipient-card-top,
-  .recipient-address-stack,
-  .address-field-actions,
+  .recipient-row-actions,
+  .recipient-address-row,
   .recipient-detail-grid > label,
   .recipient-detail-grid > .creative-link-fields > label {
     grid-column: 1;
@@ -4181,7 +4128,8 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 
   .recipient-detail-grid > .creative-link-fields > span,
   .recipient-detail-grid > label > span,
-  .recipient-detail-grid > .creative-link-fields label span {
+  .recipient-detail-grid > .creative-link-fields label span,
+  .recipient-address-row label > span {
     display: block;
   }
 

@@ -134,7 +134,9 @@
             <div class="recipient-sheet-header" aria-hidden="true">
               <span>Email no.</span>
               <span>Actions</span>
-              <span>Email address(es)</span>
+              <span>To</span>
+              <span>Cc</span>
+              <span>Bcc</span>
             </div>
             <div class="recipient-card-list" data-recipient-body>
             <article class="recipient-card">
@@ -148,17 +150,34 @@
                     <input type="hidden" name="recipient_type" value="To" />
                   </div>
                   <label>
-                    <span>Email address(es)</span>
+                    <span>To</span>
                     <div class="email-chip-input" data-email-chip-input>
                       <input name="recipient_email_0" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
                     </div>
                   </label>
                 </div>
-              </div>
-              <div class="address-field-actions">
-                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
-                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Bcc"><span>+</span>Add bcc:</button>
-                <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
+                <div class="recipient-address-row type-cc is-extra">
+                  <div class="address-field-static">
+                    <input type="hidden" name="recipient_type" value="Cc" />
+                  </div>
+                  <label>
+                    <span>Cc:</span>
+                    <div class="email-chip-input" data-email-chip-input>
+                      <input name="recipient_email_2" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    </div>
+                  </label>
+                </div>
+                <div class="recipient-address-row type-bcc is-extra">
+                  <div class="address-field-static">
+                    <input type="hidden" name="recipient_type" value="Bcc" />
+                  </div>
+                  <label>
+                    <span>Bcc:</span>
+                    <div class="email-chip-input" data-email-chip-input>
+                      <input name="recipient_email_3" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    </div>
+                  </label>
+                </div>
               </div>
               <div class="recipient-detail-grid"></div>
             </article>
@@ -173,17 +192,34 @@
                     <input type="hidden" name="recipient_type" value="To" />
                   </div>
                   <label>
-                    <span>Email address(es)</span>
+                    <span>To</span>
                     <div class="email-chip-input" data-email-chip-input>
                       <input name="recipient_email_1" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
                     </div>
                   </label>
                 </div>
-              </div>
-              <div class="address-field-actions">
-                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Cc"><span>+</span>Add cc:</button>
-                <button class="add-placeholder add-address-link" type="button" data-add-address-row="Bcc"><span>+</span>Add bcc:</button>
-                <button class="add-placeholder remove-address-link" type="button" data-remove-address-row>Remove email field</button>
+                <div class="recipient-address-row type-cc is-extra">
+                  <div class="address-field-static">
+                    <input type="hidden" name="recipient_type" value="Cc" />
+                  </div>
+                  <label>
+                    <span>Cc:</span>
+                    <div class="email-chip-input" data-email-chip-input>
+                      <input name="recipient_email_4" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    </div>
+                  </label>
+                </div>
+                <div class="recipient-address-row type-bcc is-extra">
+                  <div class="address-field-static">
+                    <input type="hidden" name="recipient_type" value="Bcc" />
+                  </div>
+                  <label>
+                    <span>Bcc:</span>
+                    <div class="email-chip-input" data-email-chip-input>
+                      <input name="recipient_email_5" data-recipient-email-input type="text" value="" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
+                    </div>
+                  </label>
+                </div>
               </div>
               <div class="recipient-detail-grid"></div>
             </article>
