@@ -83,6 +83,10 @@ let generatedEmails = [];
 
 const studioVariant = document.body.dataset.studioVariant || "creative-approval";
 const isBlankSlateStudio = studioVariant === "blank";
+const autosaveVersions = {
+  blank: "v2",
+  "event-invite": "v3",
+};
 const studioFileSlugs = {
   blank: "custom-email-template",
   "event-invite": "event-invite-email-template",
@@ -95,7 +99,7 @@ const defaultFieldSets = {
   "sales-outreach": ["contact_firstname", "client_name", "recipient_role", "pain_point", "offer", "scheduling_link"],
   "creative-approval": ["client_name", "contact_firstname", "campaign_name", "deadline", "approval_link"],
 };
-const autosaveKey = `worksmartos-email-studio-draft-${studioVariant}-${isBlankSlateStudio ? "v2" : "v1"}`;
+const autosaveKey = `worksmartos-email-studio-draft-${studioVariant}-${autosaveVersions[studioVariant] || "v1"}`;
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
 
@@ -784,15 +788,31 @@ function mergeTemplate(template, data, options = {}) {
 }
 
 function normalizeDraftText(value) {
-  return String(value)
+  const normalized = String(value)
     .replace(/\u00a0/g, " ")
     .replace(/\r\n?/g, "\n")
     .split("\n")
     .map((line) => line.trim())
     .join("\n")
     .replace(/\n{3,}/g, "\n\n")
-    .replace(/\b(Thanks,|Thank you,)\n{2,}/gi, "$1\n")
     .trim();
+
+  if (studioVariant === "event-invite") {
+    return normalized;
+  }
+
+  return normalized
+    .replace(/\b(Thanks,|Thank you,)\n{2,}/gi, "$1\n");
+}
+
+function trimTrailingEmptyBlocks(container) {
+  if (studioVariant === "event-invite") {
+    return;
+  }
+
+  while (container.lastElementChild && !container.lastElementChild.textContent.trim()) {
+    container.lastElementChild.remove();
+  }
 }
 
 function htmlToText(html) {
@@ -1067,10 +1087,7 @@ function appendSenderNameToBody(bodyHtml, senderName) {
 
   const temp = document.createElement("div");
   temp.innerHTML = bodyHtml;
-
-  while (temp.lastElementChild && !temp.lastElementChild.textContent.trim()) {
-    temp.lastElementChild.remove();
-  }
+  trimTrailingEmptyBlocks(temp);
 
   return `${temp.innerHTML}<p>${escapeHtml(name)}</p>`;
 }
