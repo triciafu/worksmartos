@@ -172,6 +172,38 @@ const fieldLabels = {
 
 const fields = [...defaultFields];
 
+function activeTemplateFields() {
+  const activeFields = new Map();
+
+  [subjectTemplateEditor, bodyTemplateEditor].forEach((editor) => {
+    editor.querySelectorAll(".merge-token").forEach((token) => {
+      const field = fieldFromToken(token.dataset.token);
+      if (!field || field === "sender_name" || activeFields.has(field)) {
+        return;
+      }
+
+      activeFields.set(field, {
+        field,
+        label: labelFromTokenElement(token),
+      });
+    });
+  });
+
+  return Array.from(activeFields.values());
+}
+
+function syncRecipientFieldsFromTemplate() {
+  const activeFields = activeTemplateFields();
+
+  fields.length = 0;
+  activeFields.forEach((item) => {
+    fields.push(item.field);
+    fieldLabels[item.field] = sentenceCaseLabel(item.label || fieldLabels[item.field] || item.field);
+  });
+
+  syncRecipientDetailFieldOrder();
+}
+
 function recipientFieldTemplate(field, values = {}, sheetColumn = null) {
   const wideClass = ["approval_link"].includes(field) || !defaultFields.includes(field) ? " class=\"wide\"" : "";
   const columnStyle = sheetColumn ? ` style="--sheet-column: ${sheetColumn};"` : "";
@@ -866,10 +898,7 @@ function addRecipientField(field, label) {
     return;
   }
 
-  fields.push(field);
   fieldLabels[field] = sentenceCaseLabel(label);
-
-  syncRecipientDetailFieldOrder();
 }
 
 function paletteFieldsFromTemplate() {
@@ -988,7 +1017,7 @@ function resetTemplateFields(template) {
     bindTokenControl(token);
   });
 
-  syncRecipientDetailFieldOrder();
+  syncRecipientFieldsFromTemplate();
 }
 
 function loadTemplateState(template = {}) {
@@ -1129,6 +1158,7 @@ function insertTokenIntoEditor(editor, token, label) {
   selection.removeAllRanges();
   selection.addRange(range);
   savedTemplateRange = range.cloneRange();
+  syncRecipientFieldsFromTemplate();
   saveEditorHistory();
   scheduleAutosave();
 }
@@ -1173,6 +1203,7 @@ function restoreEditorHistory(index) {
   const [subjectHtml = "", bodyHtml = ""] = editorHistory[editorHistoryIndex].split("|||");
   subjectTemplateEditor.innerHTML = subjectHtml;
   bodyTemplateEditor.innerHTML = bodyHtml;
+  syncRecipientFieldsFromTemplate();
   bodyTemplateEditor.focus();
   isRestoringHistory = false;
   updateHistoryButtons();
@@ -1502,10 +1533,12 @@ formatButtons.forEach((button) => {
 });
 
 subjectTemplateEditor.addEventListener("input", () => {
+  syncRecipientFieldsFromTemplate();
   saveEditorHistory();
   scheduleAutosave();
 });
 bodyTemplateEditor.addEventListener("input", () => {
+  syncRecipientFieldsFromTemplate();
   saveEditorHistory();
   scheduleAutosave();
 });
@@ -1541,7 +1574,18 @@ tokenList.querySelectorAll("[data-token]").forEach(bindTokenControl);
 
 tokenList.addEventListener("click", (event) => {
   if (event.target.matches("[data-remove-placeholder]")) {
-    event.target.closest("[data-token]").remove();
+    const paletteToken = event.target.closest("[data-token]");
+    const tokenValue = paletteToken?.dataset.token;
+    paletteToken?.remove();
+    [subjectTemplateEditor, bodyTemplateEditor].forEach((editor) => {
+      editor.querySelectorAll(".merge-token").forEach((token) => {
+        if (token.dataset.token === tokenValue) {
+          token.remove();
+        }
+      });
+    });
+    syncRecipientFieldsFromTemplate();
+    saveEditorHistory();
     scheduleAutosave();
   }
 });
@@ -1550,6 +1594,7 @@ tokenList.addEventListener("click", (event) => {
   editor.addEventListener("click", (event) => {
     if (event.target.matches("[data-remove-token]")) {
       event.target.closest(".merge-token").remove();
+      syncRecipientFieldsFromTemplate();
       saveEditorHistory();
       scheduleAutosave();
     }
@@ -1727,7 +1772,7 @@ function generateEmails() {
 function goToStep(step, options = {}) {
   currentStep = Math.max(0, Math.min(step, 2));
   if (currentStep === 1) {
-    syncRecipientDetailFieldOrder();
+    syncRecipientFieldsFromTemplate();
   }
   if (options.immediate) {
     stepperTrack.style.transition = "none";
