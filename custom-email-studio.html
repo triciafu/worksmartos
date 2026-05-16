@@ -41,7 +41,7 @@
       </section>
 
       <nav class="studio-steps" aria-label="Batch Email Studio steps">
-        <button class="is-active" type="button" data-step-button="0"><span>1. Write template</span></button>
+        <button class="is-active" type="button" data-step-button="0"><span>1. Create template</span></button>
         <button type="button" data-step-button="1"><span>2. Add recipients</span></button>
         <button type="button" data-step-button="2"><span>3. Review emails</span></button>
       </nav>
@@ -72,23 +72,21 @@
             <div class="studio-panel-heading">
               <span>Step 1</span>
               <h2>Create your batch email template</h2>
-              <p>Describe what you need, or start blank. Add placeholders for any detail you want to edit later for each recipient.</p>
+              <p>Describe what you need, or create from scratch. Add placeholders for details specific to each recipient.</p>
             </div>
             <div class="template-start-panel" aria-label="Template starter">
               <label class="template-prompt">
-                <span>Describe what you need</span>
-                <textarea data-template-prompt rows="4" placeholder="Example: Send prospects a warm intro and ask them to book a demo."></textarea>
+                <textarea data-template-prompt rows="4" placeholder="Example: Send prospects a warm intro and ask them to book a demo." aria-label="Describe what you need"></textarea>
               </label>
               <div class="template-start-actions">
                 <button class="button secondary template-generate-button" type="button" data-generate-template>Generate template</button>
-                <button class="add-placeholder template-blank-button" type="button" data-template-preset="blank">Start blank</button>
+                <div class="token-row" aria-label="Available merge fields" data-token-list>
+                  <span data-token="{{contact_firstname}}" data-label="Recipient first name">Recipient first name<button type="button" data-remove-placeholder aria-label="Remove Recipient first name">×</button></span>
+                </div>
+                <button class="add-placeholder" type="button" data-add-placeholder><span>+</span>Add a new placeholder</button>
               </div>
               <p class="template-start-status" data-template-start-status aria-live="polite"></p>
             </div>
-            <div class="token-row" aria-label="Available merge fields" data-token-list>
-              <span data-token="{{contact_firstname}}" data-label="Recipient first name">Recipient first name<button type="button" data-remove-placeholder aria-label="Remove Recipient first name">×</button></span>
-            </div>
-            <button class="add-placeholder" type="button" data-add-placeholder><span>+</span>Add a new placeholder</button>
           </aside>
 
           <div class="studio-actions template-next-action">
