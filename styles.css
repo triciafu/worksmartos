@@ -2850,6 +2850,83 @@ iframe[style*="position: fixed"] {
   gap: 18px;
 }
 
+.send-center {
+  display: grid;
+  gap: 18px;
+  grid-column: 1 / -1;
+  padding: 24px;
+  border: 1px solid #e3e5ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.send-center-heading {
+  display: grid;
+  gap: 6px;
+}
+
+.send-center-heading span,
+.send-center-grid article span {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.send-center-heading h3 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.16;
+  font-weight: 500;
+}
+
+.send-center-heading p,
+.send-center-grid article p,
+.send-center-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.send-center-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.send-center-grid article {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-height: 148px;
+  padding: 18px;
+  border: 1px solid #e3e5ea;
+  border-radius: 8px;
+  background: #FAFAFA;
+}
+
+.send-center-grid article strong {
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.send-provider-actions,
+.direct-send-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.send-provider-actions {
+  margin-top: 4px;
+}
+
+.direct-send-actions {
+  padding-top: 2px;
+}
+
 .email-preview-card,
 .empty-state {
   display: grid;
@@ -2863,8 +2940,15 @@ iframe[style*="position: fixed"] {
 .email-preview-top {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 10px;
+}
+
+.email-preview-top > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
 }
 
 .email-preview-top strong {
@@ -2872,6 +2956,73 @@ iframe[style*="position: fixed"] {
   font-size: 12px;
   line-height: 1.24;
   font-weight: 500;
+}
+
+.email-status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 9px;
+  border: 1px solid #dfe2e8;
+  border-radius: 999px;
+  background: #FAFAFA;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.email-status-pill[data-status="Ready"] {
+  border-color: rgba(30, 159, 100, 0.28);
+  background: rgba(30, 159, 100, 0.08);
+  color: #187a4f;
+}
+
+.email-status-pill[data-status="Needs review"],
+.email-status-pill[data-status="Connection required"] {
+  border-color: rgba(217, 45, 32, 0.28);
+  background: rgba(217, 45, 32, 0.06);
+  color: #b42318;
+}
+
+.email-status-pill[data-status="Draft opened"] {
+  border-color: rgba(0, 113, 227, 0.24);
+  background: rgba(0, 113, 227, 0.06);
+  color: var(--accent);
+}
+
+.email-quality-check {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(217, 45, 32, 0.22);
+  border-radius: 8px;
+  background: rgba(217, 45, 32, 0.045);
+}
+
+.email-quality-check.is-ready {
+  border-color: rgba(30, 159, 100, 0.24);
+  background: rgba(30, 159, 100, 0.055);
+}
+
+.email-quality-check strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.email-quality-check p,
+.email-quality-check ul {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.email-quality-check ul {
+  display: grid;
+  gap: 4px;
+  padding-left: 18px;
 }
 
 .empty-state h3 {
@@ -2896,7 +3047,8 @@ iframe[style*="position: fixed"] {
 
 @media (max-width: 940px) {
   .studio-shell,
-  .email-preview-grid {
+  .email-preview-grid,
+  .send-center-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -3575,6 +3727,7 @@ body[data-studio-theme="white"] .stepper-track .studio-output {
 
 body[data-studio-theme="white"] .studio-panel,
 body[data-studio-theme="white"] .template-card,
+body[data-studio-theme="white"] .send-center,
 body[data-studio-theme="white"] .email-preview-card,
 body[data-studio-theme="white"] .empty-state,
 body[data-studio-theme="white"] .recipient-sheet,
@@ -3625,6 +3778,7 @@ body[data-studio-theme="dark"] .studio-steps .is-active span::after {
 
 body[data-studio-theme="dark"] .studio-panel,
 body[data-studio-theme="dark"] .template-card,
+body[data-studio-theme="dark"] .send-center,
 body[data-studio-theme="dark"] .email-preview-card,
 body[data-studio-theme="dark"] .empty-state,
 body[data-studio-theme="dark"] .recipient-sheet,
@@ -3681,11 +3835,38 @@ body[data-studio-theme="dark"] .draft-link {
 body[data-studio-theme="dark"] .token-row span,
 body[data-studio-theme="dark"] .merge-token,
 body[data-studio-theme="dark"] .email-address-chip,
+body[data-studio-theme="dark"] .email-status-pill,
+body[data-studio-theme="dark"] .send-center-grid article,
 body[data-studio-theme="dark"] .availability-table th,
 body[data-studio-theme="dark"] .availability-check-cell label {
   border-color: #34363d;
   background: #202124;
   color: var(--muted);
+}
+
+body[data-studio-theme="dark"] .send-center-heading h3,
+body[data-studio-theme="dark"] .send-center-grid article strong,
+body[data-studio-theme="dark"] .email-quality-check strong {
+  color: #f5f5f7;
+}
+
+body[data-studio-theme="dark"] .email-quality-check {
+  border-color: rgba(217, 45, 32, 0.35);
+  background: rgba(217, 45, 32, 0.12);
+}
+
+body[data-studio-theme="dark"] .email-quality-check.is-ready {
+  border-color: rgba(30, 159, 100, 0.35);
+  background: rgba(30, 159, 100, 0.12);
+}
+
+body[data-studio-theme="dark"] .email-status-pill[data-status="Ready"] {
+  color: #6fd69d;
+}
+
+body[data-studio-theme="dark"] .email-status-pill[data-status="Needs review"],
+body[data-studio-theme="dark"] .email-status-pill[data-status="Connection required"] {
+  color: #ffb4ab;
 }
 
 body[data-studio-theme="dark"] .availability-table td,

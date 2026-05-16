@@ -80,6 +80,7 @@ let autosaveTimer = null;
 let isRestoringAutosave = false;
 
 let generatedEmails = [];
+let emailWorkflowState = [];
 
 const studioVariant = document.body.dataset.studioVariant || "creative-approval";
 const isBlankSlateStudio = studioVariant === "blank";
@@ -522,6 +523,147 @@ function draftLinksHtml(email) {
       <a class="draft-link draft-link-primary" href="https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}" target="_blank" rel="noopener noreferrer">Send in Gmail</a>
       <a class="draft-link" href="https://outlook.office.com/mail/deeplink/compose?${outlookQuery}" target="_blank" rel="noopener noreferrer">Send in Outlook</a>
       <a class="draft-link" href="${escapeAttribute(mailtoHref)}">Default email app</a>
+    </div>
+  `;
+}
+
+function emailIdentity(email, index) {
+  const groups = getAddressGroups(email.addresses);
+  return `${index}-${groups.To.join("|")}-${email.subject || ""}`;
+}
+
+function emailRecipients(email) {
+  const groups = getAddressGroups(email.addresses);
+  return [...groups.To, ...groups.Cc, ...groups.Bcc].map((address) => address.trim()).filter(Boolean);
+}
+
+function qualityIssuesForEmail(email, index, emails) {
+  const issues = [];
+  const recipients = emailRecipients(email);
+  const toRecipients = getAddressGroups(email.addresses).To;
+  const subject = String(email.subject || "").trim();
+  const bodyText = htmlToText(email.body || "");
+  const duplicateRecipients = new Set();
+
+  emails.forEach((otherEmail, otherIndex) => {
+    if (otherIndex === index) {
+      return;
+    }
+
+    emailRecipients(otherEmail).forEach((address) => {
+      if (recipients.map((recipient) => recipient.toLowerCase()).includes(address.toLowerCase())) {
+        duplicateRecipients.add(address.toLowerCase());
+      }
+    });
+  });
+
+  if (!toRecipients.length) {
+    issues.push("Missing To recipient.");
+  }
+
+  if (!subject) {
+    issues.push("Missing subject.");
+  } else if (subject.length > 90) {
+    issues.push("Subject may be too long.");
+  }
+
+  if (!bodyText || bodyText.length < 40) {
+    issues.push("Body may need more detail.");
+  }
+
+  if (bodyText.includes("{{") || bodyText.includes("}}")) {
+    issues.push("Unmerged placeholder appears in body.");
+  }
+
+  if (subject.includes("{{") || subject.includes("}}")) {
+    issues.push("Unmerged placeholder appears in subject.");
+  }
+
+  if (duplicateRecipients.size) {
+    issues.push("Duplicate recipient appears in another email.");
+  }
+
+  return issues;
+}
+
+function qualitySummary(emails) {
+  return emails.reduce((summary, email, index) => {
+    const issueCount = qualityIssuesForEmail(email, index, emails).length;
+    if (issueCount) {
+      summary.needsReview += 1;
+      summary.issues += issueCount;
+    } else {
+      summary.ready += 1;
+    }
+    return summary;
+  }, { ready: 0, needsReview: 0, issues: 0 });
+}
+
+function sendCenterHtml(emails) {
+  const summary = qualitySummary(emails);
+  const pluralEmails = emails.length === 1 ? "email" : "emails";
+  const pluralIssues = summary.issues === 1 ? "issue" : "issues";
+
+  return `
+    <section class="send-center" aria-label="Send Center">
+      <div class="send-center-heading">
+        <span>Send Center</span>
+        <h3>${emails.length} ${pluralEmails} prepared</h3>
+        <p>${summary.ready} ready, ${summary.needsReview} need review, ${summary.issues} ${pluralIssues} found.</p>
+      </div>
+      <div class="send-center-grid">
+        <article>
+          <span>Quality check</span>
+          <strong>${summary.issues ? "Review recommended" : "Ready to send"}</strong>
+          <p>${summary.issues ? "Fix flagged emails before using a connected send method." : "No obvious issues found in this batch."}</p>
+        </article>
+        <article>
+          <span>Connected sending</span>
+          <strong>Gmail and Outlook</strong>
+          <p>Direct sending will be available after account connection and backend email permissions are enabled.</p>
+          <div class="send-provider-actions">
+            <button class="button secondary" type="button" data-connect-email-provider="gmail">Connect Gmail</button>
+            <button class="button secondary" type="button" data-connect-email-provider="outlook">Connect Outlook</button>
+          </div>
+        </article>
+        <article>
+          <span>Current send method</span>
+          <strong>Open drafts manually</strong>
+          <p>Use Gmail, Outlook, or your default email app below while direct sending is being connected.</p>
+        </article>
+      </div>
+      <p class="send-center-status" data-send-center-status aria-live="polite"></p>
+    </section>
+  `;
+}
+
+function statusPill(status) {
+  return `<span class="email-status-pill" data-status="${escapeAttribute(status)}">${escapeHtml(status)}</span>`;
+}
+
+function qualityListHtml(issues) {
+  if (!issues.length) {
+    return `
+      <div class="email-quality-check is-ready" data-quality-check>
+        <strong>Ready</strong>
+        <p>No obvious issues found.</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="email-quality-check" data-quality-check>
+      <strong>Needs review</strong>
+      <ul>${issues.map((issue) => `<li>${escapeHtml(issue)}</li>`).join("")}</ul>
+    </div>
+  `;
+}
+
+function directSendActionsHtml() {
+  return `
+    <div class="direct-send-actions" aria-label="Connected send actions">
+      <button class="button secondary" type="button" data-direct-send="gmail">Send via connected Gmail</button>
+      <button class="button secondary" type="button" data-direct-send="outlook">Send via connected Outlook</button>
     </div>
   `;
 }
@@ -1231,7 +1373,15 @@ function restoreEditorHistory(index) {
 
 function renderEmails(emails) {
   output.innerHTML = "";
-  generatedEmails = emails;
+  generatedEmails = emails.map((email, index) => ({
+    ...email,
+    workflowId: emailIdentity(email, index),
+  }));
+  emailWorkflowState = generatedEmails.map((email, index) => ({
+    id: email.workflowId,
+    status: qualityIssuesForEmail(email, index, generatedEmails).length ? "Needs review" : "Ready",
+    issues: qualityIssuesForEmail(email, index, generatedEmails),
+  }));
   outputCount.textContent = "Review and send emails";
   exportButton.disabled = emails.length === 0;
 
@@ -1244,14 +1394,21 @@ function renderEmails(emails) {
     return;
   }
 
-  emails.forEach((email, index) => {
+  output.insertAdjacentHTML("beforeend", sendCenterHtml(generatedEmails));
+
+  generatedEmails.forEach((email, index) => {
     const card = document.createElement("article");
     card.className = "email-preview-card";
+    card.dataset.workflowId = email.workflowId;
     const recipientTitle = email.client_name || email.event_name || email.contact_firstname || "Untitled recipient";
+    const workflow = emailWorkflowState[index];
     card.innerHTML = `
       <div class="email-preview-top">
-        <span>${String(index + 1).padStart(2, "0")}</span>
-        <strong>${escapeHtml(recipientTitle)}</strong>
+        <div>
+          <span>${String(index + 1).padStart(2, "0")}</span>
+          <strong>${escapeHtml(recipientTitle)}</strong>
+        </div>
+        ${statusPill(workflow.status)}
       </div>
       <div class="email-address-preview">
         ${addressPreviewHtml(email.addresses)}
@@ -1264,6 +1421,8 @@ function renderEmails(emails) {
         <span>Body</span>
         <div class="email-body-preview" contenteditable="true" data-body-input role="textbox" aria-multiline="true">${email.body}</div>
       </div>
+      ${qualityListHtml(workflow.issues)}
+      ${directSendActionsHtml()}
       ${draftLinksHtml(email)}
     `;
 
@@ -1277,6 +1436,54 @@ function renderEmails(emails) {
 
     output.appendChild(card);
   });
+}
+
+function updateEmailStatus(card, status, message = "") {
+  const workflowId = card?.dataset.workflowId;
+  const workflow = emailWorkflowState.find((item) => item.id === workflowId);
+  if (workflow) {
+    workflow.status = status;
+  }
+
+  const pill = card?.querySelector(".email-status-pill");
+  if (pill) {
+    pill.dataset.status = status;
+    pill.textContent = status;
+  }
+
+  const statusNode = output.querySelector("[data-send-center-status]");
+  if (statusNode && message) {
+    statusNode.textContent = message;
+  }
+}
+
+function refreshEmailCard(card) {
+  const index = Array.from(output.querySelectorAll(".email-preview-card")).indexOf(card);
+  if (index < 0 || !generatedEmails[index]) {
+    return;
+  }
+
+  generatedEmails[index].subject = card.querySelector("[data-subject-input]")?.value || "";
+  generatedEmails[index].body = card.querySelector("[data-body-input]")?.innerHTML || "";
+
+  const issues = qualityIssuesForEmail(generatedEmails[index], index, generatedEmails);
+  const workflow = emailWorkflowState[index];
+  if (workflow) {
+    workflow.issues = issues;
+    workflow.status = issues.length ? "Needs review" : "Ready";
+  }
+
+  const qualityNode = card.querySelector("[data-quality-check]");
+  if (qualityNode) {
+    qualityNode.outerHTML = qualityListHtml(issues);
+  }
+
+  const draftActions = card.querySelector(".draft-actions");
+  if (draftActions) {
+    draftActions.outerHTML = draftLinksHtml(generatedEmails[index]);
+  }
+
+  updateEmailStatus(card, issues.length ? "Needs review" : "Ready");
 }
 
 async function copyText(text) {
@@ -1506,6 +1713,43 @@ uploadCsvInput.addEventListener("change", async () => {
 
   importCsv(await file.text());
   uploadCsvInput.value = "";
+});
+
+output.addEventListener("click", (event) => {
+  const connectButton = event.target.closest("[data-connect-email-provider]");
+  if (connectButton) {
+    const statusNode = output.querySelector("[data-send-center-status]");
+    const provider = connectButton.dataset.connectEmailProvider === "gmail" ? "Gmail" : "Outlook";
+    if (statusNode) {
+      statusNode.textContent = `${provider} connection needs OAuth and backend sending to be enabled before direct send can run.`;
+    }
+    return;
+  }
+
+  const directSendButton = event.target.closest("[data-direct-send]");
+  if (directSendButton) {
+    const card = directSendButton.closest(".email-preview-card");
+    const provider = directSendButton.dataset.directSend === "gmail" ? "Gmail" : "Outlook";
+    updateEmailStatus(card, "Connection required", `${provider} direct sending is not connected yet. Open a draft manually for now.`);
+    return;
+  }
+
+  const draftLink = event.target.closest(".draft-link");
+  if (draftLink) {
+    const card = draftLink.closest(".email-preview-card");
+    updateEmailStatus(card, "Draft opened", "Draft opened. Mark it as sent after you send it from your email client.");
+  }
+});
+
+output.addEventListener("input", (event) => {
+  if (!event.target.matches("[data-subject-input], [data-body-input]")) {
+    return;
+  }
+
+  const card = event.target.closest(".email-preview-card");
+  if (card) {
+    refreshEmailCard(card);
+  }
 });
 
 
@@ -1848,4 +2092,6 @@ window.addEventListener("pagehide", saveAutosaveDraft);
 window.WorkSmartEmailStudio = {
   getTemplateState,
   loadTemplateState,
+  getGeneratedEmails: () => generatedEmails,
+  getSendWorkflowState: () => emailWorkflowState,
 };
