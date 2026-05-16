@@ -85,7 +85,7 @@ const studioVariant = document.body.dataset.studioVariant || "creative-approval"
 const isBlankSlateStudio = studioVariant === "blank";
 const autosaveVersions = {
   blank: "v2",
-  "event-invite": "v4",
+  "event-invite": "v5",
 };
 const studioFileSlugs = {
   blank: "custom-email-template",
@@ -163,7 +163,7 @@ const fieldLabels = {
   event_date: "Event date",
   event_time: "Event time",
   event_location: "Event location",
-  rsvp_link: "RSVP link",
+  rsvp_link: "Registration link",
   recipient_role: "Role",
   pain_point: "Pain point",
   offer: "Offer",
