@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Choose a meeting time from available options without connecting a calendar."
+    />
+    <title>Choose a Meeting Time | WorkSmartOS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="WorkSmartOS home">
+          <span>WorkSmartOS</span>
+          <span class="brand-beta">Beta</span>
+        </a>
+        <div class="nav-links" data-nav>
+          <a href="index.html#tools">Explore tools</a>
+          <a href="index.html#enterprise">Enterprise Solutions</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="booking-page">
+      <section class="booking-card">
+        <p class="eyebrow">Meeting request</p>
+        <h1 data-booking-title>Choose a meeting time</h1>
+        <p data-booking-summary></p>
+
+        <form class="booking-form" data-booking-form>
+          <fieldset>
+            <legend>Available times</legend>
+            <div class="booking-time-list" data-booking-times></div>
+          </fieldset>
+
+          <label>
+            <span>Your name</span>
+            <input name="guest_name" autocomplete="name" required />
+          </label>
+          <label>
+            <span>Your email</span>
+            <input name="guest_email" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            <span>Notes</span>
+            <textarea name="guest_notes" placeholder="Optional"></textarea>
+          </label>
+
+          <button class="button primary" type="submit">Send selected time</button>
+        </form>
+
+        <div class="booking-response is-hidden" data-booking-response>
+          <span>Response message</span>
+          <textarea readonly data-booking-response-message></textarea>
+          <a class="button primary" href="#" data-booking-mailto>Open email response</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>WorkSmartOS</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:contact@worksmartos.com">contact@worksmartos.com</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="meeting-booking.js"></script>
+  </body>
+</html>

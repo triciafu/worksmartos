@@ -98,6 +98,16 @@
               <span>Time zone</span>
               <input name="timezone" value="Recipient local time" />
             </label>
+            <label>
+              <span>Organizer email</span>
+              <input name="organizer_email" type="email" value="contact@worksmartos.com" />
+            </label>
+            <label class="meeting-form-full">
+              <span>Available time options</span>
+              <textarea name="time_options">Tuesday at 10:00 AM
+Wednesday at 1:30 PM
+Thursday at 3:00 PM</textarea>
+            </label>
             <label class="meeting-form-full">
               <span>Scheduling rules</span>
               <textarea name="rules">Avoid Fridays, protect focus blocks, and offer three options.</textarea>
@@ -122,6 +132,11 @@
           <div>
             <span>Automation plan</span>
             <ol data-meeting-plan></ol>
+          </div>
+          <div>
+            <span>Guest booking link</span>
+            <input class="meeting-link-output" readonly data-booking-link />
+            <button class="button secondary" type="button" data-copy-booking-link>Copy booking link</button>
           </div>
           <div>
             <span>Suggested message</span>

@@ -9,6 +9,8 @@ const meetingModes = {
     duration: "30 minutes",
     location: "Google Meet",
     timezone: "Recipient local time",
+    organizerEmail: "contact@worksmartos.com",
+    timeOptions: "Tuesday at 10:00 AM\nWednesday at 1:30 PM\nThursday at 3:00 PM",
     rules: "Avoid Fridays, protect focus blocks, and offer three options.",
     context: "Share the purpose of the meeting and ask guests to send any questions ahead of time.",
   },
@@ -22,6 +24,8 @@ const meetingModes = {
     duration: "45 minutes",
     location: "Zoom",
     timezone: "Show all options in each guest's local time",
+    organizerEmail: "contact@worksmartos.com",
+    timeOptions: "Monday at 11:00 AM\nTuesday at 2:00 PM\nThursday at 12:30 PM",
     rules: "Collect availability from every guest, rank overlapping windows, and avoid early mornings.",
     context: "Ask guests to choose every time that works so the final meeting can be scheduled quickly.",
   },
@@ -35,6 +39,8 @@ const meetingModes = {
     duration: "30 minutes",
     location: "Original meeting link",
     timezone: "Keep original time zone",
+    organizerEmail: "contact@worksmartos.com",
+    timeOptions: "Today at 4:00 PM\nTomorrow at 10:30 AM\nFriday at 1:00 PM",
     rules: "Preserve the original agenda, suggest two replacement times, and follow up after one business day.",
     context: "A conflict came up, but the meeting is still important and should be moved to a new time.",
   },
@@ -48,6 +54,8 @@ const meetingModes = {
     duration: "Default to 25 or 50 minutes",
     location: "Calendar rules",
     timezone: "Team local time",
+    organizerEmail: "contact@worksmartos.com",
+    timeOptions: "Tuesday through Thursday, 10:00 AM-3:00 PM\nNo Fridays\nNo meetings before 10:00 AM",
     rules: "No meetings before 10 AM, protect Fridays, and require an agenda for meetings over 30 minutes.",
     context: "The team needs fewer fragmented days and clearer rules for when meetings should be booked.",
   },
@@ -61,6 +69,8 @@ const meetingModes = {
     duration: "60 minutes",
     location: "Existing calendar invite",
     timezone: "Meeting time zone",
+    organizerEmail: "contact@worksmartos.com",
+    timeOptions: "Already scheduled\nPrep notes due two days before\nReminder sent one day before",
     rules: "Collect agenda items two days before the meeting and send prep notes the day before.",
     context: "Make sure everyone arrives with decisions, questions, and open items already captured.",
   },
@@ -75,6 +85,8 @@ const planList = document.querySelector("[data-meeting-plan]");
 const messageOutput = document.querySelector("[data-meeting-message]");
 const checklist = document.querySelector("[data-meeting-checklist]");
 const copyButton = document.querySelector("[data-copy-meeting-message]");
+const bookingLinkOutput = document.querySelector("[data-booking-link]");
+const copyBookingLinkButton = document.querySelector("[data-copy-booking-link]");
 
 let activeMode = "schedule";
 
@@ -91,6 +103,51 @@ function formValue(name) {
 
 function checkedOptions() {
   return Array.from(meetingForm.querySelectorAll('input[name="options"]:checked')).map((input) => input.value);
+}
+
+function timeOptions() {
+  return formValue("time_options")
+    .split(/\n+/)
+    .map((time) => time.trim())
+    .filter(Boolean);
+}
+
+function encodeBookingPayload(payload) {
+  return btoa(unescape(encodeURIComponent(JSON.stringify(payload))))
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
+    .replaceAll("=", "");
+}
+
+function bookingLink() {
+  const url = new URL("meeting-booking.html", window.location.href);
+  const payload = {
+    goal: formValue("goal"),
+    guests: formValue("guests"),
+    duration: formValue("duration"),
+    location: formValue("location"),
+    timezone: formValue("timezone"),
+    organizerEmail: formValue("organizer_email"),
+    context: formValue("context"),
+    times: timeOptions(),
+  };
+
+  url.searchParams.set("data", encodeBookingPayload(payload));
+  return url.href;
+}
+
+async function copyText(text) {
+  if (navigator.clipboard) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
 }
 
 function setMode(mode) {
@@ -112,6 +169,8 @@ function setMode(mode) {
   setField("duration", config.duration);
   setField("location", config.location);
   setField("timezone", config.timezone);
+  setField("organizer_email", config.organizerEmail);
+  setField("time_options", config.timeOptions);
   setField("rules", config.rules);
   setField("context", config.context);
   generateWorkflow();
@@ -128,21 +187,21 @@ function planItems() {
   const base = {
     schedule: [
       `Collect availability from ${guests || "the required guests"} for ${dateRange || "the preferred window"}.`,
-      `Suggest the best ${duration || "meeting"} windows based on the rules: ${rules || "use default availability rules"}.`,
-      "Create the calendar invite with the meeting link, guests, and context.",
+      `Send a no-login booking link with ${timeOptions().length || "the"} available ${duration || "meeting"} options.`,
+      "Use the guest's selected time to create the final calendar invite.",
     ],
     group: [
       `Request availability from ${guests || "each guest"} and keep responses in one place.`,
-      "Rank overlapping windows by attendance, seniority, and preferred meeting rules.",
+      "Let guests choose from shared options without connecting their calendars.",
       `Schedule ${goal || "the meeting"} once a strong overlap is found.`,
     ],
     "follow-up": [
       "Check whether the meeting is missing responses or has a calendar conflict.",
-      `Offer new times within ${dateRange || "the preferred range"} while preserving the original context.`,
+      `Send a new no-login booking link with replacement times within ${dateRange || "the preferred range"}.`,
       "Send a clear follow-up if guests do not respond.",
     ],
     protect: [
-      "Apply the scheduling rules before new meetings are accepted.",
+      "Apply the scheduling rules before booking links are sent.",
       "Decline or reroute requests that conflict with protected time.",
       "Suggest better windows that respect focus blocks and meeting limits.",
     ],
@@ -162,9 +221,10 @@ function meetingMessage() {
   const duration = formValue("duration") || "30 minutes";
   const timezone = formValue("timezone") || "your local time";
   const context = formValue("context");
+  const link = bookingLink();
 
   if (activeMode === "follow-up") {
-    return `Hi,\n\nI wanted to follow up on ${goal}. Could you share a few times that work ${dateRange}? I’ll use ${timezone} and keep the meeting to ${duration}.\n\n${context}\n\nThank you,`;
+    return `Hi,\n\nI wanted to follow up on ${goal}. Please choose the time that works best here:\n${link}\n\nI’ll use ${timezone} and keep the meeting to ${duration}.\n\n${context}\n\nThank you,`;
   }
 
   if (activeMode === "protect") {
@@ -175,7 +235,7 @@ function meetingMessage() {
     return `Hi,\n\nAhead of ${goal}, please send any questions, decisions, or topics you want included in the agenda.\n\n${context}\n\nThank you,`;
   }
 
-  return `Hi,\n\nI’d like to schedule ${goal}. Could you share availability for ${dateRange}? I’m planning for ${duration}, and I’ll show times in ${timezone}.\n\n${context}\n\nThank you,`;
+  return `Hi,\n\nI’d like to schedule ${goal}. Please choose the time that works best here:\n${link}\n\nI’m planning for ${duration}, and I’ll show times in ${timezone}.\n\n${context}\n\nThank you,`;
 }
 
 function checklistItems() {
@@ -184,6 +244,7 @@ function checklistItems() {
     `Guests: ${formValue("guests") || "Not set"}`,
     `Timing: ${formValue("date_range") || "Not set"} · ${formValue("duration") || "Not set"}`,
     `Location: ${formValue("location") || "Not set"}`,
+    `Time options: ${timeOptions().join("; ") || "Not set"}`,
     `Rules: ${formValue("rules") || "Not set"}`,
   ];
 }
@@ -194,6 +255,7 @@ function renderList(list, items) {
 
 function generateWorkflow() {
   renderList(planList, planItems());
+  bookingLinkOutput.value = bookingLink();
   messageOutput.value = meetingMessage();
   renderList(checklist, checklistItems());
 }
@@ -210,10 +272,18 @@ meetingForm.addEventListener("submit", (event) => {
 meetingForm.addEventListener("input", generateWorkflow);
 
 copyButton.addEventListener("click", async () => {
-  await navigator.clipboard?.writeText(messageOutput.value);
+  await copyText(messageOutput.value);
   copyButton.textContent = "Copied";
   window.setTimeout(() => {
     copyButton.textContent = "Copy message";
+  }, 1400);
+});
+
+copyBookingLinkButton.addEventListener("click", async () => {
+  await copyText(bookingLinkOutput.value);
+  copyBookingLinkButton.textContent = "Copied";
+  window.setTimeout(() => {
+    copyBookingLinkButton.textContent = "Copy booking link";
   }, 1400);
 });
 

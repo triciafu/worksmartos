@@ -954,6 +954,7 @@ h1 {
 
 .meeting-form-grid input,
 .meeting-form-grid textarea,
+.meeting-link-output,
 .meeting-output textarea {
   width: 100%;
   border: 1px solid #dfe2e8;
@@ -969,6 +970,13 @@ h1 {
 .meeting-form-grid input {
   height: 44px;
   padding: 0 12px;
+}
+
+.meeting-link-output {
+  height: 40px;
+  padding: 0 10px;
+  color: var(--muted);
+  text-overflow: ellipsis;
 }
 
 .meeting-form-grid textarea {
@@ -1043,6 +1051,114 @@ h1 {
   resize: vertical;
 }
 
+.booking-page {
+  min-height: calc(100vh - 64px);
+  padding: 92px max(24px, calc((100vw - 760px) / 2 + 24px)) 112px;
+  background: #fafafa;
+}
+
+.booking-card {
+  display: grid;
+  gap: 22px;
+  padding: 34px;
+  border: 1px solid #e1e4ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.booking-card h1 {
+  margin: 0;
+  font-size: clamp(38px, 5vw, 58px);
+  line-height: 1;
+  font-weight: 600;
+}
+
+.booking-card > p:not(.eyebrow) {
+  margin: 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.booking-form,
+.booking-response {
+  display: grid;
+  gap: 16px;
+}
+
+.booking-form fieldset {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.booking-form legend,
+.booking-form span,
+.booking-response span {
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.booking-time-list {
+  display: grid;
+  gap: 10px;
+}
+
+.booking-time-list label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid #dfe2e8;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.booking-time-list input {
+  accent-color: var(--accent);
+}
+
+.booking-form label,
+.booking-response {
+  display: grid;
+  gap: 8px;
+}
+
+.booking-form input:not([type="radio"]),
+.booking-form textarea,
+.booking-response textarea {
+  width: 100%;
+  border: 1px solid #dfe2e8;
+  border-radius: 8px;
+  color: var(--ink);
+  background: #ffffff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.booking-form input:not([type="radio"]) {
+  height: 44px;
+  padding: 0 12px;
+}
+
+.booking-form textarea,
+.booking-response textarea {
+  min-height: 104px;
+  padding: 12px;
+  resize: vertical;
+}
+
+.booking-response {
+  padding-top: 18px;
+  border-top: 1px solid #e1e4ea;
+}
+
 @media (max-width: 1100px) {
   .meeting-studio-shell {
     grid-template-columns: 1fr;
@@ -1069,7 +1185,8 @@ h1 {
   }
 
   .meeting-builder,
-  .meeting-output {
+  .meeting-output,
+  .booking-card {
     padding: 22px;
   }
 }
