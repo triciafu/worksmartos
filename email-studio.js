@@ -324,6 +324,26 @@ function recipientSheetColumnWidths() {
   return ["92px", "132px", "minmax(260px, 1.45fr)", ...fieldColumns].join(" ");
 }
 
+function recipientSheetMinWidth() {
+  const fieldWidths = getRecipientFieldOrder().flatMap((field) => {
+    if (field === "approval_link") {
+      return [170, 220];
+    }
+
+    if (field === "contact_firstname") {
+      return [150];
+    }
+
+    if (field === "deadline") {
+      return [140];
+    }
+
+    return [160];
+  });
+
+  return 92 + 132 + 260 + fieldWidths.reduce((total, width) => total + width, 0);
+}
+
 function syncRecipientSheetHeader() {
   if (!recipientSheet || !recipientSheetHeader) {
     return;
@@ -331,7 +351,7 @@ function syncRecipientSheetHeader() {
 
   const headers = ["Email no.", "Actions", "Email address(es)", ...getRecipientFieldOrder().flatMap(fieldHeader)];
   recipientSheet.style.setProperty("--recipient-sheet-columns", recipientSheetColumnWidths());
-  recipientSheet.style.setProperty("--recipient-sheet-min-width", `${headers.length === 9 ? 1490 : Math.max(980, 352 + ((headers.length - 3) * 170))}px`);
+  recipientSheet.style.setProperty("--recipient-sheet-min-width", `${recipientSheetMinWidth()}px`);
   recipientSheetHeader.innerHTML = headers.map((header) => `<span>${escapeHtml(header)}</span>`).join("");
 }
 
