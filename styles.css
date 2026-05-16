@@ -4488,7 +4488,7 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 .template-generate-button {
   justify-self: start;
   min-height: 38px;
-  margin-right: 14px;
+  margin-right: 42px;
   padding: 0 18px;
   font-size: 13px;
 }
