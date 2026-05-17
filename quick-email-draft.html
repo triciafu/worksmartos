@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Turn a plain-language request into a review-ready email draft."
+      content="Tell WorkSmartOS what to write, reply to, find, or follow up on in email."
     />
-    <title>Quick Email Draft | WorkSmartOS</title>
+    <title>AI Email Assistant | WorkSmartOS</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-studio-theme="white">
@@ -50,22 +50,30 @@
           <aside class="quick-draft-guide">
             <div class="studio-panel-heading">
               <span>Step 1</span>
-              <h2>Create your email with AI</h2>
-              <p>Enter a prompt to generate an email draft, then review it before sending.</p>
+              <h2>AI Email Assistant</h2>
+              <p>Tell WorkSmartOS what to write, reply to, find, or follow up on.</p>
             </div>
 
             <div class="quick-draft-examples" aria-label="Example requests">
-              <button type="button" data-example-request="Send an email to Murilo and let him know we're working on it.">Working on it</button>
-              <button type="button" data-example-request="Email Lauren and ask if Thursday afternoon works for a quick check-in.">Schedule check-in</button>
-              <button type="button" data-example-request="Send an email to Jordan thanking them for the update and saying we'll follow up tomorrow.">Follow up tomorrow</button>
+              <button type="button" data-example-request="Send an email to John and let him know the proposal is ready.">Send update</button>
+              <button type="button" data-example-request="Respond to Bob and tell him Thursday afternoon works for a quick check-in.">Reply to Bob</button>
+              <button type="button" data-example-request="Follow up with everyone I emailed last week who has not responded.">Find follow-ups</button>
+              <button type="button" data-example-request="Summarize the emails I need to answer today.">Summarize inbox</button>
             </div>
           </aside>
 
           <form class="quick-draft-prompt-card studio-panel" id="quick-draft-form" data-quick-draft-form>
             <label>
-              <span>Email request</span>
-              <textarea name="request" data-request-input>Send an email to Murilo and let him know we're working on it.</textarea>
+              <span>What should WorkSmartOS do with your email?</span>
+              <textarea name="request" data-request-input>Send an email to John and let him know the proposal is ready.</textarea>
             </label>
+
+            <div class="quick-assistant-capabilities" aria-label="AI email assistant capabilities">
+              <span>Draft</span>
+              <span>Reply</span>
+              <span>Follow up</span>
+              <span>Summarize</span>
+            </div>
 
             <p class="quick-draft-status" data-quick-draft-status aria-live="polite"></p>
           </form>
@@ -80,24 +88,39 @@
           <div class="studio-output-heading">
             <div class="studio-panel-heading">
               <span>Step 2</span>
-              <h2>Review and send email</h2>
+              <h2>Review assistant output</h2>
+            </div>
+          </div>
+
+          <div class="quick-assistant-summary" data-assistant-summary>
+            <div>
+              <span>Intent</span>
+              <strong data-assistant-intent>Send email</strong>
+            </div>
+            <div>
+              <span>Next action</span>
+              <strong data-assistant-action>Review draft</strong>
+            </div>
+            <div>
+              <span>Needs connection</span>
+              <strong data-assistant-connection>Gmail or Outlook</strong>
             </div>
           </div>
 
           <div class="quick-draft-card email-preview-card">
             <label>
               <span>To</span>
-              <input data-draft-to value="Murilo" />
+              <input data-draft-to value="John" />
             </label>
             <label>
               <span>Subject</span>
-              <input data-draft-subject value="Quick update" />
+              <input data-draft-subject value="Proposal ready" />
             </label>
             <label>
               <span>Body</span>
-              <textarea data-draft-body>Hi Murilo,
+              <textarea data-draft-body>Hi John,
 
-Just wanted to let you know we're working on it and will keep you posted as things move forward.
+Just wanted to let you know the proposal is ready.
 
 Thank you,</textarea>
             </label>

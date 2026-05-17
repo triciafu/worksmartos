@@ -1595,6 +1595,55 @@ h1 {
   color: var(--accent);
 }
 
+.quick-assistant-capabilities,
+.quick-assistant-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-assistant-capabilities span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #FAFAFA;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.quick-assistant-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.quick-assistant-summary div {
+  display: grid;
+  gap: 6px;
+  min-height: 86px;
+  align-content: center;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.quick-assistant-summary span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.quick-assistant-summary strong {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+}
+
 .quick-draft-actions,
 .quick-draft-send {
   display: flex;
@@ -1657,6 +1706,10 @@ h1 {
   .quick-draft-examples {
     display: flex;
     flex-wrap: wrap;
+  }
+
+  .quick-assistant-summary {
+    grid-template-columns: 1fr;
   }
 
   .meeting-studio-shell {
@@ -4040,6 +4093,8 @@ body[data-studio-theme="dark"] .merge-token,
 body[data-studio-theme="dark"] .email-address-chip,
 body[data-studio-theme="dark"] .email-status-pill,
 body[data-studio-theme="dark"] .quick-draft-examples button,
+body[data-studio-theme="dark"] .quick-assistant-capabilities span,
+body[data-studio-theme="dark"] .quick-assistant-summary div,
 body[data-studio-theme="dark"] .template-start-options button,
 body[data-studio-theme="dark"] .availability-table th,
 body[data-studio-theme="dark"] .availability-check-cell label {

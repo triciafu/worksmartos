@@ -9,9 +9,13 @@ const draftBody = document.querySelector("[data-draft-body]");
 const mailtoDraft = document.querySelector("[data-mailto-draft]");
 const sendNowButton = document.querySelector("[data-quick-send-now]");
 const qualityPanel = document.querySelector("[data-quick-draft-quality]");
+const assistantIntent = document.querySelector("[data-assistant-intent]");
+const assistantAction = document.querySelector("[data-assistant-action]");
+const assistantConnection = document.querySelector("[data-assistant-connection]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
+let currentIntent = "send";
 
 function applyStudioTheme(theme) {
   const nextTheme = studioThemes.has(theme) ? theme : "white";
@@ -50,6 +54,7 @@ function sentenceCase(value) {
 function extractRecipient(request) {
   const patterns = [
     /\b(?:send|write|draft|email)\s+(?:an\s+email\s+)?to\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /\b(?:respond|reply)\s+to\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
     /\bemail\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
   ];
 
@@ -63,6 +68,20 @@ function extractRecipient(request) {
   return "";
 }
 
+function detectIntent(request) {
+  const lower = String(request || "").toLowerCase();
+  if (/\b(summarize|summary|digest)\b/.test(lower)) {
+    return "summarize";
+  }
+  if (/\b(follow up|follow-up|has not responded|haven't responded|waiting on)\b/.test(lower)) {
+    return "follow-up";
+  }
+  if (/\b(respond|reply)\b/.test(lower)) {
+    return "reply";
+  }
+  return "send";
+}
+
 function extractMessage(request, recipient) {
   const text = String(request || "").trim();
   const letKnow = text.match(/\blet\s+(?:him|her|them|[A-Z][a-z]+)\s+know\s+(?:that\s+)?(.+?)(?:[.!?])?$/i);
@@ -73,6 +92,11 @@ function extractMessage(request, recipient) {
   const saying = text.match(/\b(?:saying|tell(?:ing)?|that)\s+(.+?)(?:[.!?])?$/i);
   if (saying?.[1]) {
     return saying[1].trim();
+  }
+
+  const tell = text.match(/\btell\s+(?:him|her|them|[A-Z][a-z]+)\s+(.+?)(?:[.!?])?$/i);
+  if (tell?.[1]) {
+    return tell[1].trim();
   }
 
   const ask = text.match(/\bask\s+(?:him|her|them|[A-Z][a-z]+)\s+(?:if|whether)\s+(.+?)(?:[.!?])?$/i);
@@ -97,6 +121,9 @@ function subjectFromMessage(message) {
   if (lower.includes("working on it") || lower.includes("work on it")) {
     return "Quick update";
   }
+  if (lower.includes("proposal")) {
+    return "Proposal ready";
+  }
   return "Quick note";
 }
 
@@ -114,15 +141,54 @@ ${firstSentence}
 Thank you,`;
 }
 
+function inboxActionBody(intent, request) {
+  if (intent === "follow-up") {
+    return `WorkSmartOS will look for sent emails that have not received a reply, prioritize the most important threads, and prepare follow-up drafts for review.
+
+Connect Gmail or Outlook to scan sent mail and identify open follow-ups.`;
+  }
+
+  if (intent === "summarize") {
+    return `WorkSmartOS will summarize the messages that need your attention, group them by urgency, and identify the replies or decisions waiting on you.
+
+Connect Gmail or Outlook to read the relevant inbox context.`;
+  }
+
+  return "";
+}
+
+function updateAssistantSummary(intent) {
+  const copy = {
+    send: ["Send email", "Review draft", "Optional for direct send"],
+    reply: ["Reply to thread", "Review reply", "Gmail or Outlook"],
+    "follow-up": ["Find follow-ups", "Connect inbox", "Gmail or Outlook"],
+    summarize: ["Summarize inbox", "Connect inbox", "Gmail or Outlook"],
+  };
+  const [intentLabel, actionLabel, connectionLabel] = copy[intent] || copy.send;
+
+  assistantIntent.textContent = intentLabel;
+  assistantAction.textContent = actionLabel;
+  assistantConnection.textContent = connectionLabel;
+}
+
 function createDraft() {
   const request = requestInput.value.trim();
+  const intent = detectIntent(request);
+  currentIntent = intent;
   const recipient = extractRecipient(request);
   const message = extractMessage(request, recipient);
 
-  draftTo.value = recipient || "";
-  draftSubject.value = subjectFromMessage(message);
-  draftBody.value = bodyFromRequest(recipient, message);
+  if (intent === "follow-up" || intent === "summarize") {
+    draftTo.value = "";
+    draftSubject.value = intent === "follow-up" ? "Follow-up review" : "Inbox summary";
+    draftBody.value = inboxActionBody(intent, request);
+  } else {
+    draftTo.value = recipient || "";
+    draftSubject.value = subjectFromMessage(message);
+    draftBody.value = bodyFromRequest(recipient, message);
+  }
 
+  updateAssistantSummary(intent);
   updateLinks();
   updateQuality();
 }
@@ -147,6 +213,13 @@ function updateLinks() {
 }
 
 function updateQuality() {
+  if (currentIntent === "follow-up" || currentIntent === "summarize") {
+    qualityPanel.classList.remove("is-ready");
+    qualityPanel.innerHTML =
+      "<strong>Connection required</strong><p>Connect Gmail or Outlook to use inbox-aware assistant actions.</p>";
+    return;
+  }
+
   const issues = [];
   if (!draftTo.value.trim()) {
     issues.push("Recipient is missing.");
@@ -223,5 +296,7 @@ if (!SpeechRecognition) {
 }
 
 restoreStudioTheme();
+currentIntent = detectIntent(requestInput.value);
+updateAssistantSummary(currentIntent);
 updateLinks();
 updateQuality();
