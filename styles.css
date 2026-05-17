@@ -1587,7 +1587,8 @@ h1 {
 
 .quick-draft-prompt-card textarea,
 .quick-draft-card input,
-.quick-draft-card textarea {
+.quick-draft-card textarea,
+.quick-body-input {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1614,6 +1615,18 @@ h1 {
   min-height: 360px;
   padding: 14px 14px 62px;
   resize: vertical;
+}
+
+.quick-body-input {
+  min-height: 360px;
+  padding: 14px 14px 62px;
+  overflow: auto;
+  outline: none;
+  white-space: pre-wrap;
+}
+
+.quick-body-input:focus {
+  border-color: var(--accent);
 }
 
 .quick-body-editor {
@@ -1947,12 +1960,19 @@ h1 {
 
 .quick-inbox-item.is-active {
   border-color: var(--accent);
+  background: rgba(0, 113, 227, 0.06);
   box-shadow: 0 0 0 1px rgba(0, 113, 227, 0.15);
 }
 
 .quick-inbox-item:hover {
   border-color: rgba(0, 113, 227, 0.5);
   background: rgba(0, 113, 227, 0.06);
+}
+
+.quick-inbox-list:hover .quick-inbox-item.is-active:not(:hover) {
+  border-color: var(--line);
+  background: #FAFAFA;
+  box-shadow: none;
 }
 
 .quick-inbox-item.is-open {
@@ -4423,6 +4443,7 @@ body[data-studio-theme="dark"] .availability-card textarea,
 body[data-studio-theme="dark"] .quick-draft-prompt-card textarea,
 body[data-studio-theme="dark"] .quick-draft-card input,
 body[data-studio-theme="dark"] .quick-draft-card textarea,
+body[data-studio-theme="dark"] .quick-body-input,
 body[data-studio-theme="dark"] .availability-table input,
 body[data-studio-theme="dark"] .availability-message-panel textarea,
 body[data-studio-theme="dark"] .availability-row-tools input,
@@ -4494,6 +4515,17 @@ body[data-studio-theme="dark"] .quick-inbox-item.is-open {
 body[data-studio-theme="dark"] .quick-inbox-item:hover {
   border-color: rgba(0, 113, 227, 0.55);
   background: rgba(0, 113, 227, 0.12);
+}
+
+body[data-studio-theme="dark"] .quick-inbox-item.is-active {
+  border-color: rgba(0, 113, 227, 0.55);
+  background: rgba(0, 113, 227, 0.12);
+}
+
+body[data-studio-theme="dark"] .quick-inbox-list:hover .quick-inbox-item.is-active:not(:hover) {
+  border-color: #34363d;
+  background: #202124;
+  box-shadow: none;
 }
 
 body[data-studio-theme="dark"] .quick-chat-message.user {

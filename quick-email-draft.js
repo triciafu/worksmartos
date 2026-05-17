@@ -14,10 +14,29 @@ const qualityPanel = document.querySelector("[data-quick-draft-quality]");
 const chatPreview = document.querySelector("[data-chat-preview] p");
 const addRecipientFieldButtons = document.querySelectorAll("[data-add-recipient-field]");
 const removeRecipientFieldButtons = document.querySelectorAll("[data-remove-recipient-field]");
+const formatButtons = document.querySelectorAll("[data-format-command]");
+const formatLinkButton = document.querySelector("[data-format-link]");
+const attachFileButton = document.querySelector("[data-attach-file]");
+const attachmentInput = document.querySelector("[data-attachment-input]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
 let currentIntent = "send";
+
+function plainTextToHtml(value) {
+  return String(value || "")
+    .split(/\n/)
+    .map((line) => line || "<br>")
+    .join("<br>");
+}
+
+function getDraftBody() {
+  return draftBody.innerText.trim();
+}
+
+function setDraftBody(value) {
+  draftBody.innerHTML = plainTextToHtml(value);
+}
 
 function applyStudioTheme(theme) {
   const nextTheme = studioThemes.has(theme) ? theme : "white";
@@ -173,13 +192,13 @@ function createDraft() {
     draftCc.value = "";
     draftBcc.value = "";
     draftSubject.value = intent === "follow-up" ? "Follow-up review" : "Inbox summary";
-    draftBody.value = inboxActionBody(intent, request);
+    setDraftBody(inboxActionBody(intent, request));
   } else {
     draftTo.value = recipient || "";
     draftCc.value = "";
     draftBcc.value = "";
     draftSubject.value = subjectFromMessage(message);
-    draftBody.value = bodyFromRequest(recipient, message);
+    setDraftBody(bodyFromRequest(recipient, message));
   }
 
   updateLinks();
@@ -199,7 +218,7 @@ function updateLinks() {
     cc: draftCc.value.trim(),
     bcc: draftBcc.value.trim(),
     subject: draftSubject.value.trim(),
-    body: draftBody.value.trim(),
+    body: getDraftBody(),
   };
   const mailtoTo = encodeURIComponent(params.to);
   const mailtoQuery = queryString({
@@ -228,7 +247,7 @@ function updateQuality() {
   if (!draftSubject.value.trim()) {
     issues.push("Subject is missing.");
   }
-  if (!draftBody.value.trim()) {
+  if (!getDraftBody()) {
     issues.push("Body is missing.");
   }
 
@@ -262,6 +281,36 @@ document.querySelectorAll("[data-example-request]").forEach((button) => {
     updateLinks();
     updateQuality();
   });
+});
+
+formatButtons.forEach((button) => {
+  button.addEventListener("mousedown", (event) => event.preventDefault());
+  button.addEventListener("click", () => {
+    draftBody.focus();
+    document.execCommand(button.dataset.formatCommand, false, null);
+    updateLinks();
+  });
+});
+
+formatLinkButton.addEventListener("mousedown", (event) => event.preventDefault());
+formatLinkButton.addEventListener("click", () => {
+  draftBody.focus();
+  const url = window.prompt("Enter link URL");
+  if (url) {
+    document.execCommand("createLink", false, url);
+    updateLinks();
+  }
+});
+
+attachFileButton.addEventListener("click", () => {
+  attachmentInput.click();
+});
+
+attachmentInput.addEventListener("change", () => {
+  const count = attachmentInput.files.length;
+  statusText.textContent = count
+    ? `${count} attachment${count === 1 ? "" : "s"} selected. Gmail or Outlook connection will attach files when sending.`
+    : "";
 });
 
 document.querySelectorAll("[data-inbox-item]").forEach((item) => {
