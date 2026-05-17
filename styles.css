@@ -5254,10 +5254,34 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 }
 
 .batch-email-page .template-step {
-  grid-template-columns: minmax(240px, 280px) minmax(0, 600px) minmax(240px, 280px);
-  gap: 40px;
+  grid-template-columns: minmax(240px, 280px) minmax(0, 700px) minmax(220px, 260px);
+  gap: 32px;
   padding-right: 48px;
   padding-left: 48px;
+}
+
+.batch-email-page .template-card {
+  width: 700px;
+  padding: 24px;
+}
+
+.batch-email-page .template-card,
+.batch-email-page .template-guide,
+.batch-email-page .template-start-panel {
+  gap: 18px;
+}
+
+.batch-email-page .template-card .rich-editor {
+  min-height: 360px;
+}
+
+.batch-email-page .template-prompt textarea {
+  min-height: 116px;
+}
+
+.batch-email-page .template-generate-button {
+  margin-right: 0;
+  margin-bottom: 18px;
 }
 
 .batch-email-page .template-guide .studio-panel-heading p {
