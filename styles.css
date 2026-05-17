@@ -5254,15 +5254,22 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 }
 
 .batch-email-page .template-step {
-  grid-template-columns: minmax(240px, 280px) minmax(0, 700px) minmax(220px, 260px);
+  grid-template-columns: minmax(220px, 260px) minmax(0, 560px) minmax(200px, 240px);
   gap: 32px;
   padding-right: 48px;
   padding-left: 48px;
 }
 
 .batch-email-page .template-card {
-  width: 700px;
+  width: 560px;
   padding: 24px;
+}
+
+.batch-email-page .template-guide {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
 }
 
 .batch-email-page .template-card,
