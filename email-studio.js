@@ -643,8 +643,8 @@ function draftLinksHtml(email) {
 
   return `
     <div class="draft-actions" aria-label="Draft actions">
-      <a class="draft-link draft-link-primary" href="${escapeAttribute(mailtoHref)}">Open in drafts</a>
-      <button class="button secondary" type="button" data-direct-send>Send now</button>
+      <a class="draft-link" href="${escapeAttribute(mailtoHref)}">Open in drafts</a>
+      <button class="button primary" type="button" data-direct-send>Send now</button>
     </div>
   `;
 }
