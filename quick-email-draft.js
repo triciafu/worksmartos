@@ -17,7 +17,9 @@ const removeRecipientFieldButtons = document.querySelectorAll("[data-remove-reci
 const formatButtons = document.querySelectorAll("[data-format-command]");
 const formatLinkButton = document.querySelector("[data-format-link]");
 const attachFileButton = document.querySelector("[data-attach-file]");
+const attachDriveButton = document.querySelector("[data-attach-drive]");
 const attachmentInput = document.querySelector("[data-attachment-input]");
+const attachmentList = document.querySelector("[data-attachment-list]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
@@ -307,10 +309,18 @@ attachFileButton.addEventListener("click", () => {
 });
 
 attachmentInput.addEventListener("change", () => {
-  const count = attachmentInput.files.length;
+  const files = Array.from(attachmentInput.files);
+  const count = files.length;
+  attachmentList.innerHTML = files
+    .map((file) => `<span>${file.name}</span>`)
+    .join("");
   statusText.textContent = count
     ? `${count} attachment${count === 1 ? "" : "s"} selected. Gmail or Outlook connection will attach files when sending.`
     : "";
+});
+
+attachDriveButton.addEventListener("click", () => {
+  statusText.textContent = "Connect Google Drive to attach Drive files.";
 });
 
 document.querySelectorAll("[data-inbox-item]").forEach((item) => {

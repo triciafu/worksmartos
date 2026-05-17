@@ -1637,6 +1637,10 @@ h1 {
   display: block;
 }
 
+.quick-body-editor textarea {
+  display: none;
+}
+
 .quick-format-toolbar {
   position: absolute;
   right: 12px;
@@ -1678,10 +1682,39 @@ h1 {
   color: var(--ink);
 }
 
+.quick-format-toolbar svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
 .quick-format-toolbar span {
   width: 1px;
   height: 18px;
   background: var(--line);
+}
+
+.quick-attachment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-attachment-list span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #FAFAFA;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .quick-chat-thread {
@@ -4482,6 +4515,12 @@ body[data-studio-theme="dark"] .quick-format-toolbar {
 body[data-studio-theme="dark"] .quick-format-toolbar button:hover {
   background: #070707;
   color: #f5f5f7;
+}
+
+body[data-studio-theme="dark"] .quick-attachment-list span {
+  border-color: #34363d;
+  background: #202124;
+  color: var(--muted);
 }
 
 body[data-studio-theme="dark"] .token-row span,
