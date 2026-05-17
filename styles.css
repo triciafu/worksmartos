@@ -3239,10 +3239,15 @@ iframe[style*="position: fixed"] {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 14px;
   align-items: center;
-  padding: 14px 18px;
+  min-height: 108px;
+  padding: 22px 28px;
   border: 1px solid #e3e5ea;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.72);
+}
+
+.spreadsheet-tools > div:first-child {
+  align-self: center;
 }
 
 .spreadsheet-tools strong {
@@ -3676,12 +3681,18 @@ iframe[style*="position: fixed"] {
   background: #FAFAFA;
 }
 
+.stepper-track .recipient-panel.is-active-step {
+  gap: 28px;
+  padding: 40px 28px 48px;
+}
+
 .recipient-panel .studio-panel-heading h2 {
   font-size: 24px;
 }
 
 .recipient-panel > .studio-actions {
-  margin-top: 24px;
+  margin-top: 30px;
+  padding-bottom: 4px;
 }
 
 .add-email-row {
