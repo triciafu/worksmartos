@@ -5254,7 +5254,7 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 }
 
 .batch-email-page .template-step {
-  grid-template-columns: minmax(250px, 286px) 600px minmax(250px, 286px);
+  grid-template-columns: minmax(250px, 280px) 600px minmax(250px, 280px);
   gap: 50px;
 }
 
