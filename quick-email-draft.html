@@ -31,7 +31,7 @@
 
     <main class="studio-page quick-draft-page">
       <section class="studio-hero compact">
-        <p class="eyebrow">Draft an email from a request</p>
+        <p class="eyebrow">AI Email Assistant</p>
         <div class="studio-theme-control" role="group" aria-label="Studio theme">
           <button type="button" data-studio-theme="light">Light</button>
           <button class="is-active" type="button" data-studio-theme="white">White</button>
@@ -39,22 +39,26 @@
         </div>
       </section>
 
-      <nav class="studio-steps" aria-label="Quick Email Draft steps">
-        <button class="is-active" type="button"><span>1. Create email</span></button>
-        <button type="button"><span>2. Review email</span></button>
-        <button type="button"><span>3. Send</span></button>
-      </nav>
-
-      <section class="quick-draft-shell" aria-label="Natural language email draft tool">
-        <section class="quick-draft-command">
-          <div class="quick-draft-assistant">
+      <section class="quick-draft-shell quick-email-workspace" aria-label="AI email workspace">
+        <section class="quick-draft-assistant studio-panel" aria-label="AI chat">
             <div class="studio-panel-heading">
-              <span>Step 1</span>
+              <span>AI chat</span>
               <h2>AI Email Assistant</h2>
               <p>Tell WorkSmartOS what to write, reply to, find, or follow up on.</p>
             </div>
 
-            <form class="quick-draft-prompt-card studio-panel" id="quick-draft-form" data-quick-draft-form>
+            <div class="quick-chat-thread" aria-label="Assistant conversation">
+              <div class="quick-chat-message assistant">
+                <span>WorkSmartOS</span>
+                <p>I can draft new emails, reply to selected inbox messages, find follow-ups, or summarize what needs your attention.</p>
+              </div>
+              <div class="quick-chat-message user" data-chat-preview>
+                <span>You</span>
+                <p>Send an email to John and let him know the proposal is ready.</p>
+              </div>
+            </div>
+
+            <form class="quick-draft-prompt-card" id="quick-draft-form" data-quick-draft-form>
               <label>
                 <span>What should WorkSmartOS do with your email?</span>
                 <textarea name="request" data-request-input>Send an email to John and let him know the proposal is ready.</textarea>
@@ -81,74 +85,29 @@
               <button class="button primary" type="submit" form="quick-draft-form">Create draft</button>
               <button class="button secondary" type="button" data-voice-draft>Speak request</button>
             </div>
-          </div>
-
-          <aside class="quick-inbox-view studio-panel" aria-label="Inbox view">
-            <div class="quick-inbox-heading">
-              <div>
-                <span>Inbox view</span>
-                <h3>Work to manage</h3>
-              </div>
-              <strong>6 open</strong>
-            </div>
-
-            <div class="quick-inbox-list">
-              <article class="quick-inbox-item is-urgent">
-                <div>
-                  <span>Bob</span>
-                  <strong>Can Thursday work?</strong>
-                  <p>Quick check-in about the launch timeline.</p>
-                </div>
-                <button type="button" data-example-request="Respond to Bob and tell him Thursday afternoon works for a quick check-in.">Reply</button>
-              </article>
-              <article class="quick-inbox-item">
-                <div>
-                  <span>Lauren</span>
-                  <strong>Pricing sheet</strong>
-                  <p>Waiting for your notes before this goes to the client.</p>
-                </div>
-                <button type="button" data-example-request="Reply to Lauren and tell her the pricing sheet looks good to send.">Reply</button>
-              </article>
-              <article class="quick-inbox-item">
-                <div>
-                  <span>Jordan</span>
-                  <strong>Follow-up needed</strong>
-                  <p>No reply yet on the vendor approval.</p>
-                </div>
-                <button type="button" data-example-request="Follow up with Jordan about the vendor approval.">Follow up</button>
-              </article>
-            </div>
-          </aside>
         </section>
 
-        <section class="quick-draft-review studio-output" aria-label="Draft review">
-          <div class="studio-output-heading">
+        <section class="quick-compose-view studio-panel" aria-label="Email composer">
+          <div class="quick-compose-heading">
             <div class="studio-panel-heading">
-              <span>Step 2</span>
-              <h2>Created emails</h2>
-              <p>Drafts and replies created by WorkSmartOS appear here before anything is sent.</p>
+              <span>Email</span>
+              <h2>Compose and send</h2>
             </div>
+            <button class="button primary" type="button" data-quick-send-now>Send now</button>
           </div>
 
-          <div class="quick-assistant-summary" data-assistant-summary>
-            <div>
-              <span>Intent</span>
-              <strong data-assistant-intent>Send email</strong>
-            </div>
-            <div>
-              <span>Next action</span>
-              <strong data-assistant-action>Review draft</strong>
-            </div>
-            <div>
-              <span>Needs connection</span>
-              <strong data-assistant-connection>Gmail or Outlook</strong>
-            </div>
-          </div>
-
-          <div class="quick-draft-card email-preview-card">
+          <div class="quick-draft-card">
             <label>
               <span>To</span>
               <input data-draft-to value="John" />
+            </label>
+            <label>
+              <span>Cc</span>
+              <input data-draft-cc value="" />
+            </label>
+            <label>
+              <span>Bcc</span>
+              <input data-draft-bcc value="" />
             </label>
             <label>
               <span>Subject</span>
@@ -166,7 +125,6 @@ Thank you,</textarea>
 
           <div class="quick-draft-send">
             <a class="draft-link draft-link-primary" href="#" data-mailto-draft>Open in drafts</a>
-            <button class="button secondary" type="button" data-quick-send-now>Send now</button>
           </div>
 
           <div class="email-quality-check is-ready" data-quick-draft-quality>
@@ -174,6 +132,43 @@ Thank you,</textarea>
             <p>Draft is ready for review.</p>
           </div>
         </section>
+
+        <aside class="quick-inbox-view studio-panel" aria-label="Inbox view">
+            <div class="quick-inbox-heading">
+              <div>
+                <span>Inbox</span>
+                <h3>Work to manage</h3>
+              </div>
+              <strong>6 open</strong>
+            </div>
+
+            <div class="quick-inbox-list">
+              <article class="quick-inbox-item is-active is-urgent" tabindex="0" data-inbox-item data-inbox-from="Bob" data-inbox-subject="Can Thursday work?" data-inbox-body="Quick check-in about the launch timeline." data-inbox-request="Respond to Bob and tell him Thursday afternoon works for a quick check-in.">
+                <div>
+                  <span>Bob</span>
+                  <strong>Can Thursday work?</strong>
+                  <p>Quick check-in about the launch timeline.</p>
+                </div>
+                <button type="button">Reply</button>
+              </article>
+              <article class="quick-inbox-item" tabindex="0" data-inbox-item data-inbox-from="Lauren" data-inbox-subject="Pricing sheet" data-inbox-body="Waiting for your notes before this goes to the client." data-inbox-request="Reply to Lauren and tell her the pricing sheet looks good to send.">
+                <div>
+                  <span>Lauren</span>
+                  <strong>Pricing sheet</strong>
+                  <p>Waiting for your notes before this goes to the client.</p>
+                </div>
+                <button type="button">Reply</button>
+              </article>
+              <article class="quick-inbox-item" tabindex="0" data-inbox-item data-inbox-from="Jordan" data-inbox-subject="Follow-up needed" data-inbox-body="No reply yet on the vendor approval." data-inbox-request="Follow up with Jordan about the vendor approval.">
+                <div>
+                  <span>Jordan</span>
+                  <strong>Follow-up needed</strong>
+                  <p>No reply yet on the vendor approval.</p>
+                </div>
+                <button type="button">Follow up</button>
+              </article>
+            </div>
+        </aside>
       </section>
     </main>
 

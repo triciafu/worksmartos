@@ -4,14 +4,14 @@ const statusText = document.querySelector("[data-quick-draft-status]");
 const voiceButton = document.querySelector("[data-voice-draft]");
 const themeButtons = document.querySelectorAll("[data-studio-theme]");
 const draftTo = document.querySelector("[data-draft-to]");
+const draftCc = document.querySelector("[data-draft-cc]");
+const draftBcc = document.querySelector("[data-draft-bcc]");
 const draftSubject = document.querySelector("[data-draft-subject]");
 const draftBody = document.querySelector("[data-draft-body]");
 const mailtoDraft = document.querySelector("[data-mailto-draft]");
 const sendNowButton = document.querySelector("[data-quick-send-now]");
 const qualityPanel = document.querySelector("[data-quick-draft-quality]");
-const assistantIntent = document.querySelector("[data-assistant-intent]");
-const assistantAction = document.querySelector("[data-assistant-action]");
-const assistantConnection = document.querySelector("[data-assistant-connection]");
+const chatPreview = document.querySelector("[data-chat-preview] p");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
@@ -55,6 +55,7 @@ function extractRecipient(request) {
   const patterns = [
     /\b(?:send|write|draft|email)\s+(?:an\s+email\s+)?to\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
     /\b(?:respond|reply)\s+to\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /\bfollow\s+up\s+with\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
     /\bemail\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
   ];
 
@@ -157,38 +158,28 @@ Connect Gmail or Outlook to read the relevant inbox context.`;
   return "";
 }
 
-function updateAssistantSummary(intent) {
-  const copy = {
-    send: ["Send email", "Review draft", "Optional for direct send"],
-    reply: ["Reply to thread", "Review reply", "Gmail or Outlook"],
-    "follow-up": ["Find follow-ups", "Connect inbox", "Gmail or Outlook"],
-    summarize: ["Summarize inbox", "Connect inbox", "Gmail or Outlook"],
-  };
-  const [intentLabel, actionLabel, connectionLabel] = copy[intent] || copy.send;
-
-  assistantIntent.textContent = intentLabel;
-  assistantAction.textContent = actionLabel;
-  assistantConnection.textContent = connectionLabel;
-}
-
 function createDraft() {
   const request = requestInput.value.trim();
   const intent = detectIntent(request);
   currentIntent = intent;
   const recipient = extractRecipient(request);
   const message = extractMessage(request, recipient);
+  chatPreview.textContent = request || "Tell WorkSmartOS what you want done.";
 
-  if (intent === "follow-up" || intent === "summarize") {
+  if ((intent === "follow-up" && !recipient) || intent === "summarize") {
     draftTo.value = "";
+    draftCc.value = "";
+    draftBcc.value = "";
     draftSubject.value = intent === "follow-up" ? "Follow-up review" : "Inbox summary";
     draftBody.value = inboxActionBody(intent, request);
   } else {
     draftTo.value = recipient || "";
+    draftCc.value = "";
+    draftBcc.value = "";
     draftSubject.value = subjectFromMessage(message);
     draftBody.value = bodyFromRequest(recipient, message);
   }
 
-  updateAssistantSummary(intent);
   updateLinks();
   updateQuality();
 }
@@ -203,17 +194,25 @@ function queryString(params, aliases = {}) {
 function updateLinks() {
   const params = {
     to: draftTo.value.trim(),
+    cc: draftCc.value.trim(),
+    bcc: draftBcc.value.trim(),
     subject: draftSubject.value.trim(),
     body: draftBody.value.trim(),
   };
   const mailtoTo = encodeURIComponent(params.to);
-  const mailtoQuery = queryString({ subject: params.subject, body: params.body });
+  const mailtoQuery = queryString({
+    cc: params.cc,
+    bcc: params.bcc,
+    subject: params.subject,
+    body: params.body,
+  });
 
   mailtoDraft.href = `mailto:${mailtoTo}${mailtoQuery ? `?${mailtoQuery}` : ""}`;
 }
 
 function updateQuality() {
-  if (currentIntent === "follow-up" || currentIntent === "summarize") {
+  const needsInboxConnection = currentIntent === "summarize" || (currentIntent === "follow-up" && !draftTo.value.trim());
+  if (needsInboxConnection) {
     qualityPanel.classList.remove("is-ready");
     qualityPanel.innerHTML =
       "<strong>Connection required</strong><p>Connect Gmail or Outlook to use inbox-aware assistant actions.</p>";
@@ -249,10 +248,27 @@ document.querySelectorAll("[data-example-request]").forEach((button) => {
   });
 });
 
-[draftTo, draftSubject, draftBody].forEach((field) => {
+[draftTo, draftCc, draftBcc, draftSubject, draftBody].forEach((field) => {
   field.addEventListener("input", () => {
     updateLinks();
     updateQuality();
+  });
+});
+
+document.querySelectorAll("[data-inbox-item]").forEach((item) => {
+  item.addEventListener("click", () => {
+    document.querySelectorAll("[data-inbox-item]").forEach((inboxItem) => {
+      inboxItem.classList.toggle("is-active", inboxItem === item);
+    });
+    requestInput.value = item.dataset.inboxRequest || "";
+    createDraft();
+  });
+
+  item.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      item.click();
+    }
   });
 });
 
@@ -297,6 +313,5 @@ if (!SpeechRecognition) {
 
 restoreStudioTheme();
 currentIntent = detectIntent(requestInput.value);
-updateAssistantSummary(currentIntent);
 updateLinks();
 updateQuality();

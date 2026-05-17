@@ -1482,9 +1482,15 @@ h1 {
 .quick-draft-shell {
   display: grid;
   gap: 28px;
-  max-width: 1180px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 0 24px 32px;
+}
+
+.quick-email-workspace {
+  grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.25fr) minmax(320px, 0.9fr);
+  align-items: start;
+  gap: 18px;
 }
 
 .quick-draft-command {
@@ -1498,6 +1504,7 @@ h1 {
   display: grid;
   align-content: start;
   gap: 24px;
+  padding: 24px;
 }
 
 .quick-draft-assistant .studio-panel-heading h2 {
@@ -1519,6 +1526,10 @@ h1 {
   align-content: start;
   gap: 24px;
   padding: 34px;
+}
+
+.quick-draft-prompt-card {
+  padding: 0;
 }
 
 .quick-draft-prompt-card,
@@ -1555,7 +1566,7 @@ h1 {
 }
 
 .quick-draft-prompt-card textarea {
-  min-height: 210px;
+  min-height: 170px;
   padding: 14px;
   resize: vertical;
 }
@@ -1566,9 +1577,40 @@ h1 {
 }
 
 .quick-draft-card textarea {
-  min-height: 260px;
+  min-height: 360px;
   padding: 14px;
   resize: vertical;
+}
+
+.quick-chat-thread {
+  display: grid;
+  gap: 10px;
+}
+
+.quick-chat-message {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FAFAFA;
+}
+
+.quick-chat-message.user {
+  background: rgba(0, 113, 227, 0.06);
+}
+
+.quick-chat-message span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.quick-chat-message p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .quick-draft-examples {
@@ -1665,6 +1707,20 @@ h1 {
   padding: 24px;
 }
 
+.quick-compose-view {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: 24px;
+}
+
+.quick-compose-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .quick-inbox-heading {
   display: flex;
   align-items: start;
@@ -1719,6 +1775,11 @@ h1 {
   background: rgba(0, 113, 227, 0.06);
 }
 
+.quick-inbox-item.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(0, 113, 227, 0.15);
+}
+
 .quick-inbox-item strong {
   display: block;
   margin-top: 5px;
@@ -1763,14 +1824,15 @@ h1 {
 }
 
 .quick-draft-card {
-  padding: 26px;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #ffffff;
+  background: transparent;
+  border: 0;
 }
 
 .quick-draft-card label:not(:last-child) {
-  width: 75%;
+  width: 100%;
 }
 
 .quick-draft-status {
@@ -1785,6 +1847,10 @@ h1 {
   .quick-draft-command {
     grid-template-columns: minmax(0, 1fr);
     gap: 20px;
+  }
+
+  .quick-email-workspace {
+    grid-template-columns: 1fr;
   }
 
   .quick-draft-assistant .studio-panel-heading p {
@@ -4056,6 +4122,7 @@ body[data-studio-theme="white"] .send-summary,
 body[data-studio-theme="white"] .quick-draft-prompt-card,
 body[data-studio-theme="white"] .quick-draft-review,
 body[data-studio-theme="white"] .quick-inbox-view,
+body[data-studio-theme="white"] .quick-compose-view,
 body[data-studio-theme="white"] .email-preview-card,
 body[data-studio-theme="white"] .empty-state,
 body[data-studio-theme="white"] .recipient-sheet,
@@ -4110,6 +4177,7 @@ body[data-studio-theme="dark"] .send-summary,
 body[data-studio-theme="dark"] .quick-draft-prompt-card,
 body[data-studio-theme="dark"] .quick-draft-review,
 body[data-studio-theme="dark"] .quick-inbox-view,
+body[data-studio-theme="dark"] .quick-compose-view,
 body[data-studio-theme="dark"] .email-preview-card,
 body[data-studio-theme="dark"] .empty-state,
 body[data-studio-theme="dark"] .recipient-sheet,
@@ -4180,6 +4248,7 @@ body[data-studio-theme="dark"] .email-status-pill,
 body[data-studio-theme="dark"] .quick-draft-examples button,
 body[data-studio-theme="dark"] .quick-assistant-capabilities span,
 body[data-studio-theme="dark"] .quick-assistant-summary div,
+body[data-studio-theme="dark"] .quick-chat-message,
 body[data-studio-theme="dark"] .quick-inbox-item,
 body[data-studio-theme="dark"] .quick-inbox-heading strong,
 body[data-studio-theme="dark"] .quick-inbox-item button,
