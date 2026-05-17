@@ -12,8 +12,8 @@ const mailtoDraft = document.querySelector("[data-mailto-draft]");
 const sendNowButton = document.querySelector("[data-quick-send-now]");
 const qualityPanel = document.querySelector("[data-quick-draft-quality]");
 const chatPreview = document.querySelector("[data-chat-preview] p");
-const addRecipientFieldsButton = document.querySelector("[data-add-recipient-fields]");
-const optionalRecipientFields = document.querySelectorAll("[data-optional-recipient-field]");
+const addRecipientFieldButtons = document.querySelectorAll("[data-add-recipient-field]");
+const removeRecipientFieldButtons = document.querySelectorAll("[data-remove-recipient-field]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
@@ -243,6 +243,13 @@ form.addEventListener("submit", (event) => {
   createDraft();
 });
 
+requestInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    createDraft();
+  }
+});
+
 document.querySelectorAll("[data-example-request]").forEach((button) => {
   button.addEventListener("click", () => {
     requestInput.value = button.dataset.exampleRequest;
@@ -278,12 +285,29 @@ sendNowButton.addEventListener("click", () => {
   statusText.textContent = "Connect Gmail or Outlook to send directly.";
 });
 
-addRecipientFieldsButton.addEventListener("click", () => {
-  optionalRecipientFields.forEach((field) => {
+addRecipientFieldButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const fieldName = button.dataset.addRecipientField;
+    const field = document.querySelector(`[data-optional-recipient-field="${fieldName}"]`);
     field.hidden = false;
+    button.hidden = true;
+    const input = field.querySelector("input");
+    input.focus();
   });
-  addRecipientFieldsButton.hidden = true;
-  draftCc.focus();
+});
+
+removeRecipientFieldButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const fieldName = button.dataset.removeRecipientField;
+    const field = document.querySelector(`[data-optional-recipient-field="${fieldName}"]`);
+    const addButton = document.querySelector(`[data-add-recipient-field="${fieldName}"]`);
+    const input = field.querySelector("input");
+    input.value = "";
+    field.hidden = true;
+    addButton.hidden = false;
+    updateLinks();
+    updateQuality();
+  });
 });
 
 themeButtons.forEach((button) => {

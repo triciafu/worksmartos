@@ -60,7 +60,7 @@
 
             <form class="quick-draft-prompt-card" id="quick-draft-form" data-quick-draft-form>
               <label>
-                <span>What should WorkSmartOS do with your email?</span>
+                <span class="visually-hidden">What should WorkSmartOS do with your email?</span>
                 <textarea name="request" data-request-input>Send an email to John and let him know the proposal is ready.</textarea>
               </label>
 
@@ -93,15 +93,24 @@
               <span>To</span>
               <input data-draft-to value="John" />
             </label>
-            <button class="add-recipient-fields" type="button" data-add-recipient-fields>+ Add</button>
-            <label class="optional-recipient-field" data-optional-recipient-field hidden>
-              <span>Cc</span>
-              <input data-draft-cc value="" />
-            </label>
-            <label class="optional-recipient-field" data-optional-recipient-field hidden>
-              <span>Bcc</span>
-              <input data-draft-bcc value="" />
-            </label>
+            <div class="recipient-field-links">
+              <button class="add-recipient-fields" type="button" data-add-recipient-field="cc">+ Add Cc</button>
+              <button class="add-recipient-fields" type="button" data-add-recipient-field="bcc">+ Add Bcc</button>
+            </div>
+            <div class="optional-recipient-field" data-optional-recipient-field="cc" hidden>
+              <label>
+                <span>Cc</span>
+                <input data-draft-cc value="" />
+              </label>
+              <button class="remove-recipient-field" type="button" data-remove-recipient-field="cc">Remove</button>
+            </div>
+            <div class="optional-recipient-field" data-optional-recipient-field="bcc" hidden>
+              <label>
+                <span>Bcc</span>
+                <input data-draft-bcc value="" />
+              </label>
+              <button class="remove-recipient-field" type="button" data-remove-recipient-field="bcc">Remove</button>
+            </div>
             <label>
               <span>Subject</span>
               <input data-draft-subject value="Proposal ready" />
@@ -117,8 +126,8 @@ Thank you,</textarea>
           </div>
 
           <div class="quick-draft-send">
-            <a class="draft-link draft-link-primary" href="#" data-mailto-draft>Open in drafts</a>
-            <button class="button primary" type="button" data-quick-send-now>Send now</button>
+            <a class="draft-link" href="#" data-mailto-draft>Open in drafts</a>
+            <button class="draft-link" type="button" data-quick-send-now>Send now</button>
           </div>
 
           <div class="email-quality-check is-ready" data-quick-draft-quality>
