@@ -1576,6 +1576,10 @@ h1 {
   gap: 16px;
 }
 
+.quick-compose-output[hidden] {
+  display: none;
+}
+
 .compose-output-heading h2 {
   margin: 6px 0 0;
   color: var(--ink);
