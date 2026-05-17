@@ -1886,8 +1886,8 @@ h1 {
 }
 
 .quick-inbox-item.is-urgent {
-  border-color: rgba(0, 113, 227, 0.35);
-  background: rgba(0, 113, 227, 0.06);
+  border-color: var(--line);
+  background: #FAFAFA;
 }
 
 .quick-inbox-item.is-active {
@@ -4413,8 +4413,8 @@ body[data-studio-theme="dark"] .availability-check-cell label {
 }
 
 body[data-studio-theme="dark"] .quick-inbox-item.is-urgent {
-  border-color: rgba(0, 113, 227, 0.55);
-  background: rgba(0, 113, 227, 0.12);
+  border-color: #34363d;
+  background: #202124;
 }
 
 body[data-studio-theme="dark"] .quick-inbox-item.is-open {
