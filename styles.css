@@ -1499,6 +1499,10 @@ h1 {
   padding: 0 24px 32px;
 }
 
+.quick-draft-page .studio-hero {
+  max-width: 1320px;
+}
+
 .quick-email-workspace {
   grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.25fr) minmax(320px, 0.9fr);
   align-items: start;
@@ -1786,7 +1790,7 @@ h1 {
   color: var(--accent);
   font: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   cursor: pointer;
 }
 
@@ -1891,6 +1895,10 @@ h1 {
   box-shadow: 0 0 0 1px rgba(0, 113, 227, 0.15);
 }
 
+.quick-inbox-item.is-open {
+  background: #ffffff;
+}
+
 .quick-inbox-item strong {
   display: block;
   margin-top: 5px;
@@ -1922,6 +1930,29 @@ h1 {
 .quick-inbox-item button:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.quick-inbox-detail {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.quick-inbox-detail[hidden] {
+  display: none;
+}
+
+.quick-inbox-detail span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.quick-inbox-detail p {
+  margin: 0;
+  color: var(--ink);
 }
 
 .quick-draft-review {
@@ -4384,6 +4415,10 @@ body[data-studio-theme="dark"] .availability-check-cell label {
 body[data-studio-theme="dark"] .quick-inbox-item.is-urgent {
   border-color: rgba(0, 113, 227, 0.55);
   background: rgba(0, 113, 227, 0.12);
+}
+
+body[data-studio-theme="dark"] .quick-inbox-item.is-open {
+  background: #151516;
 }
 
 body[data-studio-theme="dark"] .quick-chat-message.user {

@@ -19,8 +19,6 @@ const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
 let currentIntent = "send";
 
-chatPreview.textContent = "";
-
 function applyStudioTheme(theme) {
   const nextTheme = studioThemes.has(theme) ? theme : "white";
   document.body.dataset.studioTheme = nextTheme;
@@ -270,7 +268,21 @@ document.querySelectorAll("[data-inbox-item]").forEach((item) => {
   item.addEventListener("click", () => {
     document.querySelectorAll("[data-inbox-item]").forEach((inboxItem) => {
       inboxItem.classList.toggle("is-active", inboxItem === item);
+      inboxItem.classList.toggle("is-open", inboxItem === item);
+      const detail = inboxItem.querySelector("[data-inbox-detail]");
+      if (detail) {
+        detail.hidden = inboxItem !== item;
+      }
     });
+    let detail = item.querySelector("[data-inbox-detail]");
+    if (!detail) {
+      detail = document.createElement("div");
+      detail.className = "quick-inbox-detail";
+      detail.dataset.inboxDetail = "";
+      detail.innerHTML = `<span>Message</span><p>${item.dataset.inboxBody || ""}</p>`;
+      item.append(detail);
+    }
+    detail.hidden = false;
     requestInput.value = item.dataset.inboxRequest || "";
     createDraft();
   });
