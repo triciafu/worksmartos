@@ -3873,6 +3873,11 @@ body[data-studio-theme="dark"] .stepper-track .studio-output {
   background: #151516;
 }
 
+body[data-studio-theme="dark"] .recipient-sheet-tools {
+  border-bottom-color: #34363d;
+  background: #151516;
+}
+
 body[data-studio-theme="dark"] .studio-panel-heading h2,
 body[data-studio-theme="dark"] .studio-output-heading h2,
 body[data-studio-theme="dark"] .empty-state h3 {
