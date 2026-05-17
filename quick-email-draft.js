@@ -12,6 +12,8 @@ const mailtoDraft = document.querySelector("[data-mailto-draft]");
 const sendNowButton = document.querySelector("[data-quick-send-now]");
 const qualityPanel = document.querySelector("[data-quick-draft-quality]");
 const chatPreview = document.querySelector("[data-chat-preview] p");
+const addRecipientFieldsButton = document.querySelector("[data-add-recipient-fields]");
+const optionalRecipientFields = document.querySelectorAll("[data-optional-recipient-field]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
@@ -274,6 +276,14 @@ document.querySelectorAll("[data-inbox-item]").forEach((item) => {
 
 sendNowButton.addEventListener("click", () => {
   statusText.textContent = "Connect Gmail or Outlook to send directly.";
+});
+
+addRecipientFieldsButton.addEventListener("click", () => {
+  optionalRecipientFields.forEach((field) => {
+    field.hidden = false;
+  });
+  addRecipientFieldsButton.hidden = true;
+  draftCc.focus();
 });
 
 themeButtons.forEach((button) => {

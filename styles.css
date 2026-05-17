@@ -1508,7 +1508,19 @@ h1 {
 }
 
 .quick-draft-assistant .studio-panel-heading h2 {
-  font-size: 24px;
+  margin: 6px 0 0;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.quick-compose-view .studio-panel-heading h2 {
+  margin: 6px 0 0;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.15;
 }
 
 .quick-draft-assistant .studio-panel-heading p,
@@ -1700,6 +1712,34 @@ h1 {
   justify-content: flex-start;
 }
 
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.icon-button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.icon-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .quick-inbox-view {
   display: grid;
   align-content: start;
@@ -1719,6 +1759,25 @@ h1 {
   align-items: start;
   justify-content: space-between;
   gap: 16px;
+}
+
+.add-recipient-fields {
+  width: fit-content;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.add-recipient-fields:hover {
+  color: var(--accent-dark);
+}
+
+.optional-recipient-field[hidden] {
+  display: none;
 }
 
 .quick-inbox-heading {
@@ -4236,6 +4295,12 @@ body[data-studio-theme="dark"] .template-prompt textarea,
 body[data-studio-theme="dark"] .template-save-panel input,
 body[data-studio-theme="dark"] .template-save-tools select,
 body[data-studio-theme="dark"] .draft-link {
+  border-color: #34363d;
+  background: #070707;
+  color: var(--ink);
+}
+
+body[data-studio-theme="dark"] .icon-button {
   border-color: #34363d;
   background: #070707;
   color: var(--ink);
