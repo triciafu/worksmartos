@@ -1489,25 +1489,24 @@ h1 {
 
 .quick-draft-command {
   display: grid;
-  grid-template-columns: minmax(180px, 220px) minmax(0, 600px) minmax(180px, 220px);
-  gap: 40px;
-  align-items: start;
-  justify-content: center;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
+  gap: 24px;
+  align-items: stretch;
 }
 
-.quick-draft-guide {
+.quick-draft-assistant {
   display: grid;
   align-content: start;
   gap: 24px;
-  padding-top: 16px;
 }
 
-.quick-draft-guide .studio-panel-heading h2 {
+.quick-draft-assistant .studio-panel-heading h2 {
   font-size: 24px;
 }
 
-.quick-draft-guide .studio-panel-heading p {
-  max-width: 260px;
+.quick-draft-assistant .studio-panel-heading p,
+.quick-draft-review .studio-panel-heading p {
+  max-width: 560px;
   margin: 14px 0 0;
   color: var(--muted);
   font-size: 15px;
@@ -1556,7 +1555,7 @@ h1 {
 }
 
 .quick-draft-prompt-card textarea {
-  min-height: 300px;
+  min-height: 210px;
   padding: 14px;
   resize: vertical;
 }
@@ -1573,7 +1572,8 @@ h1 {
 }
 
 .quick-draft-examples {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -1653,10 +1653,103 @@ h1 {
 }
 
 .quick-draft-actions {
+  display: flex;
+  align-content: start;
+  justify-content: flex-start;
+}
+
+.quick-inbox-view {
   display: grid;
   align-content: start;
-  justify-items: start;
-  padding-top: 36px;
+  gap: 18px;
+  padding: 24px;
+}
+
+.quick-inbox-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.quick-inbox-heading span,
+.quick-inbox-item span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.quick-inbox-heading h3 {
+  margin: 6px 0 0;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.quick-inbox-heading strong {
+  min-height: 28px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.quick-inbox-list {
+  display: grid;
+  gap: 10px;
+}
+
+.quick-inbox-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FAFAFA;
+}
+
+.quick-inbox-item.is-urgent {
+  border-color: rgba(0, 113, 227, 0.35);
+  background: rgba(0, 113, 227, 0.06);
+}
+
+.quick-inbox-item strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.quick-inbox-item p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.quick-inbox-item button {
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.quick-inbox-item button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .quick-draft-review {
@@ -1694,18 +1787,8 @@ h1 {
     gap: 20px;
   }
 
-  .quick-draft-guide,
-  .quick-draft-actions {
-    padding-top: 0;
-  }
-
-  .quick-draft-guide .studio-panel-heading p {
+  .quick-draft-assistant .studio-panel-heading p {
     max-width: 620px;
-  }
-
-  .quick-draft-examples {
-    display: flex;
-    flex-wrap: wrap;
   }
 
   .quick-assistant-summary {
@@ -3972,6 +4055,7 @@ body[data-studio-theme="white"] .template-card,
 body[data-studio-theme="white"] .send-summary,
 body[data-studio-theme="white"] .quick-draft-prompt-card,
 body[data-studio-theme="white"] .quick-draft-review,
+body[data-studio-theme="white"] .quick-inbox-view,
 body[data-studio-theme="white"] .email-preview-card,
 body[data-studio-theme="white"] .empty-state,
 body[data-studio-theme="white"] .recipient-sheet,
@@ -4025,6 +4109,7 @@ body[data-studio-theme="dark"] .template-card,
 body[data-studio-theme="dark"] .send-summary,
 body[data-studio-theme="dark"] .quick-draft-prompt-card,
 body[data-studio-theme="dark"] .quick-draft-review,
+body[data-studio-theme="dark"] .quick-inbox-view,
 body[data-studio-theme="dark"] .email-preview-card,
 body[data-studio-theme="dark"] .empty-state,
 body[data-studio-theme="dark"] .recipient-sheet,
@@ -4095,12 +4180,20 @@ body[data-studio-theme="dark"] .email-status-pill,
 body[data-studio-theme="dark"] .quick-draft-examples button,
 body[data-studio-theme="dark"] .quick-assistant-capabilities span,
 body[data-studio-theme="dark"] .quick-assistant-summary div,
+body[data-studio-theme="dark"] .quick-inbox-item,
+body[data-studio-theme="dark"] .quick-inbox-heading strong,
+body[data-studio-theme="dark"] .quick-inbox-item button,
 body[data-studio-theme="dark"] .template-start-options button,
 body[data-studio-theme="dark"] .availability-table th,
 body[data-studio-theme="dark"] .availability-check-cell label {
   border-color: #34363d;
   background: #202124;
   color: var(--muted);
+}
+
+body[data-studio-theme="dark"] .quick-inbox-item.is-urgent {
+  border-color: rgba(0, 113, 227, 0.55);
+  background: rgba(0, 113, 227, 0.12);
 }
 
 body[data-studio-theme="dark"] .template-help summary,
