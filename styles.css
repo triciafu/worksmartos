@@ -5254,8 +5254,10 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 }
 
 .batch-email-page .template-step {
-  grid-template-columns: minmax(250px, 280px) 600px minmax(250px, 280px);
-  gap: 50px;
+  grid-template-columns: minmax(240px, 280px) minmax(0, 600px) minmax(240px, 280px);
+  gap: 40px;
+  padding-right: 48px;
+  padding-left: 48px;
 }
 
 .batch-email-page .template-guide .studio-panel-heading p {
