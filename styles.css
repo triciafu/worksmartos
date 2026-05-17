@@ -3023,6 +3023,12 @@ iframe[style*="position: fixed"] {
   min-height: 220px;
 }
 
+.email-review-fields > .email-from-preview,
+.email-review-fields > .email-address-preview,
+.email-review-fields > label {
+  width: min(50%, 420px);
+}
+
 .email-preview-top {
   display: flex;
   align-items: center;
