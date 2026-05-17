@@ -1895,6 +1895,11 @@ h1 {
   box-shadow: 0 0 0 1px rgba(0, 113, 227, 0.15);
 }
 
+.quick-inbox-item:hover {
+  border-color: rgba(0, 113, 227, 0.5);
+  background: rgba(0, 113, 227, 0.06);
+}
+
 .quick-inbox-item.is-open {
   background: #ffffff;
 }
@@ -4419,6 +4424,11 @@ body[data-studio-theme="dark"] .quick-inbox-item.is-urgent {
 
 body[data-studio-theme="dark"] .quick-inbox-item.is-open {
   background: #151516;
+}
+
+body[data-studio-theme="dark"] .quick-inbox-item:hover {
+  border-color: rgba(0, 113, 227, 0.55);
+  background: rgba(0, 113, 227, 0.12);
 }
 
 body[data-studio-theme="dark"] .quick-chat-message.user {
