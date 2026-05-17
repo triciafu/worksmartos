@@ -3026,7 +3026,7 @@ iframe[style*="position: fixed"] {
 .email-review-fields > .email-from-preview,
 .email-review-fields > .email-address-preview,
 .email-review-fields > label {
-  width: min(50%, 420px);
+  width: 75%;
 }
 
 .email-preview-top {
