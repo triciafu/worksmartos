@@ -86,6 +86,15 @@ function updateUnreadCount() {
 }
 
 function setActiveInboxItem(item) {
+  if (item.classList.contains("is-open")) {
+    item.classList.remove("is-open");
+    const openDetail = item.querySelector("[data-inbox-detail]");
+    if (openDetail) {
+      openDetail.hidden = true;
+    }
+    return;
+  }
+
   document.querySelectorAll("[data-inbox-item]").forEach((inboxItem) => {
     inboxItem.classList.toggle("is-active", inboxItem === item);
     inboxItem.classList.toggle("is-open", inboxItem === item);
