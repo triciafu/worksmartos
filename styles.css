@@ -2959,7 +2959,7 @@ iframe[style*="position: fixed"] {
 
 .email-preview-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 18px;
 }
 
@@ -3005,12 +3005,26 @@ iframe[style*="position: fixed"] {
 .email-preview-card,
 .empty-state {
   display: grid;
-  grid-template-rows: 28px 55px 55px 55px minmax(260px, auto) auto 40px;
   gap: 16px;
   padding: 26px;
   border: 1px solid #e3e5ea;
   border-radius: 8px;
   background: #ffffff;
+}
+
+.email-review-fields {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(260px, 1.2fr) minmax(220px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.email-review-fields .email-body-field {
+  grid-column: 1 / -1;
+}
+
+.email-review-fields .email-body-preview {
+  min-height: 220px;
 }
 
 .email-preview-top {
@@ -3124,6 +3138,10 @@ iframe[style*="position: fixed"] {
 @media (max-width: 940px) {
   .studio-shell,
   .email-preview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .email-review-fields {
     grid-template-columns: 1fr;
   }
 }

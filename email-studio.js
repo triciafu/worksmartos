@@ -1867,19 +1867,21 @@ function renderEmails(emails) {
         </div>
         ${statusPill(workflow.status)}
       </div>
-      <div class="email-from-preview">
-        ${fromPreviewHtml(email)}
-      </div>
-      <div class="email-address-preview">
-        ${addressPreviewHtml(email.addresses)}
-      </div>
-      <label>
-        <span>Subject</span>
-        <input value="${escapeAttribute(email.subject)}" data-subject-input />
-      </label>
-      <div class="email-body-field">
-        <span>Body</span>
-        <div class="email-body-preview" contenteditable="true" data-body-input role="textbox" aria-multiline="true">${email.body}</div>
+      <div class="email-review-fields">
+        <div class="email-from-preview">
+          ${fromPreviewHtml(email)}
+        </div>
+        <div class="email-address-preview">
+          ${addressPreviewHtml(email.addresses)}
+        </div>
+        <label>
+          <span>Subject</span>
+          <input value="${escapeAttribute(email.subject)}" data-subject-input />
+        </label>
+        <div class="email-body-field">
+          <span>Body</span>
+          <div class="email-body-preview" contenteditable="true" data-body-input role="textbox" aria-multiline="true">${email.body}</div>
+        </div>
       </div>
       ${qualityListHtml(workflow.issues)}
       ${draftLinksHtml(email)}
