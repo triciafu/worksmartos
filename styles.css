@@ -3240,7 +3240,7 @@ iframe[style*="position: fixed"] {
   gap: 14px;
   align-items: center;
   min-height: 108px;
-  padding: 22px 28px;
+  padding: 22px 28px 0;
   border: 1px solid #e3e5ea;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.72);
