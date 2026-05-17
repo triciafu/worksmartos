@@ -320,7 +320,12 @@ attachmentInput.addEventListener("change", () => {
 });
 
 attachDriveButton.addEventListener("click", () => {
-  statusText.textContent = "Connect Google Drive to attach Drive files.";
+  const existingNames = Array.from(attachmentList.querySelectorAll("span")).map((item) => item.textContent);
+  const driveFileName = "Google Drive file";
+  if (!existingNames.includes(driveFileName)) {
+    attachmentList.insertAdjacentHTML("beforeend", `<span>${driveFileName}</span>`);
+  }
+  statusText.textContent = "Connect Google Drive to choose and attach Drive files.";
 });
 
 document.querySelectorAll("[data-inbox-item]").forEach((item) => {
