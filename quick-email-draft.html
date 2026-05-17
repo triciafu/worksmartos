@@ -122,9 +122,48 @@
           <div class="quick-compose-heading">
             <div class="studio-panel-heading">
               <span>Email</span>
-              <h2>Compose and send</h2>
+              <h2>Workspace</h2>
             </div>
           </div>
+
+          <section class="quick-draft-assistant workspace-ai" aria-label="AI chat">
+            <div class="studio-panel-heading">
+              <span>AI chat</span>
+              <h2>AI Email Assistant</h2>
+            </div>
+
+            <div class="quick-chat-thread" aria-label="Assistant conversation">
+              <div class="quick-chat-message assistant">
+                <span>WorkSmartOS</span>
+                <p>I can draft new emails, reply to selected inbox messages, find follow-ups, or summarize what needs your attention.</p>
+              </div>
+              <div class="quick-chat-message user" data-chat-preview>
+                <span>You</span>
+                <p>Send an email to John and let him know the proposal is ready.</p>
+              </div>
+            </div>
+
+            <form class="quick-draft-prompt-card" id="quick-draft-form" data-quick-draft-form>
+              <label>
+                <span class="visually-hidden">What should WorkSmartOS do with your email?</span>
+                <textarea name="request" data-request-input placeholder="Ask WorkSmartOS to draft, reply, follow up, or summarize."></textarea>
+              </label>
+
+              <p class="quick-draft-status" data-quick-draft-status aria-live="polite"></p>
+            </form>
+
+            <div class="quick-draft-actions">
+              <button class="icon-button" type="button" data-voice-draft aria-label="Speak request">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"></path>
+                  <path d="M19 11a7 7 0 0 1-14 0"></path>
+                  <path d="M12 18v3"></path>
+                  <path d="M8 21h8"></path>
+                </svg>
+              </button>
+              <button class="button primary" type="submit" form="quick-draft-form">Submit</button>
+            </div>
+          </section>
 
           <div class="quick-draft-card">
             <label>
@@ -227,45 +266,6 @@
             <strong>Ready</strong>
             <p>Draft is ready for review.</p>
           </div>
-        </section>
-
-        <section class="quick-draft-assistant studio-panel" aria-label="AI chat">
-            <div class="studio-panel-heading">
-              <span>AI chat</span>
-              <h2>AI Email Assistant</h2>
-            </div>
-
-            <div class="quick-chat-thread" aria-label="Assistant conversation">
-              <div class="quick-chat-message assistant">
-                <span>WorkSmartOS</span>
-                <p>I can draft new emails, reply to selected inbox messages, find follow-ups, or summarize what needs your attention.</p>
-              </div>
-              <div class="quick-chat-message user" data-chat-preview>
-                <span>You</span>
-                <p>Send an email to John and let him know the proposal is ready.</p>
-              </div>
-            </div>
-
-            <form class="quick-draft-prompt-card" id="quick-draft-form" data-quick-draft-form>
-              <label>
-                <span class="visually-hidden">What should WorkSmartOS do with your email?</span>
-                <textarea name="request" data-request-input placeholder="Ask WorkSmartOS to draft, reply, follow up, or summarize."></textarea>
-              </label>
-
-              <p class="quick-draft-status" data-quick-draft-status aria-live="polite"></p>
-            </form>
-
-            <div class="quick-draft-actions">
-              <button class="icon-button" type="button" data-voice-draft aria-label="Speak request">
-                <svg aria-hidden="true" viewBox="0 0 24 24">
-                  <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"></path>
-                  <path d="M19 11a7 7 0 0 1-14 0"></path>
-                  <path d="M12 18v3"></path>
-                  <path d="M8 21h8"></path>
-                </svg>
-              </button>
-              <button class="button primary" type="submit" form="quick-draft-form">Submit</button>
-            </div>
         </section>
       </section>
     </main>
