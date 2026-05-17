@@ -4561,9 +4561,27 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 }
 
 .stepper-track .studio-step.template-step {
+  display: grid;
+  width: 100%;
   max-width: none;
   margin-right: 0;
   margin-left: 0;
+}
+
+.stepper-track .studio-step.template-step.is-active-step {
+  max-width: 1120px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.stepper-track .recipient-panel.is-active-step {
+  display: grid;
+  width: 100%;
+}
+
+.stepper-track .studio-output.is-active-step {
+  display: block;
+  width: 100%;
 }
 
 .stepper-track .studio-controls.template-step > label,
