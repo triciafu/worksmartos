@@ -5101,6 +5101,25 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
   justify-self: start;
 }
 
+.batch-email-page .studio-hero,
+.batch-email-page .studio-steps,
+.batch-email-page .stepper-track .studio-step.template-step.is-active-step {
+  max-width: 1320px;
+}
+
+.batch-email-page .template-step {
+  grid-template-columns: minmax(260px, 300px) 600px minmax(260px, 300px);
+  gap: 60px;
+}
+
+.batch-email-page .template-guide .studio-panel-heading p {
+  max-width: 300px;
+}
+
+.batch-email-page .template-next-action {
+  transform: none;
+}
+
 
 @media (max-width: 980px) {
   .template-step {
