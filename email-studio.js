@@ -977,8 +977,39 @@ function csvHeaders() {
   return ["To", "Cc", "Bcc", ...getRecipientFieldOrder().flatMap(fieldHeader)];
 }
 
+function csvRowFromRecipientDraft(draft) {
+  const addressGroups = { To: [], Cc: [], Bcc: [] };
+  (draft.addresses || []).forEach((address) => {
+    const type = address.type || "To";
+    if (!addressGroups[type]) {
+      return;
+    }
+    if (address.email) {
+      addressGroups[type].push(address.email);
+    }
+  });
+
+  const values = [
+    addressGroups.To.join(", "),
+    addressGroups.Cc.join(", "),
+    addressGroups.Bcc.join(", "),
+  ];
+
+  getRecipientFieldOrder().forEach((field) => {
+    if (field === "approval_link") {
+      values.push(draft.approval_link_name || "", draft.approval_link_url || "");
+      return;
+    }
+
+    values.push(draft[field] || "");
+  });
+
+  return values;
+}
+
 function downloadCsvTemplate() {
-  const csv = `${csvHeaders().map(csvEscape).join(",")}\n`;
+  const rows = [csvHeaders(), ...recipientDrafts().map(csvRowFromRecipientDraft)];
+  const csv = `${rows.map((row) => row.map(csvEscape).join(",")).join("\n")}\n`;
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
