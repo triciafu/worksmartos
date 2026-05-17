@@ -72,9 +72,6 @@
                 <button type="button" data-mail-action="mark-unread" aria-label="Mark as unread" data-tooltip="Mark as unread">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"></path><path d="m4 7 8 6 8-6"></path></svg>
                 </button>
-                <button type="button" data-mail-action="schedule" aria-label="Schedule send" data-tooltip="Schedule send">
-                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3v4"></path><path d="M17 3v4"></path><path d="M4 8h16"></path><path d="M5 5h14v15H5z"></path><path d="M12 12v4l3 1.5"></path></svg>
-                </button>
                 <button type="button" data-mail-action="print" aria-label="Print" data-tooltip="Print">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 8V4h10v4"></path><path d="M7 17H5a2 2 0 0 1-2-2v-4h18v4a2 2 0 0 1-2 2h-2"></path><path d="M7 14h10v6H7z"></path></svg>
                 </button>
@@ -94,9 +91,6 @@
                 </div>
                 <div class="quick-inbox-item-actions">
                   <button type="button" data-reply-email>Reply</button>
-                  <button type="button" data-expand-email aria-label="Open email" data-tooltip="Open">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M16 3h3a2 2 0 0 1 2 2v3"></path><path d="M8 21H5a2 2 0 0 1-2-2v-3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path></svg>
-                  </button>
                 </div>
               </article>
               <article class="quick-inbox-item" tabindex="0" data-inbox-item data-inbox-from="Lauren" data-inbox-subject="Pricing sheet" data-inbox-body="Waiting for your notes before this goes to the client." data-inbox-request="Reply to Lauren and tell her the pricing sheet looks good to send.">
@@ -108,9 +102,6 @@
                 </div>
                 <div class="quick-inbox-item-actions">
                   <button type="button" data-reply-email>Reply</button>
-                  <button type="button" data-expand-email aria-label="Open email" data-tooltip="Open">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M16 3h3a2 2 0 0 1 2 2v3"></path><path d="M8 21H5a2 2 0 0 1-2-2v-3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path></svg>
-                  </button>
                 </div>
               </article>
               <article class="quick-inbox-item" tabindex="0" data-inbox-item data-inbox-from="Jordan" data-inbox-subject="Follow-up needed" data-inbox-body="No reply yet on the vendor approval." data-inbox-request="Follow up with Jordan about the vendor approval.">
@@ -122,9 +113,6 @@
                 </div>
                 <div class="quick-inbox-item-actions">
                   <button type="button" data-reply-email>Follow up</button>
-                  <button type="button" data-expand-email aria-label="Open email" data-tooltip="Open">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M16 3h3a2 2 0 0 1 2 2v3"></path><path d="M8 21H5a2 2 0 0 1-2-2v-3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path></svg>
-                  </button>
                 </div>
               </article>
             </div>
@@ -293,26 +281,6 @@
         <div class="studio-prompt-actions">
           <button class="draft-link" type="button" data-studio-prompt-cancel>Cancel</button>
           <button class="button primary" type="button" data-studio-prompt-confirm>Save</button>
-        </div>
-      </section>
-    </div>
-
-    <div class="studio-prompt-modal email-view-modal" data-email-view-modal hidden>
-      <div class="studio-prompt-backdrop" data-email-view-close></div>
-      <section class="email-view-dialog" role="dialog" aria-modal="true" aria-labelledby="email-view-title">
-        <div class="email-view-heading">
-          <div>
-            <span data-email-view-from></span>
-            <h2 id="email-view-title" data-email-view-subject></h2>
-          </div>
-          <button class="icon-button" type="button" data-email-view-close aria-label="Close email">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12"></path><path d="m18 6-12 12"></path></svg>
-          </button>
-        </div>
-        <p data-email-view-body></p>
-        <div class="email-view-actions">
-          <button class="button primary" type="button" data-email-view-reply>Draft response</button>
-          <button class="draft-link" type="button" data-email-view-close>Close</button>
         </div>
       </section>
     </div>

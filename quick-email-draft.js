@@ -34,12 +34,6 @@ const studioPromptInput = document.querySelector("[data-studio-prompt-input]");
 const studioPromptConfirm = document.querySelector("[data-studio-prompt-confirm]");
 const studioPromptCancelButtons = document.querySelectorAll("[data-studio-prompt-cancel]");
 const unreadCount = document.querySelector("[data-unread-count]");
-const emailViewModal = document.querySelector("[data-email-view-modal]");
-const emailViewFrom = document.querySelector("[data-email-view-from]");
-const emailViewSubject = document.querySelector("[data-email-view-subject]");
-const emailViewBody = document.querySelector("[data-email-view-body]");
-const emailViewReplyButton = document.querySelector("[data-email-view-reply]");
-const emailViewCloseButtons = document.querySelectorAll("[data-email-view-close]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
@@ -112,18 +106,6 @@ function setActiveInboxItem(item) {
   detail.hidden = false;
   requestInput.value = item.dataset.inboxRequest || "";
   createDraft();
-}
-
-function openEmailView(item) {
-  emailViewFrom.textContent = item.dataset.inboxFrom || "";
-  emailViewSubject.textContent = item.dataset.inboxSubject || "";
-  emailViewBody.textContent = item.dataset.inboxBody || "";
-  emailViewReplyButton.dataset.emailViewReply = item.dataset.inboxRequest || "";
-  emailViewModal.hidden = false;
-}
-
-function closeEmailView() {
-  emailViewModal.hidden = true;
 }
 
 function scheduleLabel(value) {
@@ -530,11 +512,6 @@ mailActionButtons.forEach((button) => {
       return;
     }
 
-    if (action === "schedule") {
-      statusText.textContent = "Schedule send is ready for the connected Gmail or Outlook account.";
-      return;
-    }
-
     if (action === "print") {
       window.print();
       return;
@@ -564,11 +541,6 @@ document.querySelectorAll("[data-inbox-item]").forEach((item) => {
       return;
     }
 
-    if (event.target.closest("[data-expand-email]")) {
-      openEmailView(item);
-      return;
-    }
-
     setActiveInboxItem(item);
   });
 
@@ -578,16 +550,6 @@ document.querySelectorAll("[data-inbox-item]").forEach((item) => {
       item.click();
     }
   });
-});
-
-emailViewCloseButtons.forEach((button) => {
-  button.addEventListener("click", closeEmailView);
-});
-
-emailViewReplyButton.addEventListener("click", () => {
-  requestInput.value = emailViewReplyButton.dataset.emailViewReply || "";
-  createDraft();
-  closeEmailView();
 });
 
 sendNowButton.addEventListener("click", () => {

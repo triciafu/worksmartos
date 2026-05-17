@@ -1517,6 +1517,7 @@ h1 {
 }
 
 .quick-draft-assistant {
+  order: 2;
   display: grid;
   align-content: start;
   gap: 16px;
@@ -1839,60 +1840,6 @@ h1 {
   gap: 10px;
 }
 
-.email-view-modal {
-  align-items: start;
-  padding-top: 8vh;
-}
-
-.email-view-dialog {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 20px;
-  width: min(720px, 100%);
-  max-height: 84vh;
-  overflow: auto;
-  padding: 28px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 24px 70px rgba(20, 24, 31, 0.22);
-}
-
-.email-view-heading {
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.email-view-heading span {
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.email-view-heading h2 {
-  margin: 6px 0 0;
-  color: var(--ink);
-  font-size: 22px;
-  font-weight: 500;
-  line-height: 1.15;
-}
-
-.email-view-dialog p {
-  margin: 0;
-  color: var(--ink);
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.email-view-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
 .quick-chat-thread {
   display: grid;
   gap: 10px;
@@ -2047,6 +1994,7 @@ h1 {
 }
 
 .quick-compose-view {
+  order: 3;
   display: grid;
   align-content: start;
   gap: 18px;
@@ -2378,21 +2326,6 @@ h1 {
 .quick-inbox-item-actions button:hover {
   border-color: var(--accent);
   color: var(--accent);
-}
-
-.quick-inbox-item-actions [data-expand-email] {
-  width: 32px;
-  padding: 0;
-}
-
-.quick-inbox-item-actions svg {
-  width: 15px;
-  height: 15px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.8;
 }
 
 .quick-inbox-detail {
@@ -4954,8 +4887,7 @@ body[data-studio-theme="dark"] .quick-mail-tools,
 body[data-studio-theme="dark"] .quick-mail-tools select,
 body[data-studio-theme="dark"] .send-schedule-menu,
 body[data-studio-theme="dark"] .studio-prompt-dialog,
-body[data-studio-theme="dark"] .studio-prompt-dialog input,
-body[data-studio-theme="dark"] .email-view-dialog {
+body[data-studio-theme="dark"] .studio-prompt-dialog input {
   border-color: #34363d;
   background: #202124;
   color: var(--ink);
