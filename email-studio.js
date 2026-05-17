@@ -49,6 +49,7 @@ const outputCount = document.querySelector("[data-output-count]");
 const exportButton = document.querySelector("[data-export-csv]");
 const addRowButton = document.querySelector("[data-add-row]");
 const addRowCountInput = document.querySelector("[data-add-row-count]");
+const clearRecipientsButton = document.querySelector("[data-clear-recipients]");
 const stepperTrack = document.querySelector("[data-stepper-track]");
 const stepLabels = document.querySelectorAll(".studio-steps button");
 const themeButtons = document.querySelectorAll("[data-studio-theme]");
@@ -2142,6 +2143,28 @@ function addRecipientRows(count = 1) {
 addRowButton.addEventListener("click", () => {
   addRecipientRows(addRowCountInput?.value);
 });
+
+function clearRecipientContent() {
+  recordRecipientHistory();
+  recipientBody.querySelectorAll(".recipient-card").forEach((card) => {
+    card.querySelectorAll("input").forEach((input) => {
+      if (input.type !== "hidden") {
+        input.value = "";
+      }
+      input.classList.remove("is-invalid");
+    });
+    card.querySelectorAll(".email-address-chip").forEach((chip) => chip.remove());
+    card.querySelectorAll("[data-email-chip-input]").forEach((container) => {
+      container.classList.remove("is-invalid");
+      updateEmailChipState(container);
+    });
+  });
+  setImportStatus("");
+  scheduleAutosave();
+  recordRecipientHistory();
+}
+
+clearRecipientsButton?.addEventListener("click", clearRecipientContent);
 
 addRowCountInput?.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {

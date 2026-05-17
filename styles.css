@@ -3494,7 +3494,7 @@ iframe[style*="position: fixed"] {
 }
 
 .recipient-card-top strong {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -3682,6 +3682,10 @@ iframe[style*="position: fixed"] {
 
 .add-email-link {
   margin: 0;
+}
+
+.clear-recipients-link {
+  margin: 0 8px 0 0;
 }
 
 .add-row-count {
