@@ -1800,6 +1800,10 @@ h1 {
   line-height: 1.15;
 }
 
+.studio-prompt-dialog h2:empty {
+  display: none;
+}
+
 .studio-prompt-dialog label {
   display: grid;
   gap: 8px;
@@ -1832,6 +1836,60 @@ h1 {
 .studio-prompt-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 10px;
+}
+
+.email-view-modal {
+  align-items: start;
+  padding-top: 8vh;
+}
+
+.email-view-dialog {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 20px;
+  width: min(720px, 100%);
+  max-height: 84vh;
+  overflow: auto;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(20, 24, 31, 0.22);
+}
+
+.email-view-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.email-view-heading span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.email-view-heading h2 {
+  margin: 6px 0 0;
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.email-view-dialog p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.email-view-actions {
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -2142,6 +2200,7 @@ h1 {
 }
 
 .quick-mail-action-row button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2153,6 +2212,34 @@ h1 {
   background: #FAFAFA;
   color: var(--muted);
   cursor: pointer;
+}
+
+.quick-mail-action-row button[data-tooltip]::after,
+.quick-inbox-item-actions button[data-tooltip]::after {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  z-index: 30;
+  content: attr(data-tooltip);
+  width: max-content;
+  max-width: 180px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(2px);
+  transition: opacity 0.08s ease, transform 0.08s ease;
+}
+
+.quick-mail-action-row button[data-tooltip]:hover::after,
+.quick-inbox-item-actions button[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .quick-mail-action-row button:hover {
@@ -2177,13 +2264,47 @@ h1 {
 
 .quick-inbox-item {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 12px;
   align-items: start;
   padding: 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #FAFAFA;
+}
+
+.quick-select-email {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.quick-select-email::after {
+  display: block;
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  content: "";
+}
+
+.quick-inbox-item.is-selected {
+  border-color: var(--accent);
+  background: rgba(0, 113, 227, 0.08);
+}
+
+.quick-inbox-item.is-selected .quick-select-email {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.quick-inbox-item.is-selected .quick-select-email::after {
+  content: "✓";
 }
 
 .quick-inbox-item.is-urgent {
@@ -2233,7 +2354,15 @@ h1 {
   font-weight: 400;
 }
 
-.quick-inbox-item button {
+.quick-inbox-item-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.quick-inbox-item-actions button {
+  position: relative;
   min-height: 32px;
   padding: 0 11px;
   border: 1px solid var(--line);
@@ -2246,9 +2375,24 @@ h1 {
   cursor: pointer;
 }
 
-.quick-inbox-item button:hover {
+.quick-inbox-item-actions button:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.quick-inbox-item-actions [data-expand-email] {
+  width: 32px;
+  padding: 0;
+}
+
+.quick-inbox-item-actions svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 
 .quick-inbox-detail {
@@ -4810,7 +4954,8 @@ body[data-studio-theme="dark"] .quick-mail-tools,
 body[data-studio-theme="dark"] .quick-mail-tools select,
 body[data-studio-theme="dark"] .send-schedule-menu,
 body[data-studio-theme="dark"] .studio-prompt-dialog,
-body[data-studio-theme="dark"] .studio-prompt-dialog input {
+body[data-studio-theme="dark"] .studio-prompt-dialog input,
+body[data-studio-theme="dark"] .email-view-dialog {
   border-color: #34363d;
   background: #202124;
   color: var(--ink);
@@ -4865,6 +5010,11 @@ body[data-studio-theme="dark"] .quick-inbox-list:hover .quick-inbox-item.is-acti
   border-color: #34363d;
   background: #202124;
   box-shadow: none;
+}
+
+body[data-studio-theme="dark"] .quick-inbox-item.is-selected {
+  border-color: rgba(0, 113, 227, 0.55);
+  background: rgba(0, 113, 227, 0.12);
 }
 
 body[data-studio-theme="dark"] .quick-chat-message.user {

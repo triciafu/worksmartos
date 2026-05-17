@@ -33,6 +33,13 @@ const studioPromptLabel = document.querySelector("[data-studio-prompt-label]");
 const studioPromptInput = document.querySelector("[data-studio-prompt-input]");
 const studioPromptConfirm = document.querySelector("[data-studio-prompt-confirm]");
 const studioPromptCancelButtons = document.querySelectorAll("[data-studio-prompt-cancel]");
+const unreadCount = document.querySelector("[data-unread-count]");
+const emailViewModal = document.querySelector("[data-email-view-modal]");
+const emailViewFrom = document.querySelector("[data-email-view-from]");
+const emailViewSubject = document.querySelector("[data-email-view-subject]");
+const emailViewBody = document.querySelector("[data-email-view-body]");
+const emailViewReplyButton = document.querySelector("[data-email-view-reply]");
+const emailViewCloseButtons = document.querySelectorAll("[data-email-view-close]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
@@ -68,6 +75,55 @@ function addAttachmentChip(name) {
 
 function activeInboxItem() {
   return document.querySelector("[data-inbox-item].is-active");
+}
+
+function selectedInboxItems() {
+  const selected = Array.from(document.querySelectorAll("[data-inbox-item].is-selected"));
+  return selected.length ? selected : [activeInboxItem()].filter(Boolean);
+}
+
+function inboxItemLabel(items) {
+  return items.length === 1 ? items[0].dataset.inboxSubject : `${items.length} emails`;
+}
+
+function updateUnreadCount() {
+  const unread = document.querySelectorAll("[data-inbox-item]:not(.is-read)").length;
+  unreadCount.textContent = `${unread} unread`;
+}
+
+function setActiveInboxItem(item) {
+  document.querySelectorAll("[data-inbox-item]").forEach((inboxItem) => {
+    inboxItem.classList.toggle("is-active", inboxItem === item);
+    inboxItem.classList.toggle("is-open", inboxItem === item);
+    const detail = inboxItem.querySelector("[data-inbox-detail]");
+    if (detail) {
+      detail.hidden = inboxItem !== item;
+    }
+  });
+
+  let detail = item.querySelector("[data-inbox-detail]");
+  if (!detail) {
+    detail = document.createElement("div");
+    detail.className = "quick-inbox-detail";
+    detail.dataset.inboxDetail = "";
+    detail.innerHTML = `<span>Message</span><p>${item.dataset.inboxBody || ""}</p>`;
+    item.append(detail);
+  }
+  detail.hidden = false;
+  requestInput.value = item.dataset.inboxRequest || "";
+  createDraft();
+}
+
+function openEmailView(item) {
+  emailViewFrom.textContent = item.dataset.inboxFrom || "";
+  emailViewSubject.textContent = item.dataset.inboxSubject || "";
+  emailViewBody.textContent = item.dataset.inboxBody || "";
+  emailViewReplyButton.dataset.emailViewReply = item.dataset.inboxRequest || "";
+  emailViewModal.hidden = false;
+}
+
+function closeEmailView() {
+  emailViewModal.hidden = true;
 }
 
 function scheduleLabel(value) {
@@ -409,7 +465,7 @@ driveFileButtons.forEach((button) => {
 
 newFolderButton.addEventListener("click", async () => {
   const folderName = await openStudioPrompt({
-    title: "New folder",
+    title: "",
     label: "Folder name",
     placeholder: "Example: Client follow-ups",
     confirmText: "Create folder",
@@ -447,28 +503,30 @@ studioPromptInput.addEventListener("keydown", (event) => {
 
 mailActionButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const item = activeInboxItem();
+    const items = selectedInboxItems();
     const action = button.dataset.mailAction;
 
-    if (!item) {
-      statusText.textContent = "Choose an inbox email first.";
+    if (!items.length) {
+      statusText.textContent = "Choose one or more emails first.";
       return;
     }
 
     if (action === "move") {
-      statusText.textContent = `${item.dataset.inboxSubject} will move to ${folderSelect.value} once connected.`;
+      statusText.textContent = `${inboxItemLabel(items)} will move to ${folderSelect.value} once connected.`;
       return;
     }
 
     if (action === "mark-read") {
-      item.classList.add("is-read");
-      statusText.textContent = `${item.dataset.inboxSubject} marked as read.`;
+      items.forEach((item) => item.classList.add("is-read"));
+      updateUnreadCount();
+      statusText.textContent = `${inboxItemLabel(items)} marked as read.`;
       return;
     }
 
     if (action === "mark-unread") {
-      item.classList.remove("is-read");
-      statusText.textContent = `${item.dataset.inboxSubject} marked as unread.`;
+      items.forEach((item) => item.classList.remove("is-read"));
+      updateUnreadCount();
+      statusText.textContent = `${inboxItemLabel(items)} marked as unread.`;
       return;
     }
 
@@ -483,37 +541,35 @@ mailActionButtons.forEach((button) => {
     }
 
     if (action === "delete") {
-      const nextItem = item.nextElementSibling || item.previousElementSibling;
-      item.remove();
-      if (nextItem?.matches("[data-inbox-item]")) {
-        nextItem.click();
+      const activeItem = activeInboxItem();
+      const fallbackItem = items[items.length - 1].nextElementSibling || items[0].previousElementSibling;
+      const deletedLabel = inboxItemLabel(items);
+      items.forEach((item) => item.remove());
+      if (activeItem && !document.body.contains(activeItem) && fallbackItem?.matches("[data-inbox-item]")) {
+        setActiveInboxItem(fallbackItem);
       }
-      statusText.textContent = "Email removed from this view. Backend delete will sync this action.";
+      updateUnreadCount();
+      statusText.textContent = `${deletedLabel} removed from this view. Backend delete will sync this action.`;
     }
   });
 });
 
 document.querySelectorAll("[data-inbox-item]").forEach((item) => {
-  item.addEventListener("click", () => {
-    document.querySelectorAll("[data-inbox-item]").forEach((inboxItem) => {
-      inboxItem.classList.toggle("is-active", inboxItem === item);
-      inboxItem.classList.toggle("is-open", inboxItem === item);
-      const detail = inboxItem.querySelector("[data-inbox-detail]");
-      if (detail) {
-        detail.hidden = inboxItem !== item;
-      }
-    });
-    let detail = item.querySelector("[data-inbox-detail]");
-    if (!detail) {
-      detail = document.createElement("div");
-      detail.className = "quick-inbox-detail";
-      detail.dataset.inboxDetail = "";
-      detail.innerHTML = `<span>Message</span><p>${item.dataset.inboxBody || ""}</p>`;
-      item.append(detail);
+  item.addEventListener("click", (event) => {
+    if (event.target.closest("[data-select-email]") || event.metaKey || event.ctrlKey || event.shiftKey) {
+      item.classList.toggle("is-selected");
+      const selectButton = item.querySelector("[data-select-email]");
+      selectButton?.setAttribute("aria-pressed", String(item.classList.contains("is-selected")));
+      statusText.textContent = `${document.querySelectorAll("[data-inbox-item].is-selected").length} selected.`;
+      return;
     }
-    detail.hidden = false;
-    requestInput.value = item.dataset.inboxRequest || "";
-    createDraft();
+
+    if (event.target.closest("[data-expand-email]")) {
+      openEmailView(item);
+      return;
+    }
+
+    setActiveInboxItem(item);
   });
 
   item.addEventListener("keydown", (event) => {
@@ -522,6 +578,16 @@ document.querySelectorAll("[data-inbox-item]").forEach((item) => {
       item.click();
     }
   });
+});
+
+emailViewCloseButtons.forEach((button) => {
+  button.addEventListener("click", closeEmailView);
+});
+
+emailViewReplyButton.addEventListener("click", () => {
+  requestInput.value = emailViewReplyButton.dataset.emailViewReply || "";
+  createDraft();
+  closeEmailView();
 });
 
 sendNowButton.addEventListener("click", () => {
