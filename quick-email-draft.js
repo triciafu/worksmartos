@@ -20,6 +20,11 @@ const attachFileButton = document.querySelector("[data-attach-file]");
 const attachDriveButton = document.querySelector("[data-attach-drive]");
 const attachmentInput = document.querySelector("[data-attachment-input]");
 const attachmentList = document.querySelector("[data-attachment-list]");
+const drivePicker = document.querySelector("[data-drive-picker]");
+const driveFileButtons = document.querySelectorAll("[data-drive-file]");
+const folderSelect = document.querySelector("[data-folder-select]");
+const newFolderButton = document.querySelector("[data-new-folder]");
+const mailActionButtons = document.querySelectorAll("[data-mail-action]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
@@ -38,6 +43,22 @@ function getDraftBody() {
 
 function setDraftBody(value) {
   draftBody.innerHTML = plainTextToHtml(value);
+}
+
+function addAttachmentChip(name) {
+  const cleanName = String(name || "").trim();
+  if (!cleanName) {
+    return;
+  }
+
+  const existingNames = Array.from(attachmentList.querySelectorAll("span")).map((item) => item.textContent);
+  if (!existingNames.includes(cleanName)) {
+    attachmentList.insertAdjacentHTML("beforeend", `<span>${cleanName}</span>`);
+  }
+}
+
+function activeInboxItem() {
+  return document.querySelector("[data-inbox-item].is-active");
 }
 
 function applyStudioTheme(theme) {
@@ -311,21 +332,93 @@ attachFileButton.addEventListener("click", () => {
 attachmentInput.addEventListener("change", () => {
   const files = Array.from(attachmentInput.files);
   const count = files.length;
-  attachmentList.innerHTML = files
-    .map((file) => `<span>${file.name}</span>`)
-    .join("");
+  files.forEach((file) => addAttachmentChip(file.name));
   statusText.textContent = count
     ? `${count} attachment${count === 1 ? "" : "s"} selected. Gmail or Outlook connection will attach files when sending.`
     : "";
 });
 
 attachDriveButton.addEventListener("click", () => {
-  const existingNames = Array.from(attachmentList.querySelectorAll("span")).map((item) => item.textContent);
-  const driveFileName = "Google Drive file";
-  if (!existingNames.includes(driveFileName)) {
-    attachmentList.insertAdjacentHTML("beforeend", `<span>${driveFileName}</span>`);
+  if (!drivePicker) {
+    statusText.textContent = "Connect Google Drive to choose and attach Drive files.";
+    return;
   }
-  statusText.textContent = "Connect Google Drive to choose and attach Drive files.";
+  drivePicker.hidden = !drivePicker.hidden;
+  statusText.textContent = drivePicker.hidden
+    ? ""
+    : "Choose a Google Drive file to attach. Backend connection will open the real picker.";
+});
+
+driveFileButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const fileName = button.dataset.driveFile;
+    addAttachmentChip(fileName);
+    drivePicker.hidden = true;
+    statusText.textContent = `${fileName} attached from Google Drive.`;
+  });
+});
+
+newFolderButton.addEventListener("click", () => {
+  const folderName = window.prompt("New folder name");
+  const cleanName = String(folderName || "").trim();
+  if (!cleanName) {
+    return;
+  }
+
+  const existing = Array.from(folderSelect.options).some((option) => option.value === cleanName);
+  if (!existing) {
+    folderSelect.add(new Option(cleanName, cleanName));
+  }
+  folderSelect.value = cleanName;
+  statusText.textContent = `${cleanName} folder is ready to sync once Gmail or Outlook is connected.`;
+});
+
+mailActionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const item = activeInboxItem();
+    const action = button.dataset.mailAction;
+
+    if (!item) {
+      statusText.textContent = "Choose an inbox email first.";
+      return;
+    }
+
+    if (action === "move") {
+      statusText.textContent = `${item.dataset.inboxSubject} will move to ${folderSelect.value} once connected.`;
+      return;
+    }
+
+    if (action === "mark-read") {
+      item.classList.add("is-read");
+      statusText.textContent = `${item.dataset.inboxSubject} marked as read.`;
+      return;
+    }
+
+    if (action === "mark-unread") {
+      item.classList.remove("is-read");
+      statusText.textContent = `${item.dataset.inboxSubject} marked as unread.`;
+      return;
+    }
+
+    if (action === "schedule") {
+      statusText.textContent = "Schedule send is ready for the connected Gmail or Outlook account.";
+      return;
+    }
+
+    if (action === "print") {
+      window.print();
+      return;
+    }
+
+    if (action === "delete") {
+      const nextItem = item.nextElementSibling || item.previousElementSibling;
+      item.remove();
+      if (nextItem?.matches("[data-inbox-item]")) {
+        nextItem.click();
+      }
+      statusText.textContent = "Email removed from this view. Backend delete will sync this action.";
+    }
+  });
 });
 
 document.querySelectorAll("[data-inbox-item]").forEach((item) => {

@@ -49,6 +49,39 @@
               <strong>6 open</strong>
             </div>
 
+            <div class="quick-mail-tools" aria-label="Inbox actions">
+              <label>
+                <span>Folder</span>
+                <select data-folder-select>
+                  <option value="Inbox">Inbox</option>
+                  <option value="Follow-ups">Follow-ups</option>
+                  <option value="Clients">Clients</option>
+                  <option value="Archive">Archive</option>
+                </select>
+              </label>
+              <button class="quick-mail-link" type="button" data-new-folder>+ New folder</button>
+              <div class="quick-mail-action-row">
+                <button type="button" data-mail-action="move" aria-label="Move to selected folder">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"></path><path d="M12 14h6"></path><path d="m16 12 2 2-2 2"></path></svg>
+                </button>
+                <button type="button" data-mail-action="mark-read" aria-label="Mark as read">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"></path><path d="m4 7 8 6 8-6"></path></svg>
+                </button>
+                <button type="button" data-mail-action="mark-unread" aria-label="Mark as unread">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8h16v10H4z"></path><path d="M4 8l8 5 8-5"></path><path d="M7 5h10"></path></svg>
+                </button>
+                <button type="button" data-mail-action="schedule" aria-label="Schedule send">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3v4"></path><path d="M17 3v4"></path><path d="M4 8h16"></path><path d="M5 5h14v15H5z"></path><path d="M12 12v4l3 1.5"></path></svg>
+                </button>
+                <button type="button" data-mail-action="print" aria-label="Print">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 8V4h10v4"></path><path d="M7 17H5a2 2 0 0 1-2-2v-4h18v4a2 2 0 0 1-2 2h-2"></path><path d="M7 14h10v6H7z"></path></svg>
+                </button>
+                <button type="button" data-mail-action="delete" aria-label="Delete">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M9 7V4h6v3"></path><path d="M6 7l1 13h10l1-13"></path><path d="M10 11v5"></path><path d="M14 11v5"></path></svg>
+                </button>
+              </div>
+            </div>
+
             <div class="quick-inbox-list">
               <article class="quick-inbox-item is-active is-urgent" tabindex="0" data-inbox-item data-inbox-from="Bob" data-inbox-subject="Can Thursday work?" data-inbox-body="Quick check-in about the launch timeline." data-inbox-request="Respond to Bob and tell him Thursday afternoon works for a quick check-in.">
                 <div>
@@ -124,10 +157,10 @@
                 <div class="quick-body-input" data-draft-body contenteditable="true" role="textbox" aria-multiline="true">Hi John,<br><br>Just wanted to let you know the proposal is ready.<br><br>Thank you,</div>
                 <div class="quick-format-toolbar" aria-label="Formatting toolbar">
                   <button type="button" data-format-command="undo" aria-label="Undo">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 7H4v5"></path><path d="M20 17a8 8 0 0 0-14.8-4.2L4 14"></path></svg>
+                    <span class="toolbar-arrow" aria-hidden="true">↺</span>
                   </button>
                   <button type="button" data-format-command="redo" aria-label="Redo">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 7h5v5"></path><path d="M4 17a8 8 0 0 1 14.8-4.2L20 14"></path></svg>
+                    <span class="toolbar-arrow" aria-hidden="true">↻</span>
                   </button>
                   <span aria-hidden="true"></span>
                   <button type="button" data-format-command="bold" aria-label="Bold"><strong>B</strong></button>
@@ -159,6 +192,11 @@
                 </div>
               </div>
               <div class="quick-attachment-list" data-attachment-list aria-live="polite"></div>
+              <div class="quick-drive-picker" data-drive-picker hidden>
+                <button type="button" data-drive-file="Proposal.pdf">Proposal.pdf</button>
+                <button type="button" data-drive-file="Pricing sheet.xlsx">Pricing sheet.xlsx</button>
+                <button type="button" data-drive-file="Client brief.docx">Client brief.docx</button>
+              </div>
             </label>
           </div>
 
