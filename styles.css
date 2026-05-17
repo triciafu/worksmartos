@@ -3250,7 +3250,6 @@ iframe[style*="position: fixed"] {
   align-self: center;
   display: grid;
   align-content: center;
-  min-height: 64px;
 }
 
 .spreadsheet-tools strong {
