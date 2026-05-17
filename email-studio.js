@@ -648,6 +648,15 @@ function draftLinksHtml(email) {
   `;
 }
 
+function fromPreviewHtml(email) {
+  return `
+    <label>
+      <span>From</span>
+      <input value="${escapeAttribute(email.from || "")}" data-from-input />
+    </label>
+  `;
+}
+
 function emailIdentity(email, index) {
   const groups = getAddressGroups(email.addresses);
   return `${index}-${groups.To.join("|")}-${email.subject || ""}`;
@@ -1836,6 +1845,9 @@ function renderEmails(emails) {
         </div>
         ${statusPill(workflow.status)}
       </div>
+      <div class="email-from-preview">
+        ${fromPreviewHtml(email)}
+      </div>
       <div class="email-address-preview">
         ${addressPreviewHtml(email.addresses)}
       </div>
@@ -1888,6 +1900,7 @@ function refreshEmailCard(card) {
     return;
   }
 
+  generatedEmails[index].from = card.querySelector("[data-from-input]")?.value || "";
   generatedEmails[index].subject = card.querySelector("[data-subject-input]")?.value || "";
   generatedEmails[index].body = card.querySelector("[data-body-input]")?.innerHTML || "";
 
@@ -1948,11 +1961,12 @@ async function copyRichText(element) {
 }
 
 function exportCsv() {
-  const rows = [["Send as", "Email address", "Company name", "Recipient first name", "Campaign", "Subject", "Body"]];
+  const rows = [["From", "Send as", "Email address", "Company name", "Recipient first name", "Campaign", "Subject", "Body"]];
 
   output.querySelectorAll(".email-preview-card").forEach((card, index) => {
     const email = generatedEmails[index];
     rows.push([
+      card.querySelector("[data-from-input]")?.value || "",
       email.recipient_type,
       email.recipient_email,
       email.client_name,
@@ -2197,7 +2211,7 @@ output.addEventListener("click", (event) => {
 });
 
 output.addEventListener("input", (event) => {
-  if (!event.target.matches("[data-subject-input], [data-body-input]")) {
+  if (!event.target.matches("[data-from-input], [data-subject-input], [data-body-input]")) {
     return;
   }
 
@@ -2495,18 +2509,17 @@ function generateEmails() {
     return false;
   }
 
-  const formData = new FormData(form);
   const subjectTemplate = templateHtmlToMergeText(subjectTemplateEditor.innerHTML);
   const bodyTemplate = templateHtmlToMergeHtml(bodyTemplateEditor.innerHTML);
-  const senderName = formData.get("sender_name") || "";
 
   const emails = getRecipients().map((recipient) => {
-    const data = { ...recipient, sender_name: senderName };
+    const data = { ...recipient };
     const body = mergeTemplate(bodyTemplate, data, { html: true });
     return {
       ...recipient,
+      from: "",
       subject: mergeTemplate(subjectTemplate, data),
-      body: appendSenderNameToBody(body, senderName),
+      body,
     };
   });
 

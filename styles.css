@@ -3478,22 +3478,26 @@ iframe[style*="position: fixed"] {
   display: none;
 }
 
+.email-from-preview,
 .email-address-preview {
   display: grid;
   gap: 10px;
 }
 
+.email-from-preview label,
 .email-address-preview label {
   display: grid;
   gap: 7px;
 }
 
+.email-from-preview span,
 .email-address-preview span {
   color: var(--muted);
   font-size: 12px;
   font-weight: 500;
 }
 
+.email-from-preview input,
 .email-address-preview input {
   width: 100%;
   height: 38px;
@@ -3507,6 +3511,7 @@ iframe[style*="position: fixed"] {
   line-height: 1.25;
 }
 
+.email-from-preview input:focus,
 .email-address-preview input:focus {
   border-color: var(--accent);
   outline: none;
@@ -3916,6 +3921,7 @@ body[data-studio-theme="dark"] .email-preview-card textarea,
 body[data-studio-theme="dark"] .rich-editor,
 body[data-studio-theme="dark"] .token-editor,
 body[data-studio-theme="dark"] .email-body-preview,
+body[data-studio-theme="dark"] .email-from-preview input,
 body[data-studio-theme="dark"] .email-address-preview input,
 body[data-studio-theme="dark"] .recipient-card input,
 body[data-studio-theme="dark"] .recipient-card select,
@@ -4367,10 +4373,6 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 
 .template-card .rich-editor {
   min-height: 260px;
-}
-
-.sender-name-field {
-  margin-top: 0;
 }
 
 .template-guide {
