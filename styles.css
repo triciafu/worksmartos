@@ -1504,7 +1504,7 @@ h1 {
 }
 
 .quick-email-workspace {
-  grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.78fr);
+  grid-template-columns: minmax(0, 1.78fr) minmax(300px, 0.82fr);
   align-items: start;
   gap: 18px;
 }
@@ -2010,7 +2010,7 @@ h1 {
 }
 
 .quick-compose-view {
-  order: 1;
+  order: 2;
   display: grid;
   align-content: start;
   gap: 18px;
@@ -2018,7 +2018,7 @@ h1 {
 }
 
 .quick-inbox-view {
-  order: 2;
+  order: 1;
 }
 
 .quick-compose-heading {
