@@ -3248,6 +3248,9 @@ iframe[style*="position: fixed"] {
 
 .spreadsheet-tools > div:first-child {
   align-self: center;
+  display: grid;
+  align-content: center;
+  min-height: 64px;
 }
 
 .spreadsheet-tools strong {
@@ -3683,7 +3686,7 @@ iframe[style*="position: fixed"] {
 
 .stepper-track .recipient-panel.is-active-step {
   gap: 28px;
-  padding: 40px 28px 48px;
+  padding: 28px 28px 48px;
 }
 
 .recipient-panel .studio-panel-heading h2 {
@@ -4558,6 +4561,10 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
   align-items: center;
   column-gap: 16px;
   row-gap: 8px;
+}
+
+.template-start-actions .add-placeholder {
+  margin-top: 8px;
 }
 
 .template-blank-button {
