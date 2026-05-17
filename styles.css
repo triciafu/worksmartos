@@ -5249,8 +5249,22 @@ body[data-studio-theme="dark"] .template-save-status[data-tone="error"] {
 
 .batch-email-page .studio-hero,
 .batch-email-page .studio-steps,
+.batch-email-page .studio-shell,
 .batch-email-page .stepper-track .studio-step.template-step.is-active-step {
   max-width: 1320px;
+}
+
+.batch-email-page .studio-hero {
+  padding-right: 72px;
+  padding-left: 72px;
+}
+
+.batch-email-page .studio-steps button {
+  text-align: center;
+}
+
+.batch-email-page .studio-steps button span {
+  justify-content: center;
 }
 
 .batch-email-page .template-step {
