@@ -61,22 +61,22 @@
               </label>
               <button class="quick-mail-link" type="button" data-new-folder>+ New folder</button>
               <div class="quick-mail-action-row">
-                <button type="button" data-mail-action="move" aria-label="Move to selected folder">
+                <button type="button" data-mail-action="move" aria-label="Move to selected folder" title="Move to folder">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"></path><path d="M12 14h6"></path><path d="m16 12 2 2-2 2"></path></svg>
                 </button>
-                <button type="button" data-mail-action="mark-read" aria-label="Mark as read">
+                <button type="button" data-mail-action="mark-read" aria-label="Mark as read" title="Mark as read">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"></path><path d="m4 7 8 6 8-6"></path></svg>
                 </button>
-                <button type="button" data-mail-action="mark-unread" aria-label="Mark as unread">
+                <button type="button" data-mail-action="mark-unread" aria-label="Mark as unread" title="Mark as unread">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8h16v10H4z"></path><path d="M4 8l8 5 8-5"></path><path d="M7 5h10"></path></svg>
                 </button>
-                <button type="button" data-mail-action="schedule" aria-label="Schedule send">
+                <button type="button" data-mail-action="schedule" aria-label="Schedule send" title="Schedule send">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3v4"></path><path d="M17 3v4"></path><path d="M4 8h16"></path><path d="M5 5h14v15H5z"></path><path d="M12 12v4l3 1.5"></path></svg>
                 </button>
-                <button type="button" data-mail-action="print" aria-label="Print">
+                <button type="button" data-mail-action="print" aria-label="Print" title="Print">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 8V4h10v4"></path><path d="M7 17H5a2 2 0 0 1-2-2v-4h18v4a2 2 0 0 1-2 2h-2"></path><path d="M7 14h10v6H7z"></path></svg>
                 </button>
-                <button type="button" data-mail-action="delete" aria-label="Delete">
+                <button type="button" data-mail-action="delete" aria-label="Delete" title="Delete">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M9 7V4h6v3"></path><path d="M6 7l1 13h10l1-13"></path><path d="M10 11v5"></path><path d="M14 11v5"></path></svg>
                 </button>
               </div>
@@ -202,7 +202,17 @@
 
           <div class="quick-draft-send">
             <a class="draft-link" href="#" data-mailto-draft>Open in drafts</a>
-            <button class="button primary" type="button" data-quick-send-now>Send now</button>
+            <div class="send-split" data-send-split>
+              <button class="button primary send-split-main" type="button" data-quick-send-now>Send now</button>
+              <button class="send-split-toggle" type="button" data-schedule-send-toggle aria-label="Schedule send" title="Schedule send">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg>
+              </button>
+              <div class="send-schedule-menu" data-schedule-send-menu hidden>
+                <button type="button" data-schedule-send-option="tomorrow">Tomorrow morning</button>
+                <button type="button" data-schedule-send-option="afternoon">This afternoon</button>
+                <button type="button" data-schedule-send-option="custom">Pick date and time</button>
+              </div>
+            </div>
           </div>
 
           <div class="email-quality-check is-ready" data-quick-draft-quality>

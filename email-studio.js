@@ -635,6 +635,16 @@ function queryString(params, aliases = {}) {
     .join("&");
 }
 
+function scheduleLabel(value) {
+  if (value === "tomorrow") {
+    return "tomorrow morning";
+  }
+  if (value === "afternoon") {
+    return "this afternoon";
+  }
+  return "a custom date and time";
+}
+
 function draftLinksHtml(email) {
   const params = encodedDraftParams(email);
   const mailtoRecipients = params.to.split(",").filter(Boolean).map(encodeURIComponent).join(",");
@@ -644,7 +654,17 @@ function draftLinksHtml(email) {
   return `
     <div class="draft-actions" aria-label="Draft actions">
       <a class="draft-link" href="${escapeAttribute(mailtoHref)}">Open in drafts</a>
-      <button class="button primary" type="button" data-direct-send>Send now</button>
+      <div class="send-split" data-send-split>
+        <button class="button primary send-split-main" type="button" data-direct-send>Send now</button>
+        <button class="send-split-toggle" type="button" data-schedule-send-toggle aria-label="Schedule send" title="Schedule send">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg>
+        </button>
+        <div class="send-schedule-menu" data-schedule-send-menu hidden>
+          <button type="button" data-schedule-send-option="tomorrow">Tomorrow morning</button>
+          <button type="button" data-schedule-send-option="afternoon">This afternoon</button>
+          <button type="button" data-schedule-send-option="custom">Pick date and time</button>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -754,7 +774,17 @@ function sendSummaryHtml(emails) {
         <option value="Connect Outlook to choose sender"></option>
       </datalist>
       <div class="send-summary-actions">
-        <button class="button primary" type="button" data-send-all>Send all</button>
+        <div class="send-split" data-send-split>
+          <button class="button primary send-split-main" type="button" data-send-all>Send all</button>
+          <button class="send-split-toggle" type="button" data-schedule-send-toggle aria-label="Schedule send all" title="Schedule send">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg>
+          </button>
+          <div class="send-schedule-menu" data-schedule-send-menu hidden>
+            <button type="button" data-schedule-send-option="tomorrow">Tomorrow morning</button>
+            <button type="button" data-schedule-send-option="afternoon">This afternoon</button>
+            <button type="button" data-schedule-send-option="custom">Pick date and time</button>
+          </div>
+        </div>
       </div>
       <p class="send-center-status" data-send-center-status aria-live="polite"></p>
     </section>
@@ -2235,6 +2265,37 @@ output.addEventListener("click", (event) => {
     const provider = connectButton.dataset.connectEmailProvider === "gmail" ? "Gmail" : "Outlook";
     if (statusNode) {
       statusNode.textContent = `${provider} OAuth is not connected yet. Once it is, From account will populate from the connected sender.`;
+    }
+    return;
+  }
+
+  const scheduleToggle = event.target.closest("[data-schedule-send-toggle]");
+  if (scheduleToggle) {
+    const split = scheduleToggle.closest("[data-send-split]");
+    const menu = split?.querySelector("[data-schedule-send-menu]");
+    output.querySelectorAll("[data-schedule-send-menu]").forEach((otherMenu) => {
+      if (otherMenu !== menu) {
+        otherMenu.hidden = true;
+      }
+    });
+    if (menu) {
+      menu.hidden = !menu.hidden;
+    }
+    return;
+  }
+
+  const scheduleOption = event.target.closest("[data-schedule-send-option]");
+  if (scheduleOption) {
+    const menu = scheduleOption.closest("[data-schedule-send-menu]");
+    const card = scheduleOption.closest(".email-preview-card");
+    const statusNode = output.querySelector("[data-send-center-status]");
+    if (menu) {
+      menu.hidden = true;
+    }
+    if (card) {
+      updateEmailStatus(card, "Scheduled", `Email scheduled for ${scheduleLabel(scheduleOption.dataset.scheduleSendOption)}. Gmail or Outlook will send it once connected.`);
+    } else if (statusNode) {
+      statusNode.textContent = `All emails scheduled for ${scheduleLabel(scheduleOption.dataset.scheduleSendOption)}. Gmail or Outlook will send them once connected.`;
     }
     return;
   }

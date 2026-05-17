@@ -25,6 +25,8 @@ const driveFileButtons = document.querySelectorAll("[data-drive-file]");
 const folderSelect = document.querySelector("[data-folder-select]");
 const newFolderButton = document.querySelector("[data-new-folder]");
 const mailActionButtons = document.querySelectorAll("[data-mail-action]");
+const scheduleSendToggles = document.querySelectorAll("[data-schedule-send-toggle]");
+const scheduleSendOptions = document.querySelectorAll("[data-schedule-send-option]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
@@ -59,6 +61,16 @@ function addAttachmentChip(name) {
 
 function activeInboxItem() {
   return document.querySelector("[data-inbox-item].is-active");
+}
+
+function scheduleLabel(value) {
+  if (value === "tomorrow") {
+    return "tomorrow morning";
+  }
+  if (value === "afternoon") {
+    return "this afternoon";
+  }
+  return "a custom date and time";
 }
 
 function applyStudioTheme(theme) {
@@ -454,6 +466,29 @@ document.querySelectorAll("[data-inbox-item]").forEach((item) => {
 
 sendNowButton.addEventListener("click", () => {
   statusText.textContent = "Connect Gmail or Outlook to send directly.";
+});
+
+scheduleSendToggles.forEach((button) => {
+  button.addEventListener("click", () => {
+    const split = button.closest("[data-send-split]");
+    const menu = split?.querySelector("[data-schedule-send-menu]");
+    document.querySelectorAll("[data-schedule-send-menu]").forEach((otherMenu) => {
+      if (otherMenu !== menu) {
+        otherMenu.hidden = true;
+      }
+    });
+    if (menu) {
+      menu.hidden = !menu.hidden;
+    }
+  });
+});
+
+scheduleSendOptions.forEach((button) => {
+  button.addEventListener("click", () => {
+    const menu = button.closest("[data-schedule-send-menu]");
+    menu.hidden = true;
+    statusText.textContent = `Email scheduled for ${scheduleLabel(button.dataset.scheduleSendOption)}. Gmail or Outlook will send it once connected.`;
+  });
 });
 
 addRecipientFieldButtons.forEach((button) => {
