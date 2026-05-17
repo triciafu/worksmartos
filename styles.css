@@ -1524,8 +1524,7 @@ h1 {
 }
 
 .quick-compose-view .quick-draft-assistant {
-  padding: 0 0 20px;
-  border-bottom: 1px solid var(--line);
+  padding: 0;
 }
 
 .quick-draft-assistant .studio-panel-heading h2 {
@@ -2011,10 +2010,15 @@ h1 {
 }
 
 .quick-compose-view {
+  order: 1;
   display: grid;
   align-content: start;
   gap: 18px;
   padding: 24px;
+}
+
+.quick-inbox-view {
+  order: 2;
 }
 
 .quick-compose-heading {

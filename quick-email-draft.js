@@ -95,6 +95,7 @@ function setActiveInboxItem(item) {
       openDetail.hidden = true;
     }
     composeHome.append(composeOutput);
+    composeOutput.hidden = true;
     return;
   }
 
@@ -117,6 +118,7 @@ function setActiveInboxItem(item) {
   }
   detail.hidden = false;
   detail.append(composeOutput);
+  composeOutput.hidden = false;
   requestInput.value = item.dataset.inboxRequest || "";
   createDraft();
 }
@@ -535,6 +537,7 @@ mailActionButtons.forEach((button) => {
       const fallbackItem = items[items.length - 1].nextElementSibling || items[0].previousElementSibling;
       const deletedLabel = inboxItemLabel(items);
       composeHome.append(composeOutput);
+      composeOutput.hidden = true;
       items.forEach((item) => item.remove());
       if (activeItem && !document.body.contains(activeItem) && fallbackItem?.matches("[data-inbox-item]")) {
         setActiveInboxItem(fallbackItem);
