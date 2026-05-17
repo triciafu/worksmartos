@@ -12,6 +12,8 @@ const mailtoDraft = document.querySelector("[data-mailto-draft]");
 const sendNowButton = document.querySelector("[data-quick-send-now]");
 const qualityPanel = document.querySelector("[data-quick-draft-quality]");
 const chatPreview = document.querySelector("[data-chat-preview] p");
+const composeHome = document.querySelector(".quick-compose-view");
+const composeOutput = document.querySelector("[data-compose-output]");
 const addRecipientFieldButtons = document.querySelectorAll("[data-add-recipient-field]");
 const removeRecipientFieldButtons = document.querySelectorAll("[data-remove-recipient-field]");
 const formatButtons = document.querySelectorAll("[data-format-command]");
@@ -92,6 +94,7 @@ function setActiveInboxItem(item) {
     if (openDetail) {
       openDetail.hidden = true;
     }
+    composeHome.append(composeOutput);
     return;
   }
 
@@ -113,6 +116,7 @@ function setActiveInboxItem(item) {
     item.append(detail);
   }
   detail.hidden = false;
+  detail.append(composeOutput);
   requestInput.value = item.dataset.inboxRequest || "";
   createDraft();
 }
@@ -530,6 +534,7 @@ mailActionButtons.forEach((button) => {
       const activeItem = activeInboxItem();
       const fallbackItem = items[items.length - 1].nextElementSibling || items[0].previousElementSibling;
       const deletedLabel = inboxItemLabel(items);
+      composeHome.append(composeOutput);
       items.forEach((item) => item.remove());
       if (activeItem && !document.body.contains(activeItem) && fallbackItem?.matches("[data-inbox-item]")) {
         setActiveInboxItem(fallbackItem);

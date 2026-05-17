@@ -1572,6 +1572,19 @@ h1 {
   gap: 16px;
 }
 
+.quick-compose-output {
+  display: grid;
+  gap: 16px;
+}
+
+.compose-output-heading h2 {
+  margin: 6px 0 0;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
 .quick-draft-prompt-card label,
 .quick-draft-card label,
 .optional-recipient-field {
@@ -2337,6 +2350,16 @@ h1 {
   gap: 6px;
   padding-top: 12px;
   border-top: 1px solid var(--line);
+}
+
+.quick-inbox-detail .quick-compose-output {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.quick-inbox-detail .quick-body-input {
+  min-height: 240px;
 }
 
 .quick-inbox-detail[hidden] {
