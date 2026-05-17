@@ -737,45 +737,23 @@ function qualitySummary(emails) {
   }, { ready: 0, needsReview: 0, issues: 0 });
 }
 
-function sendCenterHtml(emails) {
+function sendSummaryHtml(emails) {
   const summary = qualitySummary(emails);
   const pluralEmails = emails.length === 1 ? "email" : "emails";
   const pluralIssues = summary.issues === 1 ? "issue" : "issues";
 
   return `
-    <section class="send-center" aria-label="Send Center">
-      <div class="send-center-heading">
-        <span>Send Center</span>
-        <h3>${emails.length} ${pluralEmails} prepared</h3>
+    <section class="send-summary" aria-label="Prepared email summary">
+      <div>
+        <strong>${emails.length} ${pluralEmails} prepared</strong>
         <p>${summary.ready} ready, ${summary.needsReview} need review, ${summary.issues} ${pluralIssues} found.</p>
       </div>
       <datalist id="connected-sender-options" data-connected-sender-options>
         <option value="Connect Gmail to choose sender"></option>
         <option value="Connect Outlook to choose sender"></option>
       </datalist>
-      <div class="send-center-actions">
+      <div class="send-summary-actions">
         <button class="button primary" type="button" data-send-all>Send all</button>
-      </div>
-      <div class="send-center-grid">
-        <article>
-          <span>Quality check</span>
-          <strong>${summary.issues ? "Review recommended" : "Ready to send"}</strong>
-          <p>${summary.issues ? "Fix flagged emails before using a connected send method." : "No obvious issues found in this batch."}</p>
-        </article>
-        <article>
-          <span>Connected sending</span>
-          <strong>Gmail and Outlook</strong>
-          <p>From account will fill from the connected Gmail or Outlook account after OAuth and backend send permissions are enabled.</p>
-          <div class="send-provider-actions">
-            <button class="button secondary" type="button" data-connect-email-provider="gmail">Connect Gmail</button>
-            <button class="button secondary" type="button" data-connect-email-provider="outlook">Connect Outlook</button>
-          </div>
-        </article>
-        <article>
-          <span>Current send method</span>
-          <strong>Open drafts manually</strong>
-          <p>The mail app controls the actual sender for drafts until connected sending is live.</p>
-        </article>
       </div>
       <p class="send-center-status" data-send-center-status aria-live="polite"></p>
     </section>
@@ -1841,7 +1819,7 @@ function renderEmails(emails) {
     return;
   }
 
-  output.insertAdjacentHTML("beforeend", sendCenterHtml(generatedEmails));
+  output.insertAdjacentHTML("beforeend", sendSummaryHtml(generatedEmails));
 
   generatedEmails.forEach((email, index) => {
     const card = document.createElement("article");
