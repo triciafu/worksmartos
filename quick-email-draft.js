@@ -6,9 +6,8 @@ const themeButtons = document.querySelectorAll("[data-studio-theme]");
 const draftTo = document.querySelector("[data-draft-to]");
 const draftSubject = document.querySelector("[data-draft-subject]");
 const draftBody = document.querySelector("[data-draft-body]");
-const gmailDraft = document.querySelector("[data-gmail-draft]");
-const outlookDraft = document.querySelector("[data-outlook-draft]");
 const mailtoDraft = document.querySelector("[data-mailto-draft]");
+const sendNowButton = document.querySelector("[data-quick-send-now]");
 const qualityPanel = document.querySelector("[data-quick-draft-quality]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
@@ -141,13 +140,9 @@ function updateLinks() {
     subject: draftSubject.value.trim(),
     body: draftBody.value.trim(),
   };
-  const gmailQuery = queryString(params, { subject: "su" });
-  const outlookQuery = queryString(params);
   const mailtoTo = encodeURIComponent(params.to);
   const mailtoQuery = queryString({ subject: params.subject, body: params.body });
 
-  gmailDraft.href = `https://mail.google.com/mail/?view=cm&fs=1&${gmailQuery}`;
-  outlookDraft.href = `https://outlook.office.com/mail/deeplink/compose?${outlookQuery}`;
   mailtoDraft.href = `mailto:${mailtoTo}${mailtoQuery ? `?${mailtoQuery}` : ""}`;
 }
 
@@ -186,6 +181,10 @@ document.querySelectorAll("[data-example-request]").forEach((button) => {
     updateLinks();
     updateQuality();
   });
+});
+
+sendNowButton.addEventListener("click", () => {
+  statusText.textContent = "Connect Gmail or Outlook to send directly.";
 });
 
 themeButtons.forEach((button) => {

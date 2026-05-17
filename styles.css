@@ -1481,41 +1481,67 @@ h1 {
 
 .quick-draft-shell {
   display: grid;
-  grid-template-columns: minmax(360px, 0.72fr) minmax(0, 1fr);
-  gap: 24px;
+  gap: 28px;
   max-width: 1180px;
   margin: 0 auto;
   padding: 0 24px 32px;
 }
 
-.quick-draft-command,
+.quick-draft-command {
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) minmax(0, 600px) minmax(180px, 220px);
+  gap: 40px;
+  align-items: start;
+  justify-content: center;
+}
+
+.quick-draft-guide {
+  display: grid;
+  align-content: start;
+  gap: 24px;
+  padding-top: 16px;
+}
+
+.quick-draft-guide .studio-panel-heading h2 {
+  font-size: 24px;
+}
+
+.quick-draft-guide .studio-panel-heading p {
+  max-width: 260px;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.quick-draft-prompt-card,
 .quick-draft-review {
   display: grid;
   align-content: start;
   gap: 24px;
-  padding: 28px;
+  padding: 34px;
 }
 
-.quick-draft-command form,
+.quick-draft-prompt-card,
 .quick-draft-card {
   display: grid;
   gap: 16px;
 }
 
-.quick-draft-command label,
+.quick-draft-prompt-card label,
 .quick-draft-card label {
   display: grid;
   gap: 10px;
 }
 
-.quick-draft-command label span,
+.quick-draft-prompt-card label span,
 .quick-draft-card label span {
   color: var(--muted);
   font-size: 13px;
   font-weight: 500;
 }
 
-.quick-draft-command textarea,
+.quick-draft-prompt-card textarea,
 .quick-draft-card input,
 .quick-draft-card textarea {
   width: 100%;
@@ -1529,8 +1555,8 @@ h1 {
   line-height: 1.25;
 }
 
-.quick-draft-command textarea {
-  min-height: 148px;
+.quick-draft-prompt-card textarea {
+  min-height: 300px;
   padding: 14px;
   resize: vertical;
 }
@@ -1547,8 +1573,7 @@ h1 {
 }
 
 .quick-draft-examples {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 8px;
 }
 
@@ -1578,6 +1603,34 @@ h1 {
   gap: 10px;
 }
 
+.quick-draft-actions {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  padding-top: 36px;
+}
+
+.quick-draft-review {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FAFAFA;
+}
+
+.quick-draft-review .studio-output-heading {
+  margin: 0;
+}
+
+.quick-draft-card {
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.quick-draft-card label:not(:last-child) {
+  width: 75%;
+}
+
 .quick-draft-status {
   min-height: 20px;
   margin: 0;
@@ -1587,6 +1640,25 @@ h1 {
 }
 
 @media (max-width: 1100px) {
+  .quick-draft-command {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .quick-draft-guide,
+  .quick-draft-actions {
+    padding-top: 0;
+  }
+
+  .quick-draft-guide .studio-panel-heading p {
+    max-width: 620px;
+  }
+
+  .quick-draft-examples {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
   .meeting-studio-shell {
     grid-template-columns: 1fr;
   }
@@ -1636,6 +1708,16 @@ h1 {
   }
 
   .availability-actions .button {
+    width: 100%;
+  }
+
+  .quick-draft-prompt-card,
+  .quick-draft-review,
+  .quick-draft-card {
+    padding: 22px;
+  }
+
+  .quick-draft-card label:not(:last-child) {
     width: 100%;
   }
 }
@@ -2944,6 +3026,18 @@ iframe[style*="position: fixed"] {
   padding: 64px 24px 128px;
 }
 
+.quick-draft-shell .quick-draft-review {
+  max-width: none;
+  margin: 0;
+  padding: 34px;
+}
+
+@media (max-width: 720px) {
+  .quick-draft-shell .quick-draft-review {
+    padding: 22px;
+  }
+}
+
 .studio-output-heading {
   margin-bottom: 24px;
 }
@@ -3823,7 +3917,7 @@ body[data-studio-theme="white"] .stepper-track .studio-output {
 body[data-studio-theme="white"] .studio-panel,
 body[data-studio-theme="white"] .template-card,
 body[data-studio-theme="white"] .send-summary,
-body[data-studio-theme="white"] .quick-draft-command,
+body[data-studio-theme="white"] .quick-draft-prompt-card,
 body[data-studio-theme="white"] .quick-draft-review,
 body[data-studio-theme="white"] .email-preview-card,
 body[data-studio-theme="white"] .empty-state,
@@ -3876,7 +3970,7 @@ body[data-studio-theme="dark"] .studio-steps .is-active span::after {
 body[data-studio-theme="dark"] .studio-panel,
 body[data-studio-theme="dark"] .template-card,
 body[data-studio-theme="dark"] .send-summary,
-body[data-studio-theme="dark"] .quick-draft-command,
+body[data-studio-theme="dark"] .quick-draft-prompt-card,
 body[data-studio-theme="dark"] .quick-draft-review,
 body[data-studio-theme="dark"] .email-preview-card,
 body[data-studio-theme="dark"] .empty-state,
@@ -3914,7 +4008,7 @@ body[data-studio-theme="dark"] .studio-controls textarea,
 body[data-studio-theme="dark"] .recipient-table input,
 body[data-studio-theme="dark"] .availability-card input,
 body[data-studio-theme="dark"] .availability-card textarea,
-body[data-studio-theme="dark"] .quick-draft-command textarea,
+body[data-studio-theme="dark"] .quick-draft-prompt-card textarea,
 body[data-studio-theme="dark"] .quick-draft-card input,
 body[data-studio-theme="dark"] .quick-draft-card textarea,
 body[data-studio-theme="dark"] .availability-table input,

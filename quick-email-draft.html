@@ -31,7 +31,7 @@
 
     <main class="studio-page quick-draft-page">
       <section class="studio-hero compact">
-        <p class="eyebrow">Quick Email Draft</p>
+        <p class="eyebrow">Draft an email from a request</p>
         <div class="studio-theme-control" role="group" aria-label="Studio theme">
           <button type="button" data-studio-theme="light">Light</button>
           <button class="is-active" type="button" data-studio-theme="white">White</button>
@@ -40,50 +40,51 @@
       </section>
 
       <nav class="studio-steps" aria-label="Quick Email Draft steps">
-        <button class="is-active" type="button"><span>1. Make request</span></button>
-        <button class="is-active" type="button"><span>2. Review draft</span></button>
+        <button class="is-active" type="button"><span>1. Create email</span></button>
+        <button type="button"><span>2. Review email</span></button>
         <button type="button"><span>3. Send</span></button>
       </nav>
 
       <section class="quick-draft-shell" aria-label="Natural language email draft tool">
-        <section class="quick-draft-command studio-panel">
-          <div class="studio-panel-heading">
-            <span>Step 1</span>
-            <h2>Tell WorkSmartOS what to write</h2>
-            <p>Type a plain-language request. This prototype drafts the email for review before sending.</p>
-          </div>
-
-          <form data-quick-draft-form>
-            <label>
-              <span>Email request</span>
-              <textarea name="request" data-request-input>Send an email to Murilo and let him know we're working on it.</textarea>
-            </label>
+        <section class="quick-draft-command">
+          <aside class="quick-draft-guide">
+            <div class="studio-panel-heading">
+              <span>Step 1</span>
+              <h2>Create your email with AI</h2>
+              <p>Enter a prompt to generate an email draft, then review it before sending.</p>
+            </div>
 
             <div class="quick-draft-examples" aria-label="Example requests">
               <button type="button" data-example-request="Send an email to Murilo and let him know we're working on it.">Working on it</button>
               <button type="button" data-example-request="Email Lauren and ask if Thursday afternoon works for a quick check-in.">Schedule check-in</button>
               <button type="button" data-example-request="Send an email to Jordan thanking them for the update and saying we'll follow up tomorrow.">Follow up tomorrow</button>
             </div>
+          </aside>
 
-            <div class="quick-draft-actions">
-              <button class="button secondary" type="button" data-voice-draft>Speak request</button>
-              <button class="button primary" type="submit">Create draft</button>
-            </div>
+          <form class="quick-draft-prompt-card studio-panel" id="quick-draft-form" data-quick-draft-form>
+            <label>
+              <span>Email request</span>
+              <textarea name="request" data-request-input>Send an email to Murilo and let him know we're working on it.</textarea>
+            </label>
 
             <p class="quick-draft-status" data-quick-draft-status aria-live="polite"></p>
           </form>
+
+          <div class="quick-draft-actions">
+            <button class="button primary" type="submit" form="quick-draft-form">Create draft</button>
+            <button class="button secondary" type="button" data-voice-draft>Speak request</button>
+          </div>
         </section>
 
-        <section class="quick-draft-review studio-panel" aria-label="Draft review">
+        <section class="quick-draft-review studio-output" aria-label="Draft review">
           <div class="studio-output-heading">
-            <div>
+            <div class="studio-panel-heading">
               <span>Step 2</span>
-              <h2>Review the draft</h2>
-              <p class="studio-output-note">Edit anything before opening it in your email client.</p>
+              <h2>Review and send email</h2>
             </div>
           </div>
 
-          <div class="quick-draft-card">
+          <div class="quick-draft-card email-preview-card">
             <label>
               <span>To</span>
               <input data-draft-to value="Murilo" />
@@ -103,9 +104,8 @@ Thank you,</textarea>
           </div>
 
           <div class="quick-draft-send">
-            <a class="draft-link draft-link-primary" href="#" target="_blank" rel="noopener noreferrer" data-gmail-draft>Send in Gmail</a>
-            <a class="draft-link" href="#" target="_blank" rel="noopener noreferrer" data-outlook-draft>Send in Outlook</a>
-            <a class="draft-link" href="#" data-mailto-draft>Default email app</a>
+            <a class="draft-link draft-link-primary" href="#" data-mailto-draft>Open in drafts</a>
+            <button class="button secondary" type="button" data-quick-send-now>Send now</button>
           </div>
 
           <div class="email-quality-check is-ready" data-quick-draft-quality>
