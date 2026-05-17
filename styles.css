@@ -3301,9 +3301,9 @@ iframe[style*="position: fixed"] {
   display: flex;
   justify-content: flex-end;
   min-width: var(--recipient-sheet-min-width, 1690px);
-  padding: 12px 16px;
+  padding: 0 16px 12px;
   border-bottom: 1px solid #dfe2e8;
-  background: #ffffff;
+  background: #FAFAFA;
 }
 
 .recipient-card-list {
