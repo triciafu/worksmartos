@@ -40,45 +40,42 @@
       </section>
 
       <section class="quick-draft-shell quick-email-workspace" aria-label="AI email workspace">
-        <section class="quick-draft-assistant studio-panel" aria-label="AI chat">
-            <div class="studio-panel-heading">
-              <span>AI chat</span>
-              <h2>Work to manage</h2>
-              <p>Tell WorkSmartOS what to write, reply to, find, or follow up on.</p>
-            </div>
-
-            <div class="quick-chat-thread" aria-label="Assistant conversation">
-              <div class="quick-chat-message assistant">
-                <span>WorkSmartOS</span>
-                <p>I can draft new emails, reply to selected inbox messages, find follow-ups, or summarize what needs your attention.</p>
+        <aside class="quick-inbox-view studio-panel" aria-label="Inbox view">
+            <div class="quick-inbox-heading">
+              <div>
+                <span>Inbox</span>
+                <h3>Work to manage</h3>
               </div>
-              <div class="quick-chat-message user" data-chat-preview>
-                <span>You</span>
-                <p>Send an email to John and let him know the proposal is ready.</p>
-              </div>
+              <strong>6 open</strong>
             </div>
 
-            <form class="quick-draft-prompt-card" id="quick-draft-form" data-quick-draft-form>
-              <label>
-                <span class="visually-hidden">What should WorkSmartOS do with your email?</span>
-                <textarea name="request" data-request-input placeholder="Ask WorkSmartOS to draft, reply, follow up, or summarize."></textarea>
-              </label>
-
-              <p class="quick-draft-status" data-quick-draft-status aria-live="polite"></p>
-            </form>
-
-            <div class="quick-draft-actions">
-              <button class="icon-button" type="button" data-voice-draft aria-label="Speak request">
-                <svg aria-hidden="true" viewBox="0 0 24 24">
-                  <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"></path>
-                  <path d="M19 11a7 7 0 0 1-14 0"></path>
-                  <path d="M12 18v3"></path>
-                  <path d="M8 21h8"></path>
-                </svg>
-              </button>
-              <button class="button primary" type="submit" form="quick-draft-form">Submit</button>
+            <div class="quick-inbox-list">
+              <article class="quick-inbox-item is-active is-urgent" tabindex="0" data-inbox-item data-inbox-from="Bob" data-inbox-subject="Can Thursday work?" data-inbox-body="Quick check-in about the launch timeline." data-inbox-request="Respond to Bob and tell him Thursday afternoon works for a quick check-in.">
+                <div>
+                  <span>Bob</span>
+                  <strong>Can Thursday work?</strong>
+                  <p>Quick check-in about the launch timeline.</p>
+                </div>
+                <button type="button">Reply</button>
+              </article>
+              <article class="quick-inbox-item" tabindex="0" data-inbox-item data-inbox-from="Lauren" data-inbox-subject="Pricing sheet" data-inbox-body="Waiting for your notes before this goes to the client." data-inbox-request="Reply to Lauren and tell her the pricing sheet looks good to send.">
+                <div>
+                  <span>Lauren</span>
+                  <strong>Pricing sheet</strong>
+                  <p>Waiting for your notes before this goes to the client.</p>
+                </div>
+                <button type="button">Reply</button>
+              </article>
+              <article class="quick-inbox-item" tabindex="0" data-inbox-item data-inbox-from="Jordan" data-inbox-subject="Follow-up needed" data-inbox-body="No reply yet on the vendor approval." data-inbox-request="Follow up with Jordan about the vendor approval.">
+                <div>
+                  <span>Jordan</span>
+                  <strong>Follow-up needed</strong>
+                  <p>No reply yet on the vendor approval.</p>
+                </div>
+                <button type="button">Follow up</button>
+              </article>
             </div>
-        </section>
+        </aside>
 
         <section class="quick-compose-view studio-panel" aria-label="Email composer">
           <div class="quick-compose-heading">
@@ -142,42 +139,45 @@ Thank you,</textarea>
           </div>
         </section>
 
-        <aside class="quick-inbox-view studio-panel" aria-label="Inbox view">
-            <div class="quick-inbox-heading">
-              <div>
-                <span>Inbox</span>
-                <h3>AI Email Assistant</h3>
-              </div>
-              <strong>6 open</strong>
+        <section class="quick-draft-assistant studio-panel" aria-label="AI chat">
+            <div class="studio-panel-heading">
+              <span>AI chat</span>
+              <h2>AI Email Assistant</h2>
+              <p>Tell WorkSmartOS what to write, reply to, find, or follow up on.</p>
             </div>
 
-            <div class="quick-inbox-list">
-              <article class="quick-inbox-item is-active is-urgent" tabindex="0" data-inbox-item data-inbox-from="Bob" data-inbox-subject="Can Thursday work?" data-inbox-body="Quick check-in about the launch timeline." data-inbox-request="Respond to Bob and tell him Thursday afternoon works for a quick check-in.">
-                <div>
-                  <span>Bob</span>
-                  <strong>Can Thursday work?</strong>
-                  <p>Quick check-in about the launch timeline.</p>
-                </div>
-                <button type="button">Reply</button>
-              </article>
-              <article class="quick-inbox-item" tabindex="0" data-inbox-item data-inbox-from="Lauren" data-inbox-subject="Pricing sheet" data-inbox-body="Waiting for your notes before this goes to the client." data-inbox-request="Reply to Lauren and tell her the pricing sheet looks good to send.">
-                <div>
-                  <span>Lauren</span>
-                  <strong>Pricing sheet</strong>
-                  <p>Waiting for your notes before this goes to the client.</p>
-                </div>
-                <button type="button">Reply</button>
-              </article>
-              <article class="quick-inbox-item" tabindex="0" data-inbox-item data-inbox-from="Jordan" data-inbox-subject="Follow-up needed" data-inbox-body="No reply yet on the vendor approval." data-inbox-request="Follow up with Jordan about the vendor approval.">
-                <div>
-                  <span>Jordan</span>
-                  <strong>Follow-up needed</strong>
-                  <p>No reply yet on the vendor approval.</p>
-                </div>
-                <button type="button">Follow up</button>
-              </article>
+            <div class="quick-chat-thread" aria-label="Assistant conversation">
+              <div class="quick-chat-message assistant">
+                <span>WorkSmartOS</span>
+                <p>I can draft new emails, reply to selected inbox messages, find follow-ups, or summarize what needs your attention.</p>
+              </div>
+              <div class="quick-chat-message user" data-chat-preview>
+                <span>You</span>
+                <p>Send an email to John and let him know the proposal is ready.</p>
+              </div>
             </div>
-        </aside>
+
+            <form class="quick-draft-prompt-card" id="quick-draft-form" data-quick-draft-form>
+              <label>
+                <span class="visually-hidden">What should WorkSmartOS do with your email?</span>
+                <textarea name="request" data-request-input placeholder="Ask WorkSmartOS to draft, reply, follow up, or summarize."></textarea>
+              </label>
+
+              <p class="quick-draft-status" data-quick-draft-status aria-live="polite"></p>
+            </form>
+
+            <div class="quick-draft-actions">
+              <button class="icon-button" type="button" data-voice-draft aria-label="Speak request">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"></path>
+                  <path d="M19 11a7 7 0 0 1-14 0"></path>
+                  <path d="M12 18v3"></path>
+                  <path d="M8 21h8"></path>
+                </svg>
+              </button>
+              <button class="button primary" type="submit" form="quick-draft-form">Submit</button>
+            </div>
+        </section>
       </section>
     </main>
 
