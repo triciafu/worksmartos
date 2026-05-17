@@ -1760,6 +1760,81 @@ h1 {
   color: var(--accent);
 }
 
+.studio-prompt-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.studio-prompt-modal[hidden] {
+  display: none;
+}
+
+.studio-prompt-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 20, 0.42);
+}
+
+.studio-prompt-dialog {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 18px;
+  width: min(460px, 100%);
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(20, 24, 31, 0.22);
+}
+
+.studio-prompt-dialog h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.studio-prompt-dialog label {
+  display: grid;
+  gap: 8px;
+}
+
+.studio-prompt-dialog label span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.studio-prompt-dialog input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+
+.studio-prompt-dialog input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+}
+
+.studio-prompt-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 .quick-chat-thread {
   display: grid;
   gap: 10px;
@@ -4733,7 +4808,9 @@ body[data-studio-theme="dark"] .quick-attachment-list span {
 body[data-studio-theme="dark"] .quick-drive-picker,
 body[data-studio-theme="dark"] .quick-mail-tools,
 body[data-studio-theme="dark"] .quick-mail-tools select,
-body[data-studio-theme="dark"] .send-schedule-menu {
+body[data-studio-theme="dark"] .send-schedule-menu,
+body[data-studio-theme="dark"] .studio-prompt-dialog,
+body[data-studio-theme="dark"] .studio-prompt-dialog input {
   border-color: #34363d;
   background: #202124;
   color: var(--ink);

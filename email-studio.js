@@ -92,6 +92,83 @@ let recipientRedoButton = null;
 
 let generatedEmails = [];
 let emailWorkflowState = [];
+let studioPromptElements = null;
+let studioPromptResolve = null;
+
+function getStudioPromptElements() {
+  if (studioPromptElements) {
+    return studioPromptElements;
+  }
+
+  document.body.insertAdjacentHTML("beforeend", `
+    <div class="studio-prompt-modal" data-studio-prompt hidden>
+      <div class="studio-prompt-backdrop" data-studio-prompt-cancel></div>
+      <section class="studio-prompt-dialog" role="dialog" aria-modal="true" aria-labelledby="studio-prompt-title">
+        <h2 id="studio-prompt-title" data-studio-prompt-title></h2>
+        <label>
+          <span data-studio-prompt-label></span>
+          <input data-studio-prompt-input />
+        </label>
+        <div class="studio-prompt-actions">
+          <button class="draft-link" type="button" data-studio-prompt-cancel>Cancel</button>
+          <button class="button primary" type="button" data-studio-prompt-confirm>Save</button>
+        </div>
+      </section>
+    </div>
+  `);
+
+  const modal = document.querySelector("[data-studio-prompt]");
+  const input = modal.querySelector("[data-studio-prompt-input]");
+  const confirm = modal.querySelector("[data-studio-prompt-confirm]");
+  const cancelButtons = modal.querySelectorAll("[data-studio-prompt-cancel]");
+
+  function close(value = "") {
+    modal.hidden = true;
+    if (studioPromptResolve) {
+      studioPromptResolve(value);
+      studioPromptResolve = null;
+    }
+  }
+
+  confirm.addEventListener("click", () => close(input.value.trim()));
+  cancelButtons.forEach((button) => button.addEventListener("click", () => close("")));
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      close(input.value.trim());
+    }
+    if (event.key === "Escape") {
+      close("");
+    }
+  });
+
+  studioPromptElements = {
+    modal,
+    title: modal.querySelector("[data-studio-prompt-title]"),
+    label: modal.querySelector("[data-studio-prompt-label]"),
+    input,
+    confirm,
+  };
+  return studioPromptElements;
+}
+
+function openStudioPrompt({ title, label, value = "", placeholder = "", confirmText = "Save" }) {
+  const prompt = getStudioPromptElements();
+  prompt.title.textContent = title;
+  prompt.label.textContent = label;
+  prompt.input.value = value;
+  prompt.input.placeholder = placeholder;
+  prompt.confirm.textContent = confirmText;
+  prompt.modal.hidden = false;
+  window.requestAnimationFrame(() => {
+    prompt.input.focus();
+    prompt.input.select();
+  });
+
+  return new Promise((resolve) => {
+    studioPromptResolve = resolve;
+  });
+}
 
 const studioVariant = document.body.dataset.studioVariant || "creative-approval";
 let activeTemplatePreset = studioVariant;
@@ -149,7 +226,7 @@ function restoreStudioTheme() {
 }
 
 themeButtons.forEach((button) => {
-  button.addEventListener("click", () => {
+  button.addEventListener("click", async () => {
     saveStudioTheme(button.dataset.studioTheme);
   });
 });
@@ -2340,7 +2417,7 @@ formatButtons.forEach((button) => {
     event.preventDefault();
   });
 
-  button.addEventListener("click", () => {
+  button.addEventListener("click", async () => {
     const command = button.dataset.format;
 
     if (command === "undo") {
@@ -2363,7 +2440,13 @@ formatButtons.forEach((button) => {
     }
 
     if (command === "createLink") {
-      const url = normalizeLinkUrl(window.prompt("Link URL", "https://"));
+      const linkValue = await openStudioPrompt({
+        title: "Insert link",
+        label: "Link URL",
+        value: "https://",
+        confirmText: "Insert link",
+      });
+      const url = normalizeLinkUrl(linkValue);
       if (!url) {
         return;
       }
@@ -2447,8 +2530,13 @@ tokenList.addEventListener("click", (event) => {
   });
 });
 
-addPlaceholderButton.addEventListener("click", () => {
-  const label = window.prompt("Placeholder name", "New placeholder");
+addPlaceholderButton.addEventListener("click", async () => {
+  const label = await openStudioPrompt({
+    title: "New placeholder",
+    label: "Placeholder name",
+    value: "New placeholder",
+    confirmText: "Add placeholder",
+  });
   if (!label) {
     return;
   }

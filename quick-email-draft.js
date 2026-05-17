@@ -27,10 +27,17 @@ const newFolderButton = document.querySelector("[data-new-folder]");
 const mailActionButtons = document.querySelectorAll("[data-mail-action]");
 const scheduleSendToggles = document.querySelectorAll("[data-schedule-send-toggle]");
 const scheduleSendOptions = document.querySelectorAll("[data-schedule-send-option]");
+const studioPrompt = document.querySelector("[data-studio-prompt]");
+const studioPromptTitle = document.querySelector("[data-studio-prompt-title]");
+const studioPromptLabel = document.querySelector("[data-studio-prompt-label]");
+const studioPromptInput = document.querySelector("[data-studio-prompt-input]");
+const studioPromptConfirm = document.querySelector("[data-studio-prompt-confirm]");
+const studioPromptCancelButtons = document.querySelectorAll("[data-studio-prompt-cancel]");
 
 const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
 let currentIntent = "send";
+let studioPromptResolve = null;
 
 function plainTextToHtml(value) {
   return String(value || "")
@@ -71,6 +78,31 @@ function scheduleLabel(value) {
     return "this afternoon";
   }
   return "a custom date and time";
+}
+
+function closeStudioPrompt(value = "") {
+  studioPrompt.hidden = true;
+  if (studioPromptResolve) {
+    studioPromptResolve(value);
+    studioPromptResolve = null;
+  }
+}
+
+function openStudioPrompt({ title, label, value = "", placeholder = "", confirmText = "Save" }) {
+  studioPromptTitle.textContent = title;
+  studioPromptLabel.textContent = label;
+  studioPromptInput.value = value;
+  studioPromptInput.placeholder = placeholder;
+  studioPromptConfirm.textContent = confirmText;
+  studioPrompt.hidden = false;
+  window.requestAnimationFrame(() => {
+    studioPromptInput.focus();
+    studioPromptInput.select();
+  });
+
+  return new Promise((resolve) => {
+    studioPromptResolve = resolve;
+  });
 }
 
 function applyStudioTheme(theme) {
@@ -328,9 +360,14 @@ formatButtons.forEach((button) => {
 });
 
 formatLinkButton.addEventListener("mousedown", (event) => event.preventDefault());
-formatLinkButton.addEventListener("click", () => {
+formatLinkButton.addEventListener("click", async () => {
   draftBody.focus();
-  const url = window.prompt("Enter link URL");
+  const url = await openStudioPrompt({
+    title: "Insert link",
+    label: "Link URL",
+    value: "https://",
+    confirmText: "Insert link",
+  });
   if (url) {
     document.execCommand("createLink", false, url);
     updateLinks();
@@ -370,8 +407,13 @@ driveFileButtons.forEach((button) => {
   });
 });
 
-newFolderButton.addEventListener("click", () => {
-  const folderName = window.prompt("New folder name");
+newFolderButton.addEventListener("click", async () => {
+  const folderName = await openStudioPrompt({
+    title: "New folder",
+    label: "Folder name",
+    placeholder: "Example: Client follow-ups",
+    confirmText: "Create folder",
+  });
   const cleanName = String(folderName || "").trim();
   if (!cleanName) {
     return;
@@ -383,6 +425,24 @@ newFolderButton.addEventListener("click", () => {
   }
   folderSelect.value = cleanName;
   statusText.textContent = `${cleanName} folder is ready to sync once Gmail or Outlook is connected.`;
+});
+
+studioPromptConfirm.addEventListener("click", () => {
+  closeStudioPrompt(studioPromptInput.value.trim());
+});
+
+studioPromptCancelButtons.forEach((button) => {
+  button.addEventListener("click", () => closeStudioPrompt(""));
+});
+
+studioPromptInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    closeStudioPrompt(studioPromptInput.value.trim());
+  }
+  if (event.key === "Escape") {
+    closeStudioPrompt("");
+  }
 });
 
 mailActionButtons.forEach((button) => {
