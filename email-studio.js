@@ -649,10 +649,18 @@ function draftLinksHtml(email) {
 }
 
 function fromPreviewHtml(email) {
+  const value = email.from || "";
   return `
     <label>
-      <span>From</span>
-      <input value="${escapeAttribute(email.from || "")}" data-from-input />
+      <span>From account</span>
+      <input
+        value="${escapeAttribute(value)}"
+        data-from-input
+        data-connected-sender-provider=""
+        data-connected-sender-id=""
+        list="connected-sender-options"
+        placeholder="Connect Gmail or Outlook to choose sender"
+      />
     </label>
   `;
 }
@@ -741,6 +749,10 @@ function sendCenterHtml(emails) {
         <h3>${emails.length} ${pluralEmails} prepared</h3>
         <p>${summary.ready} ready, ${summary.needsReview} need review, ${summary.issues} ${pluralIssues} found.</p>
       </div>
+      <datalist id="connected-sender-options" data-connected-sender-options>
+        <option value="Connect Gmail to choose sender"></option>
+        <option value="Connect Outlook to choose sender"></option>
+      </datalist>
       <div class="send-center-actions">
         <button class="button primary" type="button" data-send-all>Send all</button>
       </div>
@@ -753,7 +765,7 @@ function sendCenterHtml(emails) {
         <article>
           <span>Connected sending</span>
           <strong>Gmail and Outlook</strong>
-          <p>Direct sending will be available after account connection and backend email permissions are enabled.</p>
+          <p>From account will fill from the connected Gmail or Outlook account after OAuth and backend send permissions are enabled.</p>
           <div class="send-provider-actions">
             <button class="button secondary" type="button" data-connect-email-provider="gmail">Connect Gmail</button>
             <button class="button secondary" type="button" data-connect-email-provider="outlook">Connect Outlook</button>
@@ -762,7 +774,7 @@ function sendCenterHtml(emails) {
         <article>
           <span>Current send method</span>
           <strong>Open drafts manually</strong>
-          <p>Use Gmail, Outlook, or your default email app below while direct sending is being connected.</p>
+          <p>The mail app controls the actual sender for drafts until connected sending is live.</p>
         </article>
       </div>
       <p class="send-center-status" data-send-center-status aria-live="polite"></p>
@@ -1900,7 +1912,10 @@ function refreshEmailCard(card) {
     return;
   }
 
-  generatedEmails[index].from = card.querySelector("[data-from-input]")?.value || "";
+  const fromInput = card.querySelector("[data-from-input]");
+  generatedEmails[index].from = fromInput?.value || "";
+  generatedEmails[index].senderProvider = fromInput?.dataset.connectedSenderProvider || "";
+  generatedEmails[index].senderAccountId = fromInput?.dataset.connectedSenderId || "";
   generatedEmails[index].subject = card.querySelector("[data-subject-input]")?.value || "";
   generatedEmails[index].body = card.querySelector("[data-body-input]")?.innerHTML || "";
 
@@ -1961,12 +1976,15 @@ async function copyRichText(element) {
 }
 
 function exportCsv() {
-  const rows = [["From", "Send as", "Email address", "Company name", "Recipient first name", "Campaign", "Subject", "Body"]];
+  const rows = [["From account", "Sender provider", "Sender account ID", "Send as", "Email address", "Company name", "Recipient first name", "Campaign", "Subject", "Body"]];
 
   output.querySelectorAll(".email-preview-card").forEach((card, index) => {
     const email = generatedEmails[index];
+    const fromInput = card.querySelector("[data-from-input]");
     rows.push([
-      card.querySelector("[data-from-input]")?.value || "",
+      fromInput?.value || "",
+      fromInput?.dataset.connectedSenderProvider || "",
+      fromInput?.dataset.connectedSenderId || "",
       email.recipient_type,
       email.recipient_email,
       email.client_name,
@@ -2182,7 +2200,7 @@ output.addEventListener("click", (event) => {
     const statusNode = output.querySelector("[data-send-center-status]");
     const provider = connectButton.dataset.connectEmailProvider === "gmail" ? "Gmail" : "Outlook";
     if (statusNode) {
-      statusNode.textContent = `${provider} connection needs OAuth and backend sending to be enabled before direct send can run.`;
+      statusNode.textContent = `${provider} OAuth is not connected yet. Once it is, From account will populate from the connected sender.`;
     }
     return;
   }
@@ -2190,7 +2208,7 @@ output.addEventListener("click", (event) => {
   const directSendButton = event.target.closest("[data-direct-send]");
   if (directSendButton) {
     const card = directSendButton.closest(".email-preview-card");
-    updateEmailStatus(card, "Connection required", "Direct sending is not connected yet. Open a draft manually for now.");
+    updateEmailStatus(card, "Connection required", "Connect Gmail or Outlook before using Send now.");
     return;
   }
 
@@ -2198,7 +2216,7 @@ output.addEventListener("click", (event) => {
   if (sendAllButton) {
     const statusNode = output.querySelector("[data-send-center-status]");
     if (statusNode) {
-      statusNode.textContent = "Direct batch sending is not connected yet. Open individual drafts for now.";
+      statusNode.textContent = "Connect Gmail or Outlook before using Send all.";
     }
     return;
   }
