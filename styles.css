@@ -1804,6 +1804,19 @@ h1 {
   display: none;
 }
 
+.optional-recipient-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.optional-recipient-heading span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
 .remove-recipient-field {
   width: fit-content;
   border: 0;
@@ -4369,6 +4382,11 @@ body[data-studio-theme="dark"] .availability-check-cell label {
 }
 
 body[data-studio-theme="dark"] .quick-inbox-item.is-urgent {
+  border-color: rgba(0, 113, 227, 0.55);
+  background: rgba(0, 113, 227, 0.12);
+}
+
+body[data-studio-theme="dark"] .quick-chat-message.user {
   border-color: rgba(0, 113, 227, 0.55);
   background: rgba(0, 113, 227, 0.12);
 }

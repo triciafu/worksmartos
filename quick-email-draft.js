@@ -19,6 +19,8 @@ const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
 let currentIntent = "send";
 
+chatPreview.textContent = "";
+
 function applyStudioTheme(theme) {
   const nextTheme = studioThemes.has(theme) ? theme : "white";
   document.body.dataset.studioTheme = nextTheme;

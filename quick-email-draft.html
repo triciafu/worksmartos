@@ -54,7 +54,7 @@
               </div>
               <div class="quick-chat-message user" data-chat-preview>
                 <span>You</span>
-                <p>Send an email to John and let him know the proposal is ready.</p>
+                <p></p>
               </div>
             </div>
 
@@ -98,18 +98,24 @@
               <button class="add-recipient-fields" type="button" data-add-recipient-field="bcc">+ Add Bcc</button>
             </div>
             <div class="optional-recipient-field" data-optional-recipient-field="cc" hidden>
-              <label>
+              <div class="optional-recipient-heading">
                 <span>Cc</span>
+                <button class="remove-recipient-field" type="button" data-remove-recipient-field="cc">Remove</button>
+              </div>
+              <label>
+                <span class="visually-hidden">Cc</span>
                 <input data-draft-cc value="" />
               </label>
-              <button class="remove-recipient-field" type="button" data-remove-recipient-field="cc">Remove</button>
             </div>
             <div class="optional-recipient-field" data-optional-recipient-field="bcc" hidden>
-              <label>
+              <div class="optional-recipient-heading">
                 <span>Bcc</span>
+                <button class="remove-recipient-field" type="button" data-remove-recipient-field="bcc">Remove</button>
+              </div>
+              <label>
+                <span class="visually-hidden">Bcc</span>
                 <input data-draft-bcc value="" />
               </label>
-              <button class="remove-recipient-field" type="button" data-remove-recipient-field="bcc">Remove</button>
             </div>
             <label>
               <span>Subject</span>
@@ -127,7 +133,7 @@ Thank you,</textarea>
 
           <div class="quick-draft-send">
             <a class="draft-link" href="#" data-mailto-draft>Open in drafts</a>
-            <button class="draft-link" type="button" data-quick-send-now>Send now</button>
+            <button class="button primary" type="button" data-quick-send-now>Send now</button>
           </div>
 
           <div class="email-quality-check is-ready" data-quick-draft-quality>
