@@ -2201,6 +2201,47 @@ h1 {
   line-height: 1;
 }
 
+.ai-work-plan {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.ai-work-plan div {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.ai-work-plan span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(0, 113, 227, 0.1);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ai-work-plan p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.ai-work-plan strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
 .ai-action-strip,
 .quick-suggested-prompts {
   display: flex;
@@ -5052,6 +5093,7 @@ body[data-studio-theme="dark"] .merge-token,
 body[data-studio-theme="dark"] .email-address-chip,
 body[data-studio-theme="dark"] .email-status-pill,
 body[data-studio-theme="dark"] .ai-work-metrics button,
+body[data-studio-theme="dark"] .ai-work-plan,
 body[data-studio-theme="dark"] .quick-suggested-prompts button,
 body[data-studio-theme="dark"] .quick-draft-examples button,
 body[data-studio-theme="dark"] .quick-assistant-capabilities span,
@@ -5078,6 +5120,10 @@ body[data-studio-theme="dark"] .ai-work-metrics button:hover,
 body[data-studio-theme="dark"] .quick-suggested-prompts button:hover {
   border-color: rgba(0, 113, 227, 0.55);
   background: rgba(0, 113, 227, 0.12);
+}
+
+body[data-studio-theme="dark"] .ai-work-plan span {
+  background: rgba(0, 113, 227, 0.16);
 }
 
 body[data-studio-theme="dark"] .quick-inbox-item.is-urgent {

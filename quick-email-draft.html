@@ -51,19 +51,19 @@
 
             <div class="ai-inbox-summary" aria-label="AI inbox summary">
               <div>
-                <span>WorkSmartOS reviewed your inbox</span>
-                <strong>3 replies ready, 1 follow-up, 2 safe to archive.</strong>
+                <span>WorkSmartOS has a plan</span>
+                <strong>Reply to Bob, approve Lauren, follow up with Jordan, and clear low-priority email.</strong>
               </div>
               <button type="button" data-ai-action="review-plan">Review plan</button>
             </div>
 
             <div class="ai-work-metrics" aria-label="AI work queue">
               <button type="button" data-ai-action="draft-replies">
-                <span>Replies ready</span>
+                <span>Ready to send</span>
                 <strong>3</strong>
               </button>
               <button type="button" data-ai-action="decisions">
-                <span>Need decision</span>
+                <span>Needs approval</span>
                 <strong>1</strong>
               </button>
               <button type="button" data-ai-action="follow-ups">
@@ -71,17 +71,32 @@
                 <strong>1</strong>
               </button>
               <button type="button" data-ai-action="clean-up">
-                <span>Can archive</span>
-                <strong>2</strong>
+                <span>Time saved</span>
+                <strong>28m</strong>
               </button>
             </div>
 
+            <div class="ai-work-plan" aria-label="AI recommended work plan">
+              <div>
+                <span>1</span>
+                <p><strong>Approve or edit</strong> Lauren is waiting on the pricing sheet.</p>
+              </div>
+              <div>
+                <span>2</span>
+                <p><strong>Send prepared replies</strong> Bob and two other threads are ready for review.</p>
+              </div>
+              <div>
+                <span>3</span>
+                <p><strong>Clean up</strong> Two low-priority messages can be archived once connected.</p>
+              </div>
+            </div>
+
             <div class="ai-action-strip" aria-label="AI inbox actions">
-              <button type="button" data-ai-action="summarize">Summarize inbox</button>
-              <button type="button" data-ai-action="follow-ups">Find follow-ups</button>
-              <button type="button" data-ai-action="draft-replies">Draft replies</button>
-              <button type="button" data-ai-action="prioritize">Prioritize urgent</button>
-              <button type="button" data-ai-action="clean-up">Clean up inbox</button>
+              <button type="button" data-ai-action="review-plan">Get me caught up</button>
+              <button type="button" data-ai-action="draft-replies">Reply where safe</button>
+              <button type="button" data-ai-action="decisions">Find blockers</button>
+              <button type="button" data-ai-action="follow-ups">Chase follow-ups</button>
+              <button type="button" data-ai-action="clean-up">Clear low priority</button>
             </div>
 
             <div class="quick-mail-tools" aria-label="Inbox actions">
@@ -163,7 +178,7 @@
             <div class="quick-chat-thread" aria-label="Assistant conversation">
               <div class="quick-chat-message assistant">
                 <span>WorkSmartOS</span>
-                <p>I can draft new emails, reply to selected inbox messages, find follow-ups, or summarize what needs your attention.</p>
+                <p>Tell me the outcome you want. I will find the right email, draft the response, suggest cleanup, and wait for your approval before anything is sent.</p>
               </div>
               <div class="quick-chat-message user" data-chat-preview>
                 <span>You</span>
@@ -172,16 +187,16 @@
             </div>
 
             <div class="quick-suggested-prompts" aria-label="Suggested AI prompts">
-              <button type="button" data-example-request="Summarize what needs my attention today.">Summarize today</button>
-              <button type="button" data-example-request="Draft replies to emails that need a response.">Draft replies</button>
-              <button type="button" data-example-request="Find emails I need to follow up on.">Find follow-ups</button>
-              <button type="button" data-example-request="Prioritize urgent emails and explain why.">Prioritize urgent</button>
+              <button type="button" data-example-request="Get me caught up on email and show what needs my approval.">Get me caught up</button>
+              <button type="button" data-example-request="Draft safe replies and leave anything risky for my review.">Reply where safe</button>
+              <button type="button" data-example-request="Find emails blocking customers, payments, or approvals.">Find blockers</button>
+              <button type="button" data-example-request="Clear low-priority email from my inbox.">Clear low priority</button>
             </div>
 
             <form class="quick-draft-prompt-card" id="quick-draft-form" data-quick-draft-form>
               <label>
                 <span class="visually-hidden">What should WorkSmartOS do with your email?</span>
-                <textarea name="request" data-request-input placeholder="Ask WorkSmartOS to draft, reply, follow up, or summarize."></textarea>
+                <textarea name="request" data-request-input placeholder="Ask for an outcome: get me caught up, reply to Bob, find blockers, or clean up low-priority email."></textarea>
               </label>
 
               <p class="quick-draft-status" data-quick-draft-status aria-live="polite"></p>

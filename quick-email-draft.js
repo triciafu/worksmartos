@@ -47,17 +47,17 @@ const aiActionRequests = {
   "review-plan": "Review my inbox and tell me the fastest plan to get caught up.",
   summarize: "Summarize what needs my attention today.",
   "follow-ups": "Find emails I need to follow up on.",
-  "draft-replies": "Draft replies to emails that need a response.",
+  "draft-replies": "Draft safe replies and leave anything risky for my review.",
   decisions: "Show emails that need my decision before anything can move forward.",
   prioritize: "Prioritize urgent emails and explain why.",
   "clean-up": "Find low-priority emails I can archive or move out of my inbox.",
 };
 
 const aiActionStatuses = {
-  "review-plan": "Plan ready: start with Bob, approve Lauren's pricing sheet, then follow up with Jordan.",
-  summarize: "Summary ready. WorkSmartOS grouped your inbox by replies, decisions, follow-ups, and cleanup.",
-  "follow-ups": "Follow-ups found. WorkSmartOS can prepare reminders for the threads waiting on a response.",
-  "draft-replies": "Reply drafts queued. Open an email to review the suggested response before sending.",
+  "review-plan": "Plan ready: approve Lauren, send Bob's reply, then follow up with Jordan.",
+  summarize: "Summary ready. WorkSmartOS grouped your inbox by decisions, safe replies, follow-ups, and cleanup.",
+  "follow-ups": "Follow-ups found. WorkSmartOS can prepare reminders for threads waiting on a response.",
+  "draft-replies": "Safe replies queued. Anything uncertain stays in review before it can send.",
   decisions: "One decision found: Lauren is waiting for approval on the pricing sheet.",
   prioritize: "Urgent work prioritized. Replies with customer timing and approval blockers are first.",
   "clean-up": "Cleanup suggestions ready. Two low-priority emails can move out of the inbox once connected.",
