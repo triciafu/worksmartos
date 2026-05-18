@@ -1507,6 +1507,10 @@ h1 {
   padding-bottom: 18px;
 }
 
+.ai-command-shell {
+  gap: 18px;
+}
+
 .ai-command-center {
   display: grid;
   grid-template-columns: minmax(250px, 0.8fr) minmax(360px, 1.25fr) minmax(260px, 0.75fr);
@@ -1616,6 +1620,59 @@ h1 {
   color: var(--ink);
   font-size: 14px;
   font-weight: 500;
+}
+
+.ai-situation-layer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) repeat(2, minmax(0, 0.825fr));
+  gap: 18px;
+}
+
+.ai-situation-layer button {
+  display: grid;
+  gap: 9px;
+  min-height: 148px;
+  align-content: start;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ai-situation-layer button:hover {
+  border-color: rgba(0, 113, 227, 0.45);
+  background: rgba(0, 113, 227, 0.035);
+}
+
+.ai-situation-layer .ai-situation-primary {
+  border-color: rgba(0, 113, 227, 0.28);
+  background: #f7fbff;
+}
+
+.ai-situation-layer span {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ai-situation-layer strong {
+  max-width: 520px;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.18;
+}
+
+.ai-situation-layer p {
+  max-width: 560px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .quick-email-workspace {
@@ -2770,6 +2827,10 @@ h1 {
   }
 
   .ai-command-center {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-situation-layer {
     grid-template-columns: 1fr;
   }
 
@@ -5293,6 +5354,7 @@ body[data-studio-theme="dark"] .merge-token,
 body[data-studio-theme="dark"] .email-address-chip,
 body[data-studio-theme="dark"] .email-status-pill,
 body[data-studio-theme="dark"] .ai-guardrails div,
+body[data-studio-theme="dark"] .ai-situation-layer button,
 body[data-studio-theme="dark"] .ai-work-metrics button,
 body[data-studio-theme="dark"] .ai-work-plan,
 body[data-studio-theme="dark"] .ai-operator-signals div,
@@ -5332,6 +5394,16 @@ body[data-studio-theme="dark"] .ai-command-actions button:not(.primary) {
   border-color: #34363d;
   background: #202124;
   color: var(--ink);
+}
+
+body[data-studio-theme="dark"] .ai-situation-layer .ai-situation-primary {
+  border-color: rgba(0, 113, 227, 0.5);
+  background: rgba(0, 113, 227, 0.12);
+}
+
+body[data-studio-theme="dark"] .ai-situation-layer button:hover {
+  border-color: rgba(0, 113, 227, 0.55);
+  background: rgba(0, 113, 227, 0.12);
 }
 
 body[data-studio-theme="dark"] .ai-work-metrics button:hover,

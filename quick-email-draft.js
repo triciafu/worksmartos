@@ -46,6 +46,9 @@ let studioPromptResolve = null;
 
 const aiActionRequests = {
   "review-plan": "Review my inbox and tell me the fastest plan to get caught up.",
+  "morning-brief": "Give me an executive briefing on hidden blockers, stakeholder risks, and what could slip today.",
+  stakeholders: "Show stakeholder context, response patterns, blockers, and escalation recommendations.",
+  compress: "Compress the email trail into decisions, risks, and one recommended next action.",
   summarize: "Summarize what needs my attention today.",
   "follow-ups": "Find emails I need to follow up on.",
   "draft-replies": "Draft safe replies and leave anything risky for my review.",
@@ -56,6 +59,9 @@ const aiActionRequests = {
 
 const aiActionStatuses = {
   "review-plan": "Plan ready: approve Lauren, send Bob's reply, then follow up with Jordan.",
+  "morning-brief": "Briefing ready: launch timing is exposed tomorrow at 2PM unless Bob and Lauren are resolved.",
+  stakeholders: "Stakeholder map ready: Lauren is the approval blocker, Bob is waiting on timing, Jordan needs a nudge.",
+  compress: "Compressed: 37 messages became 3 decisions, 2 risks, and 1 recommended next action.",
   summarize: "Summary ready. WorkSmartOS grouped your inbox by decisions, safe replies, follow-ups, and cleanup.",
   "follow-ups": "Follow-ups found. WorkSmartOS can prepare reminders for threads waiting on a response.",
   "draft-replies": "Safe replies queued. Anything uncertain stays in review before it can send.",
