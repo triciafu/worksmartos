@@ -27,6 +27,7 @@ const driveFileButtons = document.querySelectorAll("[data-drive-file]");
 const folderSelect = document.querySelector("[data-folder-select]");
 const newFolderButton = document.querySelector("[data-new-folder]");
 const mailActionButtons = document.querySelectorAll("[data-mail-action]");
+const aiActionButtons = document.querySelectorAll("[data-ai-action]");
 const scheduleSendToggles = document.querySelectorAll("[data-schedule-send-toggle]");
 const scheduleSendOptions = document.querySelectorAll("[data-schedule-send-option]");
 const studioPrompt = document.querySelector("[data-studio-prompt]");
@@ -41,6 +42,26 @@ const studioThemeKey = "worksmartos-email-studio-theme";
 const studioThemes = new Set(["light", "white", "dark"]);
 let currentIntent = "send";
 let studioPromptResolve = null;
+
+const aiActionRequests = {
+  "review-plan": "Review my inbox and tell me the fastest plan to get caught up.",
+  summarize: "Summarize what needs my attention today.",
+  "follow-ups": "Find emails I need to follow up on.",
+  "draft-replies": "Draft replies to emails that need a response.",
+  decisions: "Show emails that need my decision before anything can move forward.",
+  prioritize: "Prioritize urgent emails and explain why.",
+  "clean-up": "Find low-priority emails I can archive or move out of my inbox.",
+};
+
+const aiActionStatuses = {
+  "review-plan": "Plan ready: start with Bob, approve Lauren's pricing sheet, then follow up with Jordan.",
+  summarize: "Summary ready. WorkSmartOS grouped your inbox by replies, decisions, follow-ups, and cleanup.",
+  "follow-ups": "Follow-ups found. WorkSmartOS can prepare reminders for the threads waiting on a response.",
+  "draft-replies": "Reply drafts queued. Open an email to review the suggested response before sending.",
+  decisions: "One decision found: Lauren is waiting for approval on the pricing sheet.",
+  prioritize: "Urgent work prioritized. Replies with customer timing and approval blockers are first.",
+  "clean-up": "Cleanup suggestions ready. Two low-priority emails can move out of the inbox once connected.",
+};
 
 function plainTextToHtml(value) {
   return String(value || "")
@@ -325,6 +346,21 @@ function createDraft() {
   updateQuality();
 }
 
+function runAiAction(action) {
+  const request = aiActionRequests[action];
+  if (!request) {
+    return;
+  }
+
+  requestInput.value = request;
+  chatPreview.textContent = request;
+  statusText.textContent = aiActionStatuses[action] || "WorkSmartOS is ready to help with that.";
+
+  if (composeOutput && !composeOutput.hidden) {
+    createDraft();
+  }
+}
+
 function queryString(params, aliases = {}) {
   return Object.entries(params)
     .filter(([, value]) => value)
@@ -392,7 +428,14 @@ requestInput.addEventListener("keydown", (event) => {
 document.querySelectorAll("[data-example-request]").forEach((button) => {
   button.addEventListener("click", () => {
     requestInput.value = button.dataset.exampleRequest;
+    chatPreview.textContent = button.dataset.exampleRequest;
     createDraft();
+  });
+});
+
+aiActionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    runAiAction(button.dataset.aiAction);
   });
 });
 

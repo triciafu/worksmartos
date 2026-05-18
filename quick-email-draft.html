@@ -49,6 +49,41 @@
               <strong data-unread-count>6 unread</strong>
             </div>
 
+            <div class="ai-inbox-summary" aria-label="AI inbox summary">
+              <div>
+                <span>WorkSmartOS reviewed your inbox</span>
+                <strong>3 replies ready, 1 follow-up, 2 safe to archive.</strong>
+              </div>
+              <button type="button" data-ai-action="review-plan">Review plan</button>
+            </div>
+
+            <div class="ai-work-metrics" aria-label="AI work queue">
+              <button type="button" data-ai-action="draft-replies">
+                <span>Replies ready</span>
+                <strong>3</strong>
+              </button>
+              <button type="button" data-ai-action="decisions">
+                <span>Need decision</span>
+                <strong>1</strong>
+              </button>
+              <button type="button" data-ai-action="follow-ups">
+                <span>Follow-ups</span>
+                <strong>1</strong>
+              </button>
+              <button type="button" data-ai-action="clean-up">
+                <span>Can archive</span>
+                <strong>2</strong>
+              </button>
+            </div>
+
+            <div class="ai-action-strip" aria-label="AI inbox actions">
+              <button type="button" data-ai-action="summarize">Summarize inbox</button>
+              <button type="button" data-ai-action="follow-ups">Find follow-ups</button>
+              <button type="button" data-ai-action="draft-replies">Draft replies</button>
+              <button type="button" data-ai-action="prioritize">Prioritize urgent</button>
+              <button type="button" data-ai-action="clean-up">Clean up inbox</button>
+            </div>
+
             <div class="quick-mail-tools" aria-label="Inbox actions">
               <label>
                 <span>Folder</span>
@@ -134,6 +169,13 @@
                 <span>You</span>
                 <p>Send an email to John and let him know the proposal is ready.</p>
               </div>
+            </div>
+
+            <div class="quick-suggested-prompts" aria-label="Suggested AI prompts">
+              <button type="button" data-example-request="Summarize what needs my attention today.">Summarize today</button>
+              <button type="button" data-example-request="Draft replies to emails that need a response.">Draft replies</button>
+              <button type="button" data-example-request="Find emails I need to follow up on.">Find follow-ups</button>
+              <button type="button" data-example-request="Prioritize urgent emails and explain why.">Prioritize urgent</button>
             </div>
 
             <form class="quick-draft-prompt-card" id="quick-draft-form" data-quick-draft-form>

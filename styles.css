@@ -2118,6 +2118,115 @@ h1 {
   white-space: nowrap;
 }
 
+.ai-inbox-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(0, 113, 227, 0.22);
+  border-radius: 8px;
+  background: rgba(0, 113, 227, 0.06);
+}
+
+.ai-inbox-summary div {
+  display: grid;
+  gap: 5px;
+}
+
+.ai-inbox-summary span,
+.ai-work-metrics span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ai-inbox-summary strong {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.ai-inbox-summary button,
+.ai-action-strip button,
+.quick-suggested-prompts button {
+  width: fit-content;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ai-inbox-summary button:hover,
+.ai-action-strip button:hover,
+.quick-suggested-prompts button:hover {
+  color: var(--accent-dark);
+}
+
+.ai-work-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ai-work-metrics button {
+  display: grid;
+  gap: 6px;
+  min-height: 74px;
+  align-content: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ai-work-metrics button:hover {
+  border-color: rgba(0, 113, 227, 0.45);
+  background: rgba(0, 113, 227, 0.045);
+}
+
+.ai-work-metrics strong {
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.ai-action-strip,
+.quick-suggested-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.ai-action-strip {
+  padding-bottom: 2px;
+}
+
+.quick-suggested-prompts button {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #FAFAFA;
+  color: var(--muted);
+}
+
+.quick-suggested-prompts button:hover {
+  border-color: rgba(0, 113, 227, 0.45);
+  background: rgba(0, 113, 227, 0.06);
+  color: var(--accent);
+}
+
 .quick-mail-tools {
   display: grid;
   gap: 10px;
@@ -2428,6 +2537,10 @@ h1 {
     grid-template-columns: 1fr;
   }
 
+  .ai-work-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .quick-draft-assistant .studio-panel-heading p {
     max-width: 620px;
   }
@@ -2460,6 +2573,7 @@ h1 {
   .availability-methods,
   .availability-card,
   .availability-results,
+  .ai-work-metrics,
   .quick-draft-shell {
     grid-template-columns: 1fr;
   }
@@ -4937,6 +5051,8 @@ body[data-studio-theme="dark"] .token-row span,
 body[data-studio-theme="dark"] .merge-token,
 body[data-studio-theme="dark"] .email-address-chip,
 body[data-studio-theme="dark"] .email-status-pill,
+body[data-studio-theme="dark"] .ai-work-metrics button,
+body[data-studio-theme="dark"] .quick-suggested-prompts button,
 body[data-studio-theme="dark"] .quick-draft-examples button,
 body[data-studio-theme="dark"] .quick-assistant-capabilities span,
 body[data-studio-theme="dark"] .quick-assistant-summary div,
@@ -4951,6 +5067,17 @@ body[data-studio-theme="dark"] .availability-check-cell label {
   border-color: #34363d;
   background: #202124;
   color: var(--muted);
+}
+
+body[data-studio-theme="dark"] .ai-inbox-summary {
+  border-color: rgba(0, 113, 227, 0.42);
+  background: rgba(0, 113, 227, 0.12);
+}
+
+body[data-studio-theme="dark"] .ai-work-metrics button:hover,
+body[data-studio-theme="dark"] .quick-suggested-prompts button:hover {
+  border-color: rgba(0, 113, 227, 0.55);
+  background: rgba(0, 113, 227, 0.12);
 }
 
 body[data-studio-theme="dark"] .quick-inbox-item.is-urgent {
