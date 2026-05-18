@@ -1,6 +1,7 @@
 const form = document.querySelector("[data-quick-draft-form]");
 const requestInput = document.querySelector("[data-request-input]");
 const statusText = document.querySelector("[data-quick-draft-status]");
+const objectiveInput = document.querySelector("[data-objective-input]");
 const voiceButton = document.querySelector("[data-voice-draft]");
 const themeButtons = document.querySelectorAll("[data-studio-theme]");
 const draftTo = document.querySelector("[data-draft-to]");
@@ -105,7 +106,7 @@ function inboxItemLabel(items) {
 
 function updateUnreadCount() {
   const unread = document.querySelectorAll("[data-inbox-item]:not(.is-read)").length;
-  unreadCount.textContent = `${unread} unread`;
+  unreadCount.textContent = `${unread} item${unread === 1 ? "" : "s"}`;
 }
 
 function setActiveInboxItem(item) {
@@ -347,7 +348,8 @@ function createDraft() {
 }
 
 function runAiAction(action) {
-  const request = aiActionRequests[action];
+  const objective = objectiveInput?.value.trim();
+  const request = action === "review-plan" && objective ? objective : aiActionRequests[action];
   if (!request) {
     return;
   }

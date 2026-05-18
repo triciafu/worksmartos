@@ -39,14 +39,58 @@
         </div>
       </section>
 
+      <section class="quick-draft-shell ai-command-shell" aria-label="AI command center">
+        <section class="ai-command-center studio-panel">
+          <div class="ai-command-copy">
+            <span>Command center</span>
+            <h1>Tell WorkSmartOS what outcome you want.</h1>
+            <p>It will plan the work, use email as evidence, prepare safe actions, and stop for approval when judgment is needed.</p>
+          </div>
+          <div class="ai-command-box">
+            <label>
+              <span>Objective</span>
+              <textarea data-objective-input>Get me caught up before lunch.</textarea>
+            </label>
+            <div class="ai-command-actions">
+              <button class="button primary" type="button" data-ai-action="review-plan">Run objective</button>
+              <button type="button" data-ai-action="draft-replies">Reply where safe</button>
+              <button type="button" data-ai-action="decisions">Find blockers</button>
+            </div>
+          </div>
+          <div class="ai-guardrails" aria-label="Assistant guardrails">
+            <div>
+              <span>Permission</span>
+              <strong>Ask before send</strong>
+            </div>
+            <div>
+              <span>Autonomy</span>
+              <strong>Draft, sort, flag</strong>
+            </div>
+            <div>
+              <span>Risk handling</span>
+              <strong>Hold uncertain work</strong>
+            </div>
+          </div>
+        </section>
+      </section>
+
       <section class="quick-draft-shell quick-email-workspace" aria-label="AI email workspace">
         <aside class="quick-inbox-view studio-panel" aria-label="Inbox view">
             <div class="quick-inbox-heading">
               <div>
-                <span>Inbox</span>
-                <h3>Emails</h3>
+                <span>Objective</span>
+                <h3>AI Work Queue</h3>
               </div>
-              <strong data-unread-count>6 unread</strong>
+              <strong data-unread-count>6 items</strong>
+            </div>
+
+            <div class="ai-objective-panel" aria-label="Current objective">
+              <div>
+                <span>Current objective</span>
+                <strong>Get me caught up before lunch.</strong>
+                <p>WorkSmartOS will prepare safe replies, flag decisions, and move low-priority email out of the way after approval.</p>
+              </div>
+              <button type="button" data-ai-action="review-plan">Run objective</button>
             </div>
 
             <div class="ai-inbox-summary" aria-label="AI inbox summary">
@@ -78,15 +122,15 @@
 
             <div class="ai-work-plan" aria-label="AI recommended work plan">
               <div>
-                <span>1</span>
+                <span>Review</span>
                 <p><strong>Approve or edit</strong> Lauren is waiting on the pricing sheet.</p>
               </div>
               <div>
-                <span>2</span>
+                <span>Draft</span>
                 <p><strong>Send prepared replies</strong> Bob and two other threads are ready for review.</p>
               </div>
               <div>
-                <span>3</span>
+                <span>Clean</span>
                 <p><strong>Clean up</strong> Two low-priority messages can be archived once connected.</p>
               </div>
             </div>
@@ -101,7 +145,7 @@
 
             <div class="quick-mail-tools" aria-label="Inbox actions">
               <label>
-                <span>Folder</span>
+                <span>Evidence source</span>
                 <select data-folder-select>
                   <option value="Inbox">Inbox</option>
                   <option value="Follow-ups">Follow-ups</option>
@@ -129,6 +173,11 @@
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M9 7V4h6v3"></path><path d="M6 7l1 13h10l1-13"></path><path d="M10 11v5"></path><path d="M14 11v5"></path></svg>
                 </button>
               </div>
+            </div>
+
+            <div class="ai-evidence-heading">
+              <span>Email evidence</span>
+              <p>Messages WorkSmartOS used to build the queue.</p>
             </div>
 
             <div class="quick-inbox-list">
@@ -191,6 +240,17 @@
               <button type="button" data-example-request="Draft safe replies and leave anything risky for my review.">Reply where safe</button>
               <button type="button" data-example-request="Find emails blocking customers, payments, or approvals.">Find blockers</button>
               <button type="button" data-example-request="Clear low-priority email from my inbox.">Clear low priority</button>
+            </div>
+
+            <div class="ai-operator-signals" aria-label="Assistant memory and safeguards">
+              <div>
+                <span>Memory</span>
+                <p>Uses your preferred tone: short, direct, warm.</p>
+              </div>
+              <div>
+                <span>Prevented</span>
+                <p>Held 1 uncertain reply for review instead of sending.</p>
+              </div>
             </div>
 
             <form class="quick-draft-prompt-card" id="quick-draft-form" data-quick-draft-form>

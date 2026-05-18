@@ -1503,6 +1503,121 @@ h1 {
   max-width: 1320px;
 }
 
+.ai-command-shell {
+  padding-bottom: 18px;
+}
+
+.ai-command-center {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.8fr) minmax(360px, 1.25fr) minmax(260px, 0.75fr);
+  gap: 18px;
+  align-items: stretch;
+  padding: 24px;
+}
+
+.ai-command-copy,
+.ai-command-box,
+.ai-guardrails {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.ai-command-copy span,
+.ai-command-box label span,
+.ai-guardrails span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ai-command-copy h1 {
+  max-width: 420px;
+  margin: 0;
+  color: var(--ink);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.ai-command-copy p {
+  max-width: 440px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.ai-command-box {
+  padding: 16px;
+  border: 1px solid rgba(0, 113, 227, 0.24);
+  border-radius: 8px;
+  background: rgba(0, 113, 227, 0.045);
+}
+
+.ai-command-box label {
+  display: grid;
+  gap: 8px;
+}
+
+.ai-command-box textarea {
+  width: 100%;
+  min-height: 92px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.35;
+  resize: vertical;
+}
+
+.ai-command-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ai-command-actions button:not(.primary) {
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ai-command-actions button:not(.primary):hover {
+  border-color: rgba(0, 113, 227, 0.45);
+  color: var(--accent);
+}
+
+.ai-guardrails {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.ai-guardrails div {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FAFAFA;
+}
+
+.ai-guardrails strong {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .quick-email-workspace {
   grid-template-columns: minmax(0, 1.78fr) minmax(300px, 0.82fr);
   align-items: start;
@@ -2118,6 +2233,65 @@ h1 {
   white-space: nowrap;
 }
 
+.ai-objective-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid rgba(0, 113, 227, 0.28);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(0, 113, 227, 0.08), rgba(0, 113, 227, 0.035));
+}
+
+.ai-objective-panel div {
+  display: grid;
+  gap: 6px;
+}
+
+.ai-objective-panel span,
+.ai-evidence-heading span,
+.ai-operator-signals span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ai-objective-panel strong {
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.ai-objective-panel p,
+.ai-evidence-heading p,
+.ai-operator-signals p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.ai-objective-panel button {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ai-objective-panel button:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
+}
+
 .ai-inbox-summary {
   display: flex;
   align-items: center;
@@ -2212,7 +2386,7 @@ h1 {
 
 .ai-work-plan div {
   display: grid;
-  grid-template-columns: 24px minmax(0, 1fr);
+  grid-template-columns: 58px minmax(0, 1fr);
   gap: 10px;
   align-items: start;
 }
@@ -2221,7 +2395,7 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
+  width: 58px;
   height: 22px;
   border-radius: 999px;
   background: rgba(0, 113, 227, 0.1);
@@ -2240,6 +2414,27 @@ h1 {
 .ai-work-plan strong {
   color: var(--ink);
   font-weight: 500;
+}
+
+.ai-evidence-heading {
+  display: grid;
+  gap: 4px;
+  padding-top: 4px;
+}
+
+.ai-operator-signals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ai-operator-signals div {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FAFAFA;
 }
 
 .ai-action-strip,
@@ -2572,6 +2767,10 @@ h1 {
   .quick-draft-command {
     grid-template-columns: minmax(0, 1fr);
     gap: 20px;
+  }
+
+  .ai-command-center {
+    grid-template-columns: 1fr;
   }
 
   .quick-email-workspace {
@@ -5018,6 +5217,7 @@ body[data-studio-theme="dark"] .studio-theme-control button.is-active {
 
 body[data-studio-theme="dark"] .studio-controls input,
 body[data-studio-theme="dark"] .studio-controls textarea,
+body[data-studio-theme="dark"] .ai-command-box textarea,
 body[data-studio-theme="dark"] .recipient-table input,
 body[data-studio-theme="dark"] .availability-card input,
 body[data-studio-theme="dark"] .availability-card textarea,
@@ -5092,8 +5292,10 @@ body[data-studio-theme="dark"] .token-row span,
 body[data-studio-theme="dark"] .merge-token,
 body[data-studio-theme="dark"] .email-address-chip,
 body[data-studio-theme="dark"] .email-status-pill,
+body[data-studio-theme="dark"] .ai-guardrails div,
 body[data-studio-theme="dark"] .ai-work-metrics button,
 body[data-studio-theme="dark"] .ai-work-plan,
+body[data-studio-theme="dark"] .ai-operator-signals div,
 body[data-studio-theme="dark"] .quick-suggested-prompts button,
 body[data-studio-theme="dark"] .quick-draft-examples button,
 body[data-studio-theme="dark"] .quick-assistant-capabilities span,
@@ -5114,6 +5316,22 @@ body[data-studio-theme="dark"] .availability-check-cell label {
 body[data-studio-theme="dark"] .ai-inbox-summary {
   border-color: rgba(0, 113, 227, 0.42);
   background: rgba(0, 113, 227, 0.12);
+}
+
+body[data-studio-theme="dark"] .ai-objective-panel {
+  border-color: rgba(0, 113, 227, 0.5);
+  background: linear-gradient(180deg, rgba(0, 113, 227, 0.16), rgba(0, 113, 227, 0.08));
+}
+
+body[data-studio-theme="dark"] .ai-command-box {
+  border-color: rgba(0, 113, 227, 0.42);
+  background: rgba(0, 113, 227, 0.1);
+}
+
+body[data-studio-theme="dark"] .ai-command-actions button:not(.primary) {
+  border-color: #34363d;
+  background: #202124;
+  color: var(--ink);
 }
 
 body[data-studio-theme="dark"] .ai-work-metrics button:hover,
