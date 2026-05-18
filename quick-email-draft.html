@@ -43,8 +43,8 @@
         <section class="ai-command-center studio-panel">
           <div class="ai-command-copy">
             <span>Command center</span>
-            <h1>Tell WorkSmartOS what outcome you want.</h1>
-            <p>It will plan the work, use email as evidence, prepare safe actions, and stop for approval when judgment is needed.</p>
+            <h1>Tell WorkSmartOS what you need done.</h1>
+            <p>It handles the sorting, drafting, follow-up logic, and risk checks in the background.</p>
           </div>
           <div class="ai-command-box">
             <label>
@@ -73,49 +73,13 @@
           </div>
         </section>
 
-        <section class="ai-situation-layer" aria-label="Situational intelligence">
-          <button class="ai-situation-primary" type="button" data-ai-action="morning-brief">
-            <span>Situation brief</span>
-            <strong>Launch readiness is at risk tomorrow at 2PM.</strong>
-            <p>Bob needs timing confirmation before vendor onboarding can move. Lauren’s pricing approval blocks the client proposal.</p>
-          </button>
-          <button type="button" data-ai-action="stakeholders">
-            <span>Stakeholder intelligence</span>
-            <strong>Lauren — Finance</strong>
-            <p>Usually responds within 4h. Escalate if no pricing approval by 3PM.</p>
-          </button>
-          <button type="button" data-ai-action="compress">
-            <span>Coordination compression</span>
-            <strong>37 messages → 3 decisions, 2 risks, 1 recommendation.</strong>
-            <p>WorkSmartOS can turn the email trail into an execution brief.</p>
-          </button>
-        </section>
-
-        <section class="ai-ambient-layer studio-panel" aria-label="Ambient intelligence">
-          <div class="ai-ambient-copy">
-            <span>Ambient intelligence</span>
-            <h2>WorkSmartOS detected organizational drift.</h2>
-            <p>Marketing believes launch timing is confirmed. Vendor onboarding is still waiting on Bob. Finance approval is assumed but not complete.</p>
+        <section class="ai-calm-summary studio-panel" aria-label="WorkSmartOS summary">
+          <div>
+            <span>WorkSmartOS</span>
+            <h2>I drafted three safe replies, cleared low-priority email, and found one issue that may delay launch timing.</h2>
+            <p>Nothing has been sent. One item needs your approval.</p>
           </div>
-          <div class="ai-ambient-map" aria-label="Detected coordination drift">
-            <div>
-              <span>Marketing</span>
-              <strong>Assumes launch is on track</strong>
-            </div>
-            <div>
-              <span>Vendor</span>
-              <strong>Waiting on onboarding timing</strong>
-            </div>
-            <div>
-              <span>Finance</span>
-              <strong>Pricing approval unresolved</strong>
-            </div>
-          </div>
-          <div class="ai-recovery-mode">
-            <span>Recovery mode prepared</span>
-            <p>Escalation draft, revised onboarding timeline, stakeholder summary, and alternate launch sequence are ready for approval.</p>
-            <button type="button" data-ai-action="recovery-mode">Open recovery plan</button>
-          </div>
+          <button type="button" data-ai-action="review-plan">Review important items</button>
         </section>
       </section>
 
@@ -123,60 +87,18 @@
         <aside class="quick-inbox-view studio-panel" aria-label="Inbox view">
             <div class="quick-inbox-heading">
               <div>
-                <span>Objective</span>
-                <h3>AI Work Queue</h3>
+                <span>Needs you</span>
+                <h3>Important items</h3>
               </div>
-              <strong data-unread-count>6 items</strong>
+              <strong data-unread-count>3 items</strong>
             </div>
 
             <div class="ai-inbox-summary" aria-label="Execution summary">
               <div>
-                <span>Execution plan</span>
-                <strong>Confirm Bob’s timing, approve Lauren’s pricing sheet, then clear low-priority email.</strong>
+                <span>Recommended next step</span>
+                <strong>Review the launch timing note. Bob is waiting and Lauren’s approval is still open.</strong>
               </div>
-              <button type="button" data-ai-action="review-plan">Review plan</button>
-            </div>
-
-            <div class="ai-work-metrics" aria-label="AI work queue">
-              <button type="button" data-ai-action="draft-replies">
-                <span>Ready to send</span>
-                <strong>3</strong>
-              </button>
-              <button type="button" data-ai-action="decisions">
-                <span>Needs approval</span>
-                <strong>1</strong>
-              </button>
-              <button type="button" data-ai-action="follow-ups">
-                <span>Follow-ups</span>
-                <strong>1</strong>
-              </button>
-              <button type="button" data-ai-action="clean-up">
-                <span>Time saved</span>
-                <strong>28m</strong>
-              </button>
-            </div>
-
-            <div class="ai-work-plan" aria-label="AI recommended work plan">
-              <div>
-                <span>Review</span>
-                <p><strong>Approve or edit</strong> Lauren is waiting on the pricing sheet.</p>
-              </div>
-              <div>
-                <span>Draft</span>
-                <p><strong>Send prepared replies</strong> Bob and two other threads are ready for review.</p>
-              </div>
-              <div>
-                <span>Clean</span>
-                <p><strong>Clean up</strong> Two low-priority messages can be archived once connected.</p>
-              </div>
-            </div>
-
-            <div class="ai-action-strip" aria-label="AI inbox actions">
-              <button type="button" data-ai-action="review-plan">Get me caught up</button>
-              <button type="button" data-ai-action="draft-replies">Reply where safe</button>
-              <button type="button" data-ai-action="decisions">Find blockers</button>
-              <button type="button" data-ai-action="follow-ups">Chase follow-ups</button>
-              <button type="button" data-ai-action="clean-up">Clear low priority</button>
+              <button type="button" data-ai-action="review-plan">Review</button>
             </div>
 
             <div class="quick-mail-tools" aria-label="Inbox actions">

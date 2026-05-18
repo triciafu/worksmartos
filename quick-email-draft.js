@@ -45,7 +45,7 @@ let currentIntent = "send";
 let studioPromptResolve = null;
 
 const aiActionRequests = {
-  "review-plan": "Review my inbox and tell me the fastest plan to get caught up.",
+  "review-plan": "Review the important items and show only what needs my approval.",
   "morning-brief": "Give me an executive briefing on hidden blockers, stakeholder risks, and what could slip today.",
   stakeholders: "Show stakeholder context, response patterns, blockers, and escalation recommendations.",
   compress: "Compress the email trail into decisions, risks, and one recommended next action.",
@@ -59,7 +59,7 @@ const aiActionRequests = {
 };
 
 const aiActionStatuses = {
-  "review-plan": "Plan ready: approve Lauren, send Bob's reply, then follow up with Jordan.",
+  "review-plan": "Important items ready. One launch timing note needs approval before anything is sent.",
   "morning-brief": "Briefing ready: launch timing is exposed tomorrow at 2PM unless Bob and Lauren are resolved.",
   stakeholders: "Stakeholder map ready: Lauren is the approval blocker, Bob is waiting on timing, Jordan needs a nudge.",
   compress: "Compressed: 37 messages became 3 decisions, 2 risks, and 1 recommended next action.",
